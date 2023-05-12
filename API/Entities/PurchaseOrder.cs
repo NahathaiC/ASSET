@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 using API.Entities.PRAggregate;
 
 namespace API.Entities
@@ -16,6 +13,9 @@ namespace API.Entities
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
+        [Column("ApproverName1")]
+        public string ApproverName1 { get; set; }
         public Status Status { get; set; } = Status.Pending;
+        public Quotation Quotation { get; set; }
     }
 }

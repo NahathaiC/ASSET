@@ -14,6 +14,7 @@ namespace API.Data
 
         public DbSet<Quotation> Quotations { get; set; }
         public DbSet<PurchaseRequisition> PurchaseRequisitions { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

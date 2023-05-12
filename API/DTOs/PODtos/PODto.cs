@@ -1,20 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Entities.PRAggregate;
+using System.ComponentModel.DataAnnotations;
+using API.Entities;
 
 namespace API.DTOs.PODtos
 {
     public class PODto
     {
-        public string Creator { get; set; }
+        [Required]
         public DateTime Bought_date { get; set; }
+        [Required]
         public string ProdDesc { get; set; }
+        [Required]
         public string Model { get; set; }
+        [Required]
+        [Range(1,double.PositiveInfinity)]
         public int Quantity { get; set; }
+        [Required]
+        [Range(1,double.PositiveInfinity)]
         public decimal UnitPrice { get; set; }
+        [Required]
+        [Range(1,double.PositiveInfinity)]
         public decimal TotalPrice { get; set; }
-        public Status Status { get; set; }
+        public Quotation Quotation { get; set; }
     }
 }

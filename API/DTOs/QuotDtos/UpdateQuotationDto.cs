@@ -6,7 +6,6 @@ namespace API.DTOs.QuotDtos
     {
         public int Id { get; set; }
         public string Supplier { get; set; }
-        [Range(1,double.PositiveInfinity)]
         public decimal TotalPrice { get; set; }
         public string Remark { get; set; }
     }

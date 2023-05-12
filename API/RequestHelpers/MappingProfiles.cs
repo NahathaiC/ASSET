@@ -1,3 +1,4 @@
+using API.DTOs.PODtos;
 using API.DTOs.PRDtos;
 using API.DTOs.QuotDtos;
 using API.Entities;
@@ -12,9 +13,12 @@ namespace API.RequestHelpers
         {
             CreateMap<PRDto, PurchaseRequisition>();
             CreateMap<UpdatePRDto, PurchaseRequisition>();
+            CreateMap<PurchaseRequisition, GetPRDto>();
+
             CreateMap<QuotDto, Quotation>();
             CreateMap<UpdateQuotationDto, Quotation>();
-            CreateMap<PurchaseRequisition, GetPRDto>();
+
+            CreateMap<PODto, PurchaseOrder>();
         }
     }
 }

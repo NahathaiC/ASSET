@@ -24,6 +24,14 @@ namespace API.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<GetQuotDto>>> GetQuots()
+        {
+            return await _context.Quotations
+                .ProjectQuotToQuotDto()
+                .ToListAsync();
+        }
+
         [HttpGet("{id}", Name ="GetQuot")]
         public async Task<ActionResult<GetQuotDto>> GetQuot(int id)
         {
@@ -49,10 +57,10 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPut]
-        public async Task<ActionResult> UpdatePR (UpdateQuotationDto QuotDto)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdatePR (UpdateQuotationDto QuotDto, int id)
         {
-            var quotation = await _context.Quotations.FindAsync(QuotDto.Id);
+            var quotation = await _context.Quotations.FindAsync(id);
 
             if (quotation == null) return NotFound();
 
