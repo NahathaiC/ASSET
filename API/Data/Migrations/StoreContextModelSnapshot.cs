@@ -197,6 +197,74 @@ namespace API.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("API.Entities.TaxInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("AftDiscount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("GrandAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Product_Desc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SuppAdress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Supplier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TaxPics")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Vat")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaxInvoices");
+                });
+
+            modelBuilder.Entity("API.Entities.TaxItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProdDesc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TaxInvoiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxInvoiceId");
+
+                    b.ToTable("TaxItems");
+                });
+
             modelBuilder.Entity("API.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -394,6 +462,13 @@ namespace API.Data.Migrations
                     b.Navigation("Quotation");
                 });
 
+            modelBuilder.Entity("API.Entities.TaxItem", b =>
+                {
+                    b.HasOne("API.Entities.TaxInvoice", null)
+                        .WithMany("TaxItems")
+                        .HasForeignKey("TaxInvoiceId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("API.Entities.Role", null)
@@ -443,6 +518,11 @@ namespace API.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Entities.TaxInvoice", b =>
+                {
+                    b.Navigation("TaxItems");
                 });
 #pragma warning restore 612, 618
         }

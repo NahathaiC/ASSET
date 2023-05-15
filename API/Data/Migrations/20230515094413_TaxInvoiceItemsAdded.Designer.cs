@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230512092417_updateAdded")]
-    partial class updateAdded
+    [Migration("20230515094413_TaxInvoiceItemsAdded")]
+    partial class TaxInvoiceItemsAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,50 @@ namespace API.Data.Migrations
                     b.ToTable("PurchaseRequisitions");
                 });
 
+            modelBuilder.Entity("API.Entities.PurchaseOrder", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ApproverName1")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("ApproverName1");
+
+                    b.Property<DateTime>("Bought_date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Creator")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProdDesc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("QuotationId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuotationId");
+
+                    b.ToTable("PurchaseOrders");
+                });
+
             modelBuilder.Entity("API.Entities.Quotation", b =>
                 {
                     b.Property<int>("Id")
@@ -154,6 +198,74 @@ namespace API.Data.Migrations
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
+                });
+
+            modelBuilder.Entity("API.Entities.TaxInvoice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("AftDiscount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("GrandAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Product_Desc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SuppAdress")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Supplier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TaxPics")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Vat")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaxInvoices");
+                });
+
+            modelBuilder.Entity("API.Entities.TaxItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProdDesc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("TaxInvoiceId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaxInvoiceId");
+
+                    b.ToTable("TaxItems");
                 });
 
             modelBuilder.Entity("API.Entities.User", b =>
@@ -344,6 +456,22 @@ namespace API.Data.Migrations
                     b.Navigation("Quotation");
                 });
 
+            modelBuilder.Entity("API.Entities.PurchaseOrder", b =>
+                {
+                    b.HasOne("API.Entities.Quotation", "Quotation")
+                        .WithMany()
+                        .HasForeignKey("QuotationId");
+
+                    b.Navigation("Quotation");
+                });
+
+            modelBuilder.Entity("API.Entities.TaxItem", b =>
+                {
+                    b.HasOne("API.Entities.TaxInvoice", null)
+                        .WithMany("TaxItems")
+                        .HasForeignKey("TaxInvoiceId");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("API.Entities.Role", null)
@@ -393,6 +521,11 @@ namespace API.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("API.Entities.TaxInvoice", b =>
+                {
+                    b.Navigation("TaxItems");
                 });
 #pragma warning restore 612, 618
         }

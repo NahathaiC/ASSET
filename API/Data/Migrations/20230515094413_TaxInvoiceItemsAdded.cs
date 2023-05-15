@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class updateAdded : Migration
+    public partial class TaxInvoiceItemsAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -73,6 +73,31 @@ namespace API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaxInvoices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    TaxPics = table.Column<string>(type: "TEXT", nullable: true),
+                    Supplier = table.Column<string>(type: "TEXT", nullable: true),
+                    SuppAdress = table.Column<string>(type: "TEXT", nullable: true),
+                    ProductDesc = table.Column<string>(name: "Product_Desc", type: "TEXT", nullable: true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Discount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    AftDiscount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Vat = table.Column<decimal>(type: "TEXT", nullable: false),
+                    GrandAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    PublicId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaxInvoices", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,6 +207,33 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PurchaseOrders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Creator = table.Column<string>(type: "TEXT", nullable: true),
+                    Boughtdate = table.Column<DateTime>(name: "Bought_date", type: "TEXT", nullable: false),
+                    ProdDesc = table.Column<string>(type: "TEXT", nullable: true),
+                    Model = table.Column<string>(type: "TEXT", nullable: true),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ApproverName1 = table.Column<string>(type: "TEXT", nullable: true),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    QuotationId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PurchaseOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PurchaseOrders_Quotations_QuotationId",
+                        column: x => x.QuotationId,
+                        principalTable: "Quotations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PurchaseRequisitions",
                 columns: table => new
                 {
@@ -212,6 +264,24 @@ namespace API.Data.Migrations
                         name: "FK_PurchaseRequisitions_Quotations_QuotationId",
                         column: x => x.QuotationId,
                         principalTable: "Quotations",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TaxItems",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    ProdDesc = table.Column<string>(type: "TEXT", nullable: true),
+                    TaxInvoiceId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaxItems", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaxItems_TaxInvoices_TaxInvoiceId",
+                        column: x => x.TaxInvoiceId,
+                        principalTable: "TaxInvoices",
                         principalColumn: "Id");
                 });
 
@@ -263,9 +333,19 @@ namespace API.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_PurchaseOrders_QuotationId",
+                table: "PurchaseOrders",
+                column: "QuotationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PurchaseRequisitions_QuotationId",
                 table: "PurchaseRequisitions",
                 column: "QuotationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaxItems_TaxInvoiceId",
+                table: "TaxItems",
+                column: "TaxInvoiceId");
         }
 
         /// <inheritdoc />
@@ -287,7 +367,13 @@ namespace API.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "PurchaseOrders");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseRequisitions");
+
+            migrationBuilder.DropTable(
+                name: "TaxItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -297,6 +383,9 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Quotations");
+
+            migrationBuilder.DropTable(
+                name: "TaxInvoices");
         }
     }
 }

@@ -39,7 +39,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrder>> CreatePO (PODto pODto)
+        public async Task<ActionResult<PurchaseOrder>> CreatePO(PODto pODto)
         {
             string userName = User.Identity.Name;
 
@@ -52,11 +52,11 @@ namespace API.Controllers
 
             if (result)
             {
-                return CreatedAtRoute("GetPO", new { Id = purchaseOrder.Id}, purchaseOrder);
+                return CreatedAtRoute("GetPO", new { Id = purchaseOrder.Id }, purchaseOrder);
             }
             else
             {
-                return BadRequest(new ProblemDetails {Title = "Problem creating new PO"});
+                return BadRequest(new ProblemDetails { Title = "Problem creating new PO" });
             }
         }
 
@@ -124,5 +124,23 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update Status");
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete]
+        public async Task<ActionResult> DeletePO(int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if (purchaseOrder == null) return NotFound();
+
+            _context.PurchaseOrders.Remove(purchaseOrder);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting PO" });
+        }
+
     }
 }

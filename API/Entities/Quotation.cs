@@ -10,7 +10,6 @@ namespace API.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id {  get; set; }
-        // public int Id {  get; private set; }
         public string Supplier { get; set; }
         [Range(1,double.PositiveInfinity)]
         public decimal TotalPrice { get; set; }

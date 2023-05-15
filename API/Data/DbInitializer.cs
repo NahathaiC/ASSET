@@ -53,9 +53,7 @@ namespace API.Data
                 await userManager.AddToRolesAsync(admin, new[] {"Emp","Approver", "Admin"});
 
             }
-
-            if (context.Quotations.Any()) return;
-
+            
             context.SaveChanges();
         }
     }
