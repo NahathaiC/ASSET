@@ -28,6 +28,7 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
+                Department = user.Department,
                 Token = await _tokenService.GenerateToken(user)
             };
         }
@@ -89,6 +90,7 @@ namespace API.Controllers
             {   
                 Id = user.Id,
                 Email = user.Email,
+                Department = user.Department,
                 Token = await _tokenService.GenerateToken(user)
             };
         }

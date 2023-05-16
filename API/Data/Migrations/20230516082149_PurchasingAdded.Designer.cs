@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230516034033_TaxInvoiceItemsAdded")]
-    partial class TaxInvoiceItemsAdded
+    [Migration("20230516082149_PurchasingAdded")]
+    partial class PurchasingAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

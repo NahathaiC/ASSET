@@ -16,8 +16,8 @@ namespace API.Data
                     UserName = "liew",
                     Email = "liew@test.com",
                     Position = "Interns",
-                    Department = "IT",
-                    Section = "IT",
+                    Department = "Purchasing",
+                    Section = "Purchasing",
                     Phone = "0811111111",
                     Status = "Active"
                 };

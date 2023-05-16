@@ -50,7 +50,15 @@ builder.Services.AddDbContext<StoreContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+   {
+       options.AddDefaultPolicy(builder =>
+       {
+           builder.WithOrigins("http://localhost:5050")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+       });
+   });
 builder.Services.AddIdentityCore<User>(opt =>
 {
     opt.Password.RequireNonAlphanumeric = false;
@@ -93,8 +101,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(opt =>
 {
-    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "http://localhost:3001");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5050", "http://localhost:3000", "http://localhost:3001");
 });
+
 
 app.UseAuthentication();
 app.UseAuthorization();
