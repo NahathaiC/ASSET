@@ -8,6 +8,7 @@ namespace API.Entities
     {
         [Key]
         public string Id { get; set; }
-        public string ProdDesc { get; set; } 
+        public string ProdDesc { get; set; }
+        public int TaxInvoiceId { get; set; }
     }
 }

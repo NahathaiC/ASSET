@@ -26,10 +26,13 @@ namespace API.RequestHelpers
             CreateMap<CreateTaxDto, TaxInvoice>()
                 .ForMember(dest => dest.TaxItems, opt => opt.MapFrom(src => src.TaxItems));
 
+
             // Ensure that you have a mapping for TaxItemDto as well
             CreateMap<TaxItemDto, TaxItem>();
 
             CreateMap<UpdateTaxDto, TaxInvoice>();
+            CreateMap<AddTaxPicDto, TaxInvoice>();
+            
         }
     }
 }

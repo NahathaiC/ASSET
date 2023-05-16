@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static API.DTOs.TaxDtos.CreateTaxDto;
 
 namespace API.Controllers
 {
@@ -38,24 +39,13 @@ namespace API.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<TaxInvoice>> CreateTaxInvoice(CreateTaxDto taxInvoiceDto)
+        [HttpPost("CreateTaxInvoice")] // Unique route for CreateTaxInvoice action
+        public async Task<ActionResult> CreateTaxInvoice(CreateTaxDto createTaxDto)
         {
-            var taxInvoice = _mapper.Map<TaxInvoice>(taxInvoiceDto);
-
-            if (taxInvoiceDto.TaxPics != null)
-            {
-                var imageResult = await _imageService.AddImageAsync(taxInvoiceDto.TaxPics);
-
-                if (imageResult.Error != null)
-                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-
-                taxInvoice.TaxPics = imageResult.SecureUrl.ToString();
-                taxInvoice.PublicId = imageResult.PublicId;
-            }
+            var taxInvoice = _mapper.Map<TaxInvoice>(createTaxDto);
 
             // Create the list of TaxItem entities
-            var taxItems = taxInvoiceDto.TaxItems.Select(taxItemDto => new TaxItem
+            var taxItems = createTaxDto.TaxItems.Select(taxItemDto => new TaxItem
             {
                 ProdDesc = taxItemDto.ProdDesc,
                 Id = taxItemDto.Id
@@ -78,6 +68,32 @@ namespace API.Controllers
             }
 
             return BadRequest(new ProblemDetails { Title = "Problem creating a new Tax Invoice" });
+        }
+
+        [HttpPost("AddTaxInvoicePicture")]
+        public async Task<ActionResult> AddTaxPic([FromForm]AddTaxPicDto addTaxPicDto)
+        {
+            var taxInvoice = await _context.TaxInvoices.FindAsync(addTaxPicDto.Id);
+
+            if (taxInvoice == null)
+                return NotFound();
+
+            _mapper.Map(addTaxPicDto, taxInvoice);
+
+            if (addTaxPicDto.TaxPics != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(addTaxPicDto.TaxPics);
+
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+                taxInvoice.TaxPics = imageResult.SecureUrl.ToString();
+                taxInvoice.PublicId = imageResult.PublicId;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
 

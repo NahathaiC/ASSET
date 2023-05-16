@@ -8,7 +8,7 @@ namespace API.DTOs.TaxDtos
         public DateTime CreateDate { get; set; } = DateTime.Now;
 
         // [Required]
-        public IFormFile TaxPics { get; set; }
+        // public IFormFile TaxPics { get; set; }
 
         [Required]
         public string Supplier { get; set; }

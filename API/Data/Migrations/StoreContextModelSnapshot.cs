@@ -255,7 +255,7 @@ namespace API.Data.Migrations
                     b.Property<string>("ProdDesc")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("TaxInvoiceId")
+                    b.Property<int>("TaxInvoiceId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -466,7 +466,9 @@ namespace API.Data.Migrations
                 {
                     b.HasOne("API.Entities.TaxInvoice", null)
                         .WithMany("TaxItems")
-                        .HasForeignKey("TaxInvoiceId");
+                        .HasForeignKey("TaxInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

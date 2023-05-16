@@ -18,11 +18,11 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen( c => 
+builder.Services.AddSwaggerGen(c =>
 {
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
-        BearerFormat ="JWT",
+        BearerFormat = "JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -51,7 +51,7 @@ builder.Services.AddDbContext<StoreContext>(opt =>
 });
 
 builder.Services.AddCors();
-builder.Services.AddIdentityCore<User>(opt => 
+builder.Services.AddIdentityCore<User>(opt =>
 {
     opt.Password.RequireNonAlphanumeric = false;
     opt.User.RequireUniqueEmail = true;
@@ -60,7 +60,7 @@ builder.Services.AddIdentityCore<User>(opt =>
     .AddEntityFrameworkStores<StoreContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt => 
+    .AddJwtBearer(opt =>
     {
         opt.TokenValidationParameters = new TokenValidationParameters
         {
@@ -84,15 +84,16 @@ app.UseMiddleware<ExceptionMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => 
+    app.UseSwaggerUI(c =>
     {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
         c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
     });
 }
 
-app.UseCors(opt => 
+app.UseCors(opt =>
 {
-    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000","http://localhost:3001");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "http://localhost:3001");
 });
 
 app.UseAuthentication();

@@ -273,7 +273,7 @@ namespace API.Data.Migrations
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
                     ProdDesc = table.Column<string>(type: "TEXT", nullable: true),
-                    TaxInvoiceId = table.Column<int>(type: "INTEGER", nullable: true)
+                    TaxInvoiceId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -282,7 +282,8 @@ namespace API.Data.Migrations
                         name: "FK_TaxItems_TaxInvoices_TaxInvoiceId",
                         column: x => x.TaxInvoiceId,
                         principalTable: "TaxInvoices",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
