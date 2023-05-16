@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using API.Entities.PRAggregate;
+using API.Entities.AssetAggregate;
 
 namespace API.Data
 {
@@ -17,28 +18,45 @@ namespace API.Data
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<TaxInvoice> TaxInvoices { get; set; }
         public DbSet<TaxItem> TaxItems { get; set; }
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Stock> Stocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            //  builder.Entity<TaxInvoice>()
-            //     .HasMany(t => t.ProductIds)
-            //     .WithOne(p => p.TaxInvoice)
-            //     .HasForeignKey(p => p.TaxInvoiceId);
-
-            // builder.Entity<PurchaseRequisition>()
-            //     .HasOne(q => q.Quotation)
-            //     .WithOne()
-            //     // .HasForeignKey<User>(u => u.UserName)
-            //     .HasForeignKey<Quotation>(q => q.Id);
+            builder.Entity<Asset>().HasKey(a => a.Id);
+            builder.Entity<Stock>().HasKey(s => s.Id);
 
             builder.Entity<Role>()
                 .HasData(
-                    new Role{Id = 1, Name = "Emp", NormalizedName="EMP"},
-                    new Role{Id = 2, Name = "Approver", NormalizedName="APPROVER"},
-                    new Role{Id = 3, Name = "Admin", NormalizedName="ADMIN"}
+                    new Role { Id = 1, Name = "Emp", NormalizedName = "EMP" },
+                    new Role { Id = 2, Name = "Approver", NormalizedName = "APPROVER" },
+                    new Role { Id = 3, Name = "Admin", NormalizedName = "ADMIN" }
                 );
         }
+
+        public override int SaveChanges()
+        {
+            // Find newly added entities of type Asset
+            var newAssets = ChangeTracker.Entries<Asset>()
+                .Where(e => e.State == EntityState.Added)
+                .Select(e => e.Entity);
+
+            foreach (var newAsset in newAssets)
+            {
+                // Find the corresponding Stock entity
+                var stock = Set<Stock>().Find(newAsset.StockId);
+
+                if (stock != null)
+                {
+                    // Update the stock count
+                    stock.Total += 1;
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
     }
 }
