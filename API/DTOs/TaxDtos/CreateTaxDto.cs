@@ -30,8 +30,8 @@ namespace API.DTOs.TaxDtos
         [Range(0, double.MaxValue, ErrorMessage = "Unit price must be greater than or equal to 0.")]
         public decimal UnitPrice { get; set; }
 
-        [Required]
         [Range(0, double.MaxValue, ErrorMessage = "Total amount must be greater than or equal to 0.")]
+        [Required]
         public decimal TotalAmount { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "Discount must be greater than or equal to 0.")]

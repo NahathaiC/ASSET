@@ -70,8 +70,35 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new Tax Invoice" });
         }
 
-        [HttpPost("AddTaxInvoicePicture")]
-        public async Task<ActionResult> AddTaxPic([FromForm]AddTaxPicDto addTaxPicDto)
+        // [HttpPost("AddTaxInvoicePicture")]
+        // public async Task<ActionResult> AddTaxPic([FromForm] AddTaxPicDto addTaxPicDto)
+        // {
+        //     var taxInvoice = await _context.TaxInvoices.FindAsync(addTaxPicDto.Id);
+
+        //     if (taxInvoice == null)
+        //         return NotFound();
+
+        //     _mapper.Map(addTaxPicDto, taxInvoice);
+
+        //     if (addTaxPicDto.TaxPics != null)
+        //     {
+        //         var imageResult = await _imageService.AddImageAsync(addTaxPicDto.TaxPics);
+
+        //         if (imageResult.Error != null)
+        //             return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+        //         taxInvoice.TaxPics = imageResult.SecureUrl.ToString();
+        //         taxInvoice.PublicId = imageResult.PublicId;
+        //     }
+
+        //     await _context.SaveChangesAsync();
+
+        //     return NoContent();
+        // }
+
+
+        [HttpPost("AddTaxInvoicePicture")] // Unique route for AddTaxPic action
+        public async Task<ActionResult> AddTaxPic(AddTaxPicDto addTaxPicDto)
         {
             var taxInvoice = await _context.TaxInvoices.FindAsync(addTaxPicDto.Id);
 
