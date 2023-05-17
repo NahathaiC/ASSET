@@ -69,8 +69,6 @@ namespace API.Controllers
             return StatusCode(201);
         }
 
-
-
         [Authorize]
         [HttpGet("currentUser")]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
@@ -81,8 +79,15 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                Position = user.Position,
+                Department = user.Department,
+                Section = user.Section,
+                Phone = user.Phone,
+                Status = user.Status
             };
         }
+
+
     }
 }
