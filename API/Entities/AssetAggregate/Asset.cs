@@ -1,8 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using API.Entities.AssetAggregate;
-using API.DTOs.StockDtos;
-using API.DTOs;
 
 namespace API.Entities.AssetAggregate
 {

@@ -27,19 +27,49 @@ namespace API.Controllers
             _context = context;
         }
 
+        // [HttpGet]
+        // public async Task<ActionResult<IEnumerable<Asset>>> GetAssets()
+        // {
+        //     var assets = await _context.Assets
+        //         .ToListAsync();
+
+        //     return assets;
+        // }
+
+        // [HttpGet("{id}", Name = "GetAsset")]
+        // public async Task<ActionResult<Asset>> GetAsset(string id)
+        // {
+        //     var asset = await _context.Assets
+        //         .FirstOrDefaultAsync(a => a.Id == id);
+
+        //     if (asset == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return asset;
+        // }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Asset>>> GetAssets()
+        public async Task<ActionResult<IEnumerable<GetAssetDto>>> GetAssets()
         {
             var assets = await _context.Assets
+                .Include(a => a.Owner)
+                .Include(a => a.Stock)
                 .ToListAsync();
 
-            return assets;
+            var assetDtos = _mapper.Map<List<GetAssetDto>>(assets);
+
+            return assetDtos;
         }
 
+
         [HttpGet("{id}", Name = "GetAsset")]
-        public async Task<ActionResult<Asset>> GetAsset(string id)
+        public async Task<ActionResult<GetAssetDto>> GetAsset(string id)
         {
             var asset = await _context.Assets
+                .Include(a => a.Owner)
+                .Include(a => a.Stock)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (asset == null)
@@ -47,8 +77,11 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return asset;
+            var assetDto = _mapper.Map<GetAssetDto>(asset);
+
+            return assetDto;
         }
+
 
         [HttpPost]
         public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
@@ -85,22 +118,5 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new asset." });
         }
 
-
-        // [HttpPost]
-        // public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
-        // {
-        //     var asset = _mapper.Map<Asset>(assetDto);
-
-        //     _context.Assets.Add(asset);
-
-        //     var result = await _context.SaveChangesAsync() > 0;
-
-        //     if (result)
-        //     {
-        //         return CreatedAtRoute("GetAsset", new { Id = asset.Id }, asset);
-        //     }
-
-        //     return BadRequest(new ProblemDetails { Title = "Problem creating a new Asset"});
-        // }
     }
 }

@@ -84,30 +84,5 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user)
             };
         }
-
-
-        // [Authorize(Roles = "Admin")]
-        // [HttpPost("registerApp")]
-        // public async Task<ActionResult> RegisterApp(RegisterDto registerDto)
-        // {
-        //     var user = new User{UserName = registerDto.Name, Id = registerDto.Id,Email = registerDto.Email,
-        //                          Position = registerDto.Position, Department = registerDto.Department, Section = registerDto.Section,
-        //                          Phone = registerDto.Phone};
-        //     var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-        //     if (!result.Succeeded)
-        //     {
-        //         foreach (var error in result.Errors)
-        //         {
-        //             ModelState.AddModelError(error.Code, error.Description);
-        //         }
-
-        //         return ValidationProblem();
-        //     }
-
-        //     await _userManager.AddToRoleAsync(user, "Approver");
-
-        //     return StatusCode(201);
-        // }
     }
 }

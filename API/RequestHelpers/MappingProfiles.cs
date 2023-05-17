@@ -1,3 +1,4 @@
+using API.DTOs;
 using API.DTOs.AssetDtos;
 using API.DTOs.PODtos;
 using API.DTOs.PRDtos;
@@ -33,9 +34,17 @@ namespace API.RequestHelpers
             CreateMap<UpdateTaxDto, TaxInvoice>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
 
+            // CreateMap<CreateAssetDto, Asset>()
+            //     .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
+            //     .ForMember(dest => dest.Stock, opt => opt.Ignore()); // Ignore mapping StockDto to Stock
+
             CreateMap<CreateAssetDto, Asset>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
-                .ForMember(dest => dest.Stock, opt => opt.Ignore()); // Ignore mapping StockDto to Stock
+                .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new Stock { Id = src.Stock.Id }));
+
+            CreateMap<Asset, GetAssetDto>()
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new OwnerDto { Id = src.Owner.Id, OwnerDesc = src.Owner.OwnerDesc }))
+                .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new StockDto { Id = src.Stock.Id, Type = src.Stock.Type }));
 
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
 

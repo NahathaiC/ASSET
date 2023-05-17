@@ -2,7 +2,7 @@ using API.DTOs.StockDtos;
 
 namespace API.DTOs.AssetDtos
 {
-    public class CreateAssetDto
+    public class GetAssetDto
     {
         public string Id { get; set; }
         public int No { get; set; }
@@ -11,7 +11,7 @@ namespace API.DTOs.AssetDtos
         public OwnerDto Owner { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
+        public string AssetStatus { get; set; }
         public StockDto Stock { get; set; }
     }
-
 }
