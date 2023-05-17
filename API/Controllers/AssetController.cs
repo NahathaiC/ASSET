@@ -155,6 +155,31 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsset(string id)
+        {
+            var asset = await _context.Assets.FindAsync(id);
+
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            var stock = await _context.Stocks.FindAsync(asset.StockId);
+
+            if (stock == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to find the associated stock");
+            }
+
+            stock.Total -= 1;
+
+            _context.Assets.Remove(asset);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         // [HttpPut("{id}/status")]
         // // [Authorize(Roles = "Approver")]
