@@ -1,21 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Entities;
 
-namespace API.Entities.AssetAggregate
+namespace API.DTOs.AssetDtos
 {
-    [Owned]
-    public class AssetDetails
+    public class CreateAssetDetailsDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
         public int AssetId { get; set; }
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 
-        [ForeignKey("PersonInChargeId")]  // Specify the foreign key property name
-        public int PersonInChargeId { get; set; }  // Foreign key property
-
+        [ForeignKey("PersonInChargeId")]
+        public int PersonInChargeId { get; set; }
         public User PersonInCharge { get; set; }
         public string AssetPic { get; set; }
         public string Classifier { get; set; }
@@ -29,10 +23,6 @@ namespace API.Entities.AssetAggregate
         public string Department { get; set; }
         public string Section { get; set; }
         public string LocateAt { get; set; }
-
-        public decimal GetDepreciation ()
-        {
-            return GrandAmount * DepreciationRate * UsedMonths ;
-        }
+        public decimal Depreciation { get; set; }
     }
 }

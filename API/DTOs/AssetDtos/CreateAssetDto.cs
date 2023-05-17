@@ -1,23 +1,20 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Entities;
 
-namespace API.Entities.AssetAggregate
+namespace API.DTOs.AssetDtos
 {
-    public class Asset
+    public class CreateAssetDto
     {
-        [Key]
-        public string Id { get; set; }
         public int No { get; set; }
         public string Name { get; set; }
         public Owner OwnerDesc { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        public AssetStatus AssetStatus { get; set; } = AssetStatus.GoodCondition;
+        // public AssetStatus AssetStatus { get; set; }
 
         [ForeignKey("StockId")]
         public Stock Stock { get; set; }
         public int StockId { get; set; }
-
 
     }
 }

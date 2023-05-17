@@ -25,7 +25,8 @@ namespace API.Data
                 await userManager.CreateAsync(user, "Pa$$w0rd");
                 await userManager.AddToRoleAsync(user, "Emp");
 
-                var approver = new User{
+                var approver = new User
+                {
                     Id = 63310052,
                     UserName = "approver",
                     Email = "app@test.com",
@@ -36,10 +37,11 @@ namespace API.Data
                     Status = "Active"
                 };
                 await userManager.CreateAsync(approver, "Pa$$w0rd");
-                await userManager.AddToRolesAsync(approver, new[] {"Emp", "Approver"});
+                await userManager.AddToRolesAsync(approver, new[] { "Emp", "Approver" });
 
 
-                var admin = new User{
+                var admin = new User
+                {
                     Id = 63310053,
                     UserName = "admin",
                     Email = "admin@test.com",
@@ -50,10 +52,30 @@ namespace API.Data
                     Status = "Active"
                 };
                 await userManager.CreateAsync(admin, "Pa$$w0rd");
-                await userManager.AddToRolesAsync(admin, new[] {"Emp","Approver", "Admin"});
+                await userManager.AddToRolesAsync(admin, new[] { "Emp", "Approver", "Admin" });
 
             }
-            
+
+            if (context.Owners.Any()) return;
+            var owners = new List<Owner>
+            {
+                new Owner
+                {
+                    Id = 1,
+                    OwnerDesc = "ทรัพย์สินของ บริษัท"
+                },
+                new Owner
+                {
+                    Id = 2,
+                    OwnerDesc = "ทรัพย์สินของ คู่สัญญา"
+                }
+            };
+
+            foreach (var owner in owners)
+            {
+                context.Owners.Add(owner);
+            }
+
             context.SaveChanges();
         }
     }

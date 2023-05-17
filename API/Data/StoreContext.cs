@@ -20,6 +20,8 @@ namespace API.Data
         public DbSet<TaxItem> TaxItems { get; set; }
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Stock> Stocks { get; set; }
+        public DbSet<AssetDetails> AssetDetails { get; set; }
+        public DbSet <Owner> Owners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
