@@ -76,6 +76,29 @@ namespace API.Data
                 context.Owners.Add(owner);
             }
 
+
+            if (context.Stocks.Any()) return;
+            var stocks = new List<Stock>
+            {
+                new Stock
+                {
+                    Id = 1,
+                    Type = "เครื่องมือเครื่องใช้/เครื่องใช้สำนักงาน",
+                    Total = 0
+                },
+                new Stock
+                {
+                    Id = 2,
+                    Type = "วัสดุอุปกรณ์โรงงาน/อุปกรณ์สำนักงาน",
+                    Total = 0
+                }
+            };
+
+            foreach (var stock in stocks)
+            {
+                context.Stocks.Add(stock);
+            }
+
             context.SaveChanges();
         }
     }

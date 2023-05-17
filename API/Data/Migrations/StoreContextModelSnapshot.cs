@@ -37,15 +37,18 @@ namespace API.Data.Migrations
                     b.Property<int>("No")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("OwnerDescId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("StockId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerDescId");
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("StockId");
 
@@ -331,6 +334,9 @@ namespace API.Data.Migrations
                     b.Property<int>("Total")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Stocks");
@@ -585,9 +591,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AssetAggregate.Asset", b =>
                 {
-                    b.HasOne("API.Entities.Owner", "OwnerDesc")
+                    b.HasOne("API.Entities.Owner", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerDescId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Entities.Stock", "Stock")
                         .WithMany()
@@ -595,7 +603,7 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OwnerDesc");
+                    b.Navigation("Owner");
 
                     b.Navigation("Stock");
                 });

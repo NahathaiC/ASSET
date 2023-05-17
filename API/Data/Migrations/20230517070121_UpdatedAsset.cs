@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class PurchasingAdded : Migration
+    public partial class UpdatedAsset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,6 +60,19 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Owners",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    OwnerDesc = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Owners", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Quotations",
                 columns: table => new
                 {
@@ -73,6 +86,20 @@ namespace API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quotations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Total = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -207,6 +234,39 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AssetDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AssetId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReceivedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PersonInChargeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AssetPic = table.Column<string>(type: "TEXT", nullable: true),
+                    Classifier = table.Column<string>(type: "TEXT", nullable: true),
+                    SerialNo = table.Column<string>(type: "TEXT", nullable: true),
+                    Supplier = table.Column<string>(type: "TEXT", nullable: true),
+                    TotalAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Vat = table.Column<decimal>(type: "TEXT", nullable: false),
+                    DepreciationRate = table.Column<decimal>(type: "TEXT", nullable: false),
+                    GrandAmount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    UsedMonths = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Department = table.Column<string>(type: "TEXT", nullable: true),
+                    Section = table.Column<string>(type: "TEXT", nullable: true),
+                    LocateAt = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AssetDetails_AspNetUsers_PersonInChargeId",
+                        column: x => x.PersonInChargeId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PurchaseOrders",
                 columns: table => new
                 {
@@ -268,6 +328,37 @@ namespace API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Assets",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    No = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    OwnerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Manufacturer = table.Column<string>(type: "TEXT", nullable: true),
+                    Model = table.Column<string>(type: "TEXT", nullable: true),
+                    AssetStatus = table.Column<int>(type: "INTEGER", nullable: false),
+                    StockId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Assets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Assets_Owners_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Assets_Stocks_StockId",
+                        column: x => x.StockId,
+                        principalTable: "Stocks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TaxItems",
                 columns: table => new
                 {
@@ -293,7 +384,10 @@ namespace API.Data.Migrations
                 {
                     { 1, null, "Emp", "EMP" },
                     { 2, null, "Approver", "APPROVER" },
-                    { 3, null, "Admin", "ADMIN" }
+                    { 3, null, "Admin", "ADMIN" },
+                    { 4, null, "Manager", "MANAGER" },
+                    { 5, null, "Purchasing", "PURCHASING" },
+                    { 6, null, "Asset", "ASSET" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -334,6 +428,21 @@ namespace API.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssetDetails_PersonInChargeId",
+                table: "AssetDetails",
+                column: "PersonInChargeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assets_OwnerId",
+                table: "Assets",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Assets_StockId",
+                table: "Assets",
+                column: "StockId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PurchaseOrders_QuotationId",
                 table: "PurchaseOrders",
                 column: "QuotationId");
@@ -368,6 +477,12 @@ namespace API.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AssetDetails");
+
+            migrationBuilder.DropTable(
+                name: "Assets");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrders");
 
             migrationBuilder.DropTable(
@@ -381,6 +496,12 @@ namespace API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Owners");
+
+            migrationBuilder.DropTable(
+                name: "Stocks");
 
             migrationBuilder.DropTable(
                 name: "Quotations");

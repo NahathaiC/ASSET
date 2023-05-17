@@ -1,6 +1,5 @@
 using API.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using API.Entities.PRAggregate;
 using API.Entities.AssetAggregate;
@@ -21,7 +20,7 @@ namespace API.Data
         public DbSet<Asset> Assets { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<AssetDetails> AssetDetails { get; set; }
-        public DbSet <Owner> Owners { get; set; }
+        public DbSet<Owner> Owners { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -41,27 +40,25 @@ namespace API.Data
                 );
         }
 
-        public override int SaveChanges()
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            // Find newly added entities of type Asset
             var newAssets = ChangeTracker.Entries<Asset>()
                 .Where(e => e.State == EntityState.Added)
                 .Select(e => e.Entity);
 
             foreach (var newAsset in newAssets)
             {
-                // Find the corresponding Stock entity
-                var stock = Set<Stock>().Find(newAsset.StockId);
+                var stock = await Set<Stock>().FindAsync(newAsset.StockId);
 
                 if (stock != null)
                 {
-                    // Update the stock count
                     stock.Total += 1;
                 }
             }
 
-            return base.SaveChanges();
+            return await base.SaveChangesAsync(cancellationToken);
         }
+
 
     }
 }

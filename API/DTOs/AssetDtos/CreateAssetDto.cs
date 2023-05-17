@@ -1,20 +1,16 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using API.Entities;
+using API.DTOs.StockDtos;
 
 namespace API.DTOs.AssetDtos
 {
     public class CreateAssetDto
     {
+        public string Id { get; set; }
         public int No { get; set; }
         public string Name { get; set; }
-        public Owner OwnerDesc { get; set; }
+        public OwnerDto Owner { get; set; }
         public string Manufacturer { get; set; }
         public string Model { get; set; }
-        // public AssetStatus AssetStatus { get; set; }
-
-        [ForeignKey("StockId")]
-        public Stock Stock { get; set; }
-        public int StockId { get; set; }
-
+        public StockDto Stock { get; set; }
     }
+
 }

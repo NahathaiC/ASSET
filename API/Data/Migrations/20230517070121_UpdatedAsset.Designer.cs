@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230516095319_AssetAdded")]
-    partial class AssetAdded
+    [Migration("20230517070121_UpdatedAsset")]
+    partial class UpdatedAsset
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,19 +40,80 @@ namespace API.Data.Migrations
                     b.Property<int>("No")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("OwnerDescId")
+                    b.Property<int>("OwnerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("StockId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerDescId");
+                    b.HasIndex("OwnerId");
 
                     b.HasIndex("StockId");
 
                     b.ToTable("Assets");
+                });
+
+            modelBuilder.Entity("API.Entities.AssetAggregate.AssetDetails", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AssetId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AssetPic")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Classifier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Department")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("DepreciationRate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("GrandAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LocateAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PersonInChargeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Section")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SerialNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Supplier")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("UsedMonths")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Vat")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonInChargeId");
+
+                    b.ToTable("AssetDetails");
                 });
 
             modelBuilder.Entity("API.Entities.Owner", b =>
@@ -66,7 +127,7 @@ namespace API.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Owner");
+                    b.ToTable("Owners");
                 });
 
             modelBuilder.Entity("API.Entities.PRAggregate.PurchaseRequisition", b =>
@@ -246,6 +307,24 @@ namespace API.Data.Migrations
                             Id = 3,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Purchasing",
+                            NormalizedName = "PURCHASING"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Asset",
+                            NormalizedName = "ASSET"
                         });
                 });
 
@@ -257,6 +336,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("Total")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -512,9 +594,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AssetAggregate.Asset", b =>
                 {
-                    b.HasOne("API.Entities.Owner", "OwnerDesc")
+                    b.HasOne("API.Entities.Owner", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerDescId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Entities.Stock", "Stock")
                         .WithMany()
@@ -522,9 +606,20 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("OwnerDesc");
+                    b.Navigation("Owner");
 
                     b.Navigation("Stock");
+                });
+
+            modelBuilder.Entity("API.Entities.AssetAggregate.AssetDetails", b =>
+                {
+                    b.HasOne("API.Entities.User", "PersonInCharge")
+                        .WithMany()
+                        .HasForeignKey("PersonInChargeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonInCharge");
                 });
 
             modelBuilder.Entity("API.Entities.PRAggregate.PurchaseRequisition", b =>

@@ -1,13 +1,14 @@
-using API.DTOs.TaxDtos;
+using API.DTOs.AssetDtos;
 using API.DTOs.PODtos;
 using API.DTOs.PRDtos;
 using API.DTOs.QuotDtos;
+using API.DTOs.StockDtos;
+using API.DTOs.TaxDtos;
 using API.Entities;
+using API.Entities.AssetAggregate;
 using API.Entities.PRAggregate;
 using AutoMapper;
 using static API.DTOs.TaxDtos.CreateTaxDto;
-using API.DTOs.AssetDtos;
-using API.Entities.AssetAggregate;
 
 namespace API.RequestHelpers
 {
@@ -32,10 +33,13 @@ namespace API.RequestHelpers
             CreateMap<UpdateTaxDto, TaxInvoice>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
 
-            CreateMap<CreateAssetDto, Asset>();
+            CreateMap<CreateAssetDto, Asset>()
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
+                .ForMember(dest => dest.Stock, opt => opt.Ignore()); // Ignore mapping StockDto to Stock
+
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
 
-            
+            CreateMap<CreateStockDto, Stock>();
         }
     }
 }
