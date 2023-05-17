@@ -94,10 +94,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
         c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
     });
 }
+
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI(c =>
+//     {
+//         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+//         c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+//     });
+// }
 
 app.UseCors(opt =>
 {

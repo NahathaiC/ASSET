@@ -51,48 +51,9 @@ namespace API.Controllers
             return taxInvoice;
         }
 
-
-        // [HttpPost("CreateTaxInvoice")] // Unique route for CreateTaxInvoice action
-        // public async Task<ActionResult> CreateTaxInvoice(CreateTaxDto createTaxDto)
-        // {
-        //     var user = await _userManager.GetUserAsync(User); // Get the current user
-        //     if (user != null && user.Department == "Purchasing")
-        //     {
-        //         var taxInvoice = _mapper.Map<TaxInvoice>(createTaxDto);
-
-        //         // Create the list of TaxItem entities
-        //         var taxItems = createTaxDto.TaxItems.Select(taxItemDto => new TaxItem
-        //         {
-        //             ProdDesc = taxItemDto.ProdDesc,
-        //             Id = taxItemDto.Id
-        //         }).ToList();
-
-        //         // Assign the list of TaxItems to the taxInvoice
-        //         taxInvoice.TaxItems = taxItems;
-
-        //         // Add the taxInvoice to the context
-        //         _context.TaxInvoices.Add(taxInvoice);
-
-        //         // Save changes to generate the primary key value for taxInvoice and taxItems
-        //         var result = await _context.SaveChangesAsync() > 0;
-
-        //         if (result)
-        //         {
-        //             // Refresh the taxInvoice from the context to get the updated values
-        //             await _context.Entry(taxInvoice).ReloadAsync();
-        //             return CreatedAtRoute("GetTaxInvoice", new { Id = taxInvoice.Id }, taxInvoice);
-        //         }
-
-        //         return BadRequest(new ProblemDetails { Title = "Problem creating a new Tax Invoice" });
-        //     }
-        //     else
-        //     {
-        //         return BadRequest(new ProblemDetails { Title = "You are not authorized to create a Tax Invoice" });
-        //     }
-        // }
-
+        [Authorize(Roles = "Purchasing")]
         [HttpPost("CreateTaxInvoice")] // Unique route for CreateTaxInvoice action
-        public async Task<ActionResult> CreateTaxInvoice(CreateTaxDto createTaxDto)
+        public async Task<ActionResult> CreateTaxInvoice([FromBody] CreateTaxDto createTaxDto)
         {
             var taxInvoice = _mapper.Map<TaxInvoice>(createTaxDto);
 
@@ -103,18 +64,14 @@ namespace API.Controllers
                 Id = taxItemDto.Id
             }).ToList();
 
-            // Assign the list of TaxItems to the taxInvoice
             taxInvoice.TaxItems = taxItems;
 
-            // Add the taxInvoice to the context
             _context.TaxInvoices.Add(taxInvoice);
 
-            // Save changes to generate the primary key value for taxInvoice and taxItems
             var result = await _context.SaveChangesAsync() > 0;
 
             if (result)
             {
-                // Refresh the taxInvoice from the context to get the updated values
                 await _context.Entry(taxInvoice).ReloadAsync();
                 return CreatedAtRoute("GetTaxInvoice", new { Id = taxInvoice.Id }, taxInvoice);
             }
@@ -122,6 +79,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new Tax Invoice" });
         }
 
+        [Authorize(Roles = "Purchasing")]
         [HttpPost("AddTaxInvoicePicture")] // Unique route for AddTaxPic action
         public async Task<ActionResult> AddTaxPic([FromForm] AddTaxPicDto addTaxPicDto)
         {
@@ -148,7 +106,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-
+        [Authorize(Roles = "Purchasing")]
         [HttpPut]
         public async Task<ActionResult> UpdateTaxInvoice(UpdateTaxDto taxInvoiceDto)
         {
@@ -165,7 +123,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem updating new Tax Invoice" });
         }
 
-        // [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Purchasing")]
         [HttpDelete]
         public async Task<ActionResult> DeleteTaxInvoice(int id)
         {
@@ -182,41 +140,6 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem deleting Tax Invoice" });
         }
 
-        // [HttpPost]
-        // public async Task<ActionResult<TaxInvoice>> CreateTaxInvoice([FromForm] CreateTaxDto taxInvoiceDto)
-        // {
-        //     var taxInvoice = _mapper.Map<TaxInvoice>(taxInvoiceDto);
 
-        //     if (taxInvoiceDto.TaxPics != null)
-        //     {
-        //         var imageResult = await _imageService.AddImageAsync(taxInvoiceDto.TaxPics);
-
-        //         if (imageResult.Error != null)
-        //             return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
-
-        //         taxInvoice.TaxPics = imageResult.SecureUrl.ToString();
-        //         taxInvoice.PublicId = imageResult.PublicId;
-        //     }
-
-        //     // foreach (var productIdDto in taxInvoiceDto.ProductIds)
-        //     // {
-        //     //     var productId = new ProductId
-        //     //     {
-        //     //         Id = productIdDto.Id,
-        //     //         Product_Desc = productIdDto.Product_Desc
-        //     //     };
-
-        //     //     taxInvoice.ProductIds.Add(productId);
-        //     // }
-
-        //     _context.TaxInvoices.Add(taxInvoice);
-
-        //     var result = await _context.SaveChangesAsync() > 0;
-
-        //     if (result)
-        //         return CreatedAtRoute("GetTaxInvoice", new { Id = taxInvoice.Id }, taxInvoice);
-
-        //     return BadRequest(new ProblemDetails { Title = "Problem creating new Tax Invoice" });
-        // }
     }
 }

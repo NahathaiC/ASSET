@@ -32,7 +32,10 @@ namespace API.Data
                 .HasData(
                     new Role { Id = 1, Name = "Emp", NormalizedName = "EMP" },
                     new Role { Id = 2, Name = "Approver", NormalizedName = "APPROVER" },
-                    new Role { Id = 3, Name = "Admin", NormalizedName = "ADMIN" }
+                    new Role { Id = 3, Name = "Admin", NormalizedName = "ADMIN" },
+                    new Role { Id = 4, Name = "Manager", NormalizedName = "MANAGER" },
+                    new Role { Id = 5, Name = "Purchasing", NormalizedName = "PURCHASING" },
+                    new Role { Id = 6, Name = "Asset", NormalizedName = "ASSET" }
                 );
         }
 
