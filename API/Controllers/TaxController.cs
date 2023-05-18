@@ -123,7 +123,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem updating new Tax Invoice" });
         }
 
-        // [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Purchasing")]
         [HttpDelete]
         public async Task<ActionResult> DeleteTaxInvoice(int id)
         {

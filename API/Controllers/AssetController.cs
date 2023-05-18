@@ -27,29 +27,6 @@ namespace API.Controllers
             _context = context;
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<Asset>>> GetAssets()
-        // {
-        //     var assets = await _context.Assets
-        //         .ToListAsync();
-
-        //     return assets;
-        // }
-
-        // [HttpGet("{id}", Name = "GetAsset")]
-        // public async Task<ActionResult<Asset>> GetAsset(string id)
-        // {
-        //     var asset = await _context.Assets
-        //         .FirstOrDefaultAsync(a => a.Id == id);
-
-        //     if (asset == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     return asset;
-        // }
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAssetDto>>> GetAssets()
         {
@@ -82,7 +59,7 @@ namespace API.Controllers
             return assetDto;
         }
 
-
+        [Authorize(Roles = "Asset")]
         [HttpPost]
         public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
         {
@@ -155,6 +132,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin, Asset")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsset(string id)
         {

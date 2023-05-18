@@ -187,22 +187,39 @@ namespace API.Controllers
 
 
 
-        [Authorize(Roles = "Approver, Admin")]
+        [Authorize(Roles = "Admin, RequestUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdatePR(UpdatePRDto prDto, int id)
         {
             var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);
 
-            if (purchaseRequisition == null) return NotFound();
+            if (purchaseRequisition == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user is the RequestUser or an Admin
+            string userName = User.Identity.Name;
+            bool isRequestUser = userName == purchaseRequisition.RequestUser;
+            bool isAdmin = User.IsInRole("Admin");
+
+            if (!isRequestUser && !isAdmin)
+            {
+                return Forbid(); // Return 403 Forbidden if the user is not authorized
+            }
 
             _mapper.Map(prDto, purchaseRequisition);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if (result) return NoContent();
+            if (result)
+            {
+                return NoContent();
+            }
 
-            return BadRequest(new ProblemDetails { Title = "Problen updating PR" });
+            return BadRequest(new ProblemDetails { Title = "Problem updating PR" });
         }
+
 
         [Authorize(Roles = "Admin")]
         [HttpDelete]

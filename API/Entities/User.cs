@@ -13,6 +13,6 @@ namespace API.Entities
         [PersonalData]
         public string Phone { get; set; }
         [PersonalData]
-        public string Status { get; set; } = "Active";
+        public string Status { get; set; } = "ACTIVE";
     }
 }

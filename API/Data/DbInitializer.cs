@@ -19,7 +19,7 @@ namespace API.Data
                     Department = "IT",
                     Section = "IT",
                     Phone = "0811111111",
-                    Status = "Active"
+                    Status = "ACTIVE"
                 };
 
                 await userManager.CreateAsync(user, "Pa$$w0rd");
@@ -34,7 +34,7 @@ namespace API.Data
                     Department = "Approver",
                     Section = "Approver",
                     Phone = "0811111112",
-                    Status = "Active"
+                    Status = "ACTIVE"
                 };
                 await userManager.CreateAsync(approver, "Pa$$w0rd");
                 await userManager.AddToRolesAsync(approver, new[] { "Emp", "Approver" });
@@ -49,7 +49,7 @@ namespace API.Data
                     Department = "Admin",
                     Section = "Admin",
                     Phone = "0811111113",
-                    Status = "Active"
+                    Status = "ACTIVE"
                 };
                 await userManager.CreateAsync(admin, "Pa$$w0rd");
                 await userManager.AddToRolesAsync(admin, new[] { "Emp", "Approver", "Admin" });

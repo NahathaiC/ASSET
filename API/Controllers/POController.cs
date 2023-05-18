@@ -38,6 +38,7 @@ namespace API.Controllers
                 .FirstOrDefaultAsync();
         }
 
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpPost]
         public async Task<ActionResult<PurchaseOrder>> CreatePO(PODto pODto)
         {
@@ -60,6 +61,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "Purchasing")]
         [HttpPost("{id}/quotation/{quotationId}")]
         public async Task<ActionResult> AddQuotation(int id, int quotationId)
         {

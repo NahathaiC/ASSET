@@ -30,5 +30,10 @@ namespace API.Entities.AssetAggregate
         public string LocateAt { get; set; }
         public decimal Depreciation => GrandAmount * (DepreciationRate / 100) * (UsedMonths / 12);
         public string PublicId { get; set; }
+
+        internal static IEnumerable<object> Include(Func<object, object> value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

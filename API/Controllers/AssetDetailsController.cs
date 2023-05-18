@@ -46,6 +46,7 @@ namespace API.Controllers
             public PICDto PersonInChargeDto { get; set; }
         }
 
+        [Authorize(Roles = "Asset")]
         [HttpPost]
         [ProducesResponseType(typeof(AssetDetails), 201)]
         public async Task<ActionResult<AssetDetails>> CreateAssetDetails([FromBody] CreateAssetDetailsRequest request)
@@ -67,6 +68,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, assetDetails);
         }
 
+        [Authorize(Roles = "Asset")]
         [HttpPost("AddAssetPicture")]
         public async Task<ActionResult> AddAssetPic([FromForm] AddAssetPicDto addAssetPicDto)
         {
@@ -90,11 +92,25 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpGet("assets/active")]
+        public async Task<ActionResult<IEnumerable<AssetDetails>>> GetActiveAssetDetails()
+        {
+            var activeAssetDetails = await _context.GetActiveAssetDetails();
+
+            return Ok(activeAssetDetails);
+        }
+
+        [HttpGet("assets/resign")]
+        public async Task<ActionResult<IEnumerable<AssetDetails>>> GetResignAssetDetails()
+        {
+            var resignAssetDetails = await _context.GetResignAssetDetails();
+
+            return Ok(resignAssetDetails);
+        }
 
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Roles = "Asset")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteAssetDetails(string id)
         {
             var assetDetails = await _context.AssetDetails.FindAsync(id);
@@ -105,9 +121,10 @@ namespace API.Controllers
             }
 
             _context.AssetDetails.Remove(assetDetails);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result) return Ok();
 
-            return NoContent();
+            return BadRequest(new ProblemDetails { Title = "Problem deleting AssetDetails" });
         }
 
     }

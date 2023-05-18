@@ -63,5 +63,30 @@ namespace API.Data
 
             return await base.SaveChangesAsync(cancellationToken);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
+        public async Task<List<AssetDetails>> GetActiveAssetDetails()
+        {
+            var activeAssetDetails = await AssetDetails
+                .Include(ad => ad.PersonInCharge) // Include the related PersonInCharge entity
+                .Where(ad => ad.PersonInCharge.Status.ToUpper() == "ACTIVE" || ad.PersonInCharge.Status == "Active")
+                .ToListAsync();
+
+            return activeAssetDetails;
+        }
+
+        public async Task<List<AssetDetails>> GetResignAssetDetails()
+        {
+            var resignAssetDetails = await AssetDetails
+                .Include(ad => ad.PersonInCharge) // Include the related PersonInCharge entity
+                .Where(ad => ad.PersonInCharge.Status.ToUpper() == "RESIGN" || ad.PersonInCharge.Status == "Resign")
+                .ToListAsync();
+
+            return resignAssetDetails;
+        }
+
     }
 }

@@ -70,8 +70,8 @@ namespace API.Controllers
                 return NotFound();
 
             // Update the user's status based on the provided input
-            string status = updateUserStatusDto.Status?.ToLower();
-            if (status == "active" || status == "resign")
+            string status = updateUserStatusDto.Status?.ToUpper();
+            if (status == "ACTIVE" || status == "RESIGN")
             {
                 user.Status = status;
             }
@@ -92,6 +92,8 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update user status.");
             }
         }
+
+
 
         private async Task<User> GetUserByEmailOrId(string emailOrId)
         {

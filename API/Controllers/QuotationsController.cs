@@ -58,7 +58,7 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdatePR (UpdateQuotationDto QuotDto, int id)
+        public async Task<ActionResult> UpdateQuot (UpdateQuotationDto QuotDto, int id)
         {
             var quotation = await _context.Quotations.FindAsync(id);
 
