@@ -152,7 +152,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("PurchaseRequisition/{id}/status")]
+        [Route("PurchaseRequisition/{id}/status/CancelPRbyEmp")]
         [Authorize]
         public async Task<ActionResult<PurchaseRequisition>> UpdateStatusByEmp(int id)
         {
