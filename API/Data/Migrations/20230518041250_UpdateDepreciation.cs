@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedAsset : Migration
+    public partial class UpdateDepreciation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -237,9 +237,8 @@ namespace API.Data.Migrations
                 name: "AssetDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    AssetId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    AssetId = table.Column<string>(type: "TEXT", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     PersonInChargeId = table.Column<int>(type: "INTEGER", nullable: false),
                     AssetPic = table.Column<string>(type: "TEXT", nullable: true),

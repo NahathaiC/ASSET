@@ -1,19 +1,28 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using API.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.DTOs.AssetDtos
 {
     public class CreateAssetDetailsDto
     {
-        public int AssetId { get; set; }
+        [Required]
+        public string Id { get; set; }
+
+        [Required]
+        public string AssetId { get; set; }
+
+        // [Required]
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 
-        [ForeignKey("PersonInChargeId")]
-        public int PersonInChargeId { get; set; }
-        public User PersonInCharge { get; set; }
-        public string AssetPic { get; set; }
+        // [Required]
+        public IFormFile AssetPic { get; set; }
+
+        // [Required]
         public string Classifier { get; set; }
+
+        // [Required]
         public string SerialNo { get; set; }
+
+        // [Required]
         public string Supplier { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal Vat { get; set; }

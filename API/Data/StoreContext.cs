@@ -38,6 +38,11 @@ namespace API.Data
                     new Role { Id = 5, Name = "Purchasing", NormalizedName = "PURCHASING" },
                     new Role { Id = 6, Name = "Asset", NormalizedName = "ASSET" }
                 );
+
+            builder.Entity<AssetDetails>()
+                .HasOne<User>(ad => ad.PersonInCharge)
+                .WithMany()
+                .HasForeignKey(ad => ad.PersonInChargeId);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -58,7 +63,5 @@ namespace API.Data
 
             return await base.SaveChangesAsync(cancellationToken);
         }
-
-
     }
 }

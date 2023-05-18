@@ -5,6 +5,7 @@ using API.DTOs.PRDtos;
 using API.DTOs.QuotDtos;
 using API.DTOs.StockDtos;
 using API.DTOs.TaxDtos;
+using API.DTOs.UserDtos;
 using API.Entities;
 using API.Entities.AssetAggregate;
 using API.Entities.PRAggregate;
@@ -34,10 +35,6 @@ namespace API.RequestHelpers
             CreateMap<UpdateTaxDto, TaxInvoice>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
 
-            // CreateMap<CreateAssetDto, Asset>()
-            //     .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
-            //     .ForMember(dest => dest.Stock, opt => opt.Ignore()); // Ignore mapping StockDto to Stock
-
             CreateMap<CreateAssetDto, Asset>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new Stock { Id = src.Stock.Id }));
@@ -49,6 +46,11 @@ namespace API.RequestHelpers
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
 
             CreateMap<CreateStockDto, Stock>();
+
+            CreateMap<PICDto, User>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
         }
     }
 }

@@ -180,7 +180,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-
         // [HttpPut("{id}/status")]
         // // [Authorize(Roles = "Approver")]
         // public async Task<ActionResult<Asset>> UpdateAssetStatus(string id, AssetStatus status)

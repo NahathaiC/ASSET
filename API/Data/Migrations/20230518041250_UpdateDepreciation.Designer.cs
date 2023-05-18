@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230517070121_UpdatedAsset")]
-    partial class UpdatedAsset
+    [Migration("20230518041250_UpdateDepreciation")]
+    partial class UpdateDepreciation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,12 +60,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AssetAggregate.AssetDetails", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("AssetId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AssetId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AssetPic")
                         .HasColumnType("TEXT");

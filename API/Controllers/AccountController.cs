@@ -30,7 +30,13 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
+                Position = user.Position,
+                Department = user.Department,
+                Section = user.Section,
+                Phone = user.Phone,
+                Status = user.Status,
                 Token = await _tokenService.GenerateToken(user)
+
             };
         }
 
@@ -79,12 +85,12 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user),
                 Position = user.Position,
                 Department = user.Department,
                 Section = user.Section,
                 Phone = user.Phone,
-                Status = user.Status
+                Status = user.Status,
+                Token = await _tokenService.GenerateToken(user)
             };
         }
 

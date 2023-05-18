@@ -57,12 +57,11 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.AssetAggregate.AssetDetails", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
 
-                    b.Property<int>("AssetId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("AssetId")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("AssetPic")
                         .HasColumnType("TEXT");
