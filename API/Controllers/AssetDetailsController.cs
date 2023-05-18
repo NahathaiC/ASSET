@@ -67,6 +67,31 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, assetDetails);
         }
 
+        [HttpPost("AddAssetPicture")]
+        public async Task<ActionResult> AddAssetPic([FromForm] AddAssetPicDto addAssetPicDto)
+        {
+            var assetDetails = await _context.AssetDetails.FindAsync(addAssetPicDto.Id);
+
+            if (assetDetails == null)
+                return NotFound();
+
+            if (addAssetPicDto.AssetPic != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(addAssetPicDto.AssetPic);
+
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+                assetDetails.AssetPic = imageResult.SecureUrl.ToString();
+                assetDetails.PublicId = imageResult.PublicId;
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -84,6 +84,9 @@ namespace API.Data.Migrations
                     b.Property<int>("PersonInChargeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("TEXT");
 

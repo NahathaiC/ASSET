@@ -9,12 +9,11 @@ namespace API.DTOs.AssetDtos
 
         [Required]
         public string AssetId { get; set; }
+        // [Required]
+        // public IFormFile AssetPic { get; set; }
 
         // [Required]
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
-
-        // [Required]
-        public IFormFile AssetPic { get; set; }
 
         // [Required]
         public string Classifier { get; set; }

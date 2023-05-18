@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateDepreciation : Migration
+    public partial class AssetPicsAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -252,7 +252,8 @@ namespace API.Data.Migrations
                     UsedMonths = table.Column<decimal>(type: "TEXT", nullable: false),
                     Department = table.Column<string>(type: "TEXT", nullable: true),
                     Section = table.Column<string>(type: "TEXT", nullable: true),
-                    LocateAt = table.Column<string>(type: "TEXT", nullable: true)
+                    LocateAt = table.Column<string>(type: "TEXT", nullable: true),
+                    PublicId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

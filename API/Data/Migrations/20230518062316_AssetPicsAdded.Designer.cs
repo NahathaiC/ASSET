@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230518041250_UpdateDepreciation")]
-    partial class UpdateDepreciation
+    [Migration("20230518062316_AssetPicsAdded")]
+    partial class AssetPicsAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,9 @@ namespace API.Data.Migrations
 
                     b.Property<int>("PersonInChargeId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("TEXT");

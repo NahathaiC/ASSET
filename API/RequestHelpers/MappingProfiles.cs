@@ -44,6 +44,7 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new StockDto { Id = src.Stock.Id, Type = src.Stock.Type }));
 
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
+            CreateMap<AddAssetPicDto, AssetDetails>();
 
             CreateMap<CreateStockDto, Stock>();
 

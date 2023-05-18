@@ -151,6 +151,41 @@ namespace API.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("PurchaseRequisition/{id}/status")]
+        [Authorize]
+        public async Task<ActionResult<PurchaseRequisition>> UpdateStatusByEmp(int id)
+        {
+            string userName = User.Identity.Name;
+
+            var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);
+
+            if (purchaseRequisition == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the authenticated user is authorized to update the status
+            if (purchaseRequisition.RequestUser != userName)
+            {
+                return Forbid(); // Return 403 Forbidden if the authenticated user is not the request user
+            }
+
+            purchaseRequisition.Status = Status.Cancel; // Set the status to "Cancel"
+
+            var result = await _context.SaveChangesAsync();
+
+            if (result > 0)
+            {
+                return Ok(purchaseRequisition); // Return the updated purchase requisition
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update Status");
+            }
+        }
+
+
 
         [Authorize(Roles = "Approver, Admin")]
         [HttpPut("{id}")]
