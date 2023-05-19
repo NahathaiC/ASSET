@@ -10,6 +10,7 @@ using API.Entities;
 using API.Entities.AssetAggregate;
 using API.Entities.PRAggregate;
 using AutoMapper;
+using static API.Controllers.AssetDetailsController;
 using static API.DTOs.TaxDtos.CreateTaxDto;
 
 namespace API.RequestHelpers
@@ -45,12 +46,18 @@ namespace API.RequestHelpers
 
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
             CreateMap<AddAssetPicDto, AssetDetails>();
+            CreateMap<AssetDetails, GetAssetDetailsDto>();
+            CreateMap<AssetDetails, GetAssetDetailsRequest>()
+                .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
 
             CreateMap<CreateStockDto, Stock>();
 
             CreateMap<PICDto, User>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
+
+            CreateMap<User, GetPICDto>();
 
         }
     }

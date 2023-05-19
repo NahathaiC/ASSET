@@ -85,9 +85,9 @@ namespace API.Controllers
         }
 
 
+        [Authorize(Roles = "Approver")]
         [HttpPut]
         [Route("PurchaseRequisition/{id}/status")]
-        [Authorize(Roles = "Approver")]
         public async Task<ActionResult<PurchaseRequisition>> UpdateStatus(int id, string status)
         {
             string userName = User.Identity.Name;

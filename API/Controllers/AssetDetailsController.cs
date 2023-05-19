@@ -28,15 +28,25 @@ namespace API.Controllers
             _context = context;
         }
 
+        public class GetAssetDetailsRequest
+        {
+            public GetAssetDetailsDto AssetDetailsDto { get; set; }
+            public GetPICDto PersonInChargeDto { get; set; }
+        }
+
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AssetDetails>>> GetAssetDetails()
+        public async Task<ActionResult<IEnumerable<GetAssetDetailsRequest>>> GetAssetDetails()
         {
             var assetDetails = await _context.AssetDetails
-                .Include(ad => ad.PersonInCharge) // Include the related PersonInCharge entity
+                .Include(ad => ad.PersonInCharge)
                 .ToListAsync();
 
-            return Ok(assetDetails);
+            var assetDetailsDto = _mapper.Map<List<GetAssetDetailsRequest>>(assetDetails);
+
+            return Ok(assetDetailsDto);
         }
+
 
 
         // Create a wrapper class for the request body
