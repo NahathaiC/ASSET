@@ -127,5 +127,37 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem deleting AssetDetails" });
         }
 
+        // [Authorize(Roles = "Asset")]
+        // [HttpDelete("{id}")]
+        // public async Task<IActionResult> DeleteAssetDetailswithAsset(string id)
+        // {
+        //     var assetDetails = await _context.AssetDetails.FindAsync(id);
+
+        //     if (assetDetails == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     var asset = await _context.Assets.FindAsync(assetDetails.AssetId);
+
+        //     if (asset == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     _context.AssetDetails.Remove(assetDetails);
+        //     _context.Assets.Remove(asset);
+
+        //     var result = await _context.SaveChangesAsync() > 0;
+
+        //     if (result)
+        //     {
+        //         return Ok();
+        //     }
+
+        //     return BadRequest(new ProblemDetails { Title = "Problem deleting Asset and AssetDetails" });
+        // }
+
+
     }
 }

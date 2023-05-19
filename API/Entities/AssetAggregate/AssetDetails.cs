@@ -9,6 +9,8 @@ namespace API.Entities.AssetAggregate
     {
         [Key]
         public string Id { get; set; }
+        [ForeignKey("AssetId")]
+        public Asset Asset { get; set; }
         public string AssetId { get; set; }
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 
