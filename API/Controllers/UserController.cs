@@ -4,6 +4,7 @@ using API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -21,7 +22,29 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers(string emailOrId)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+
+            var userDtos = users.Select(async user => new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Token = await _tokenService.GenerateToken(user),
+                Position = user.Position,
+                Department = user.Department,
+                Section = user.Section,
+                Phone = user.Phone,
+                Status = user.Status
+            }).Select(task => task.Result);
+
+            return Ok(userDtos);
+        }
+
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUser(string emailOrId)
         {
             var users = await GetUsersByEmailOrId(emailOrId);
 
