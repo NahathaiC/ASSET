@@ -36,7 +36,6 @@ namespace API.Controllers
         public async Task<ActionResult<GetQuotDto>> GetQuot(int id)
         {
             return await _context.Quotations
-                // .Include( q => q.Quotation)
                 .ProjectQuotToQuotDto()
                 .Where( x => x.Id == id)
                 .FirstOrDefaultAsync();

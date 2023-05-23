@@ -5,10 +5,8 @@ namespace API.DTOs.PRDtos
 {
     public class UpdatePRDto
     {
-        // [Required]
-        // public int Id { get; set; }
         public string FixHistory { get; set; }
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        // public DateTime CreateDate { get; set; }
         
         public string Title { get; set; }
         public string Department { get; set; }

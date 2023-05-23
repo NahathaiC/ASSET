@@ -87,7 +87,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-
         [HttpPut]
         [Route("PurchaseOrder/{id}/status")]
         [Authorize(Roles = "Approver")]
@@ -133,7 +132,64 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
+        // [Authorize(Roles = "Admin, Purchasing")]
+        // [HttpPut("EditPurchaseOrders")]
+        // public async Task<ActionResult> UpdatePO(UpdatePODto poDto, int id)
+        // {
+        //     var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+        //     if (purchaseOrder == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     _mapper.Map(poDto, purchaseOrder);
+
+        //     var result = await _context.SaveChangesAsync() > 0;
+
+        //     if (result)
+        //     {
+        //         return NoContent();
+        //     }
+
+        //     return BadRequest(new ProblemDetails { Title = "Problem editing PO"});
+        // }
+
+        [Authorize(Roles = "Admin, Purchasing")]
+        [HttpPut("EditPurchaseOrders")]
+        public async Task<ActionResult> UpdatePO(UpdatePODto poDto, int id)
+        {
+            var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
+
+            if (purchaseOrder == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _mapper.Map(poDto, purchaseOrder);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Problem editing PO",
+                    Detail = ex.Message
+                });
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpDelete]
         public async Task<ActionResult> DeletePO(int id)
         {

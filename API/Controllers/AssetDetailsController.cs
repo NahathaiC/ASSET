@@ -34,7 +34,6 @@ namespace API.Controllers
             public GetPICDto PersonInChargeDto { get; set; }
         }
 
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetAssetDetailsRequest>>> GetAssetDetails()
         {
@@ -47,10 +46,10 @@ namespace API.Controllers
             return Ok(assetDetailsDto);
         }
 
-        [HttpGet("AssetDetails/{id}", Name = "GetAssetDetail")]
+        [HttpGet("AssetDetails", Name = "GetAssetDetail")]
         public async Task<ActionResult<GetAssetDetailsRequest>> GetAssetDetailsById(string id)
         {
-            id = Uri.UnescapeDataString(id);
+            // id = Uri.UnescapeDataString(id);
 
             var assetDetails = await _context.AssetDetails
                 .Include(ad => ad.PersonInCharge)
@@ -73,7 +72,7 @@ namespace API.Controllers
             public PICDto PersonInChargeDto { get; set; }
         }
 
-        [Authorize(Roles = "Asset")]
+        [Authorize(Roles = "Admin, Asset")]
         [HttpPost]
         [ProducesResponseType(typeof(AssetDetails), 201)]
         public async Task<ActionResult<AssetDetails>> CreateAssetDetails([FromBody] CreateAssetDetailsRequest request)
@@ -98,7 +97,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, createdAssetDetails);
         }
 
-        [Authorize(Roles = "Asset")]
+        [Authorize(Roles = "Admin, Asset")]
         [HttpPost("AddAssetPicture")]
         public async Task<ActionResult> AddAssetPic([FromForm] AddAssetPicDto addAssetPicDto)
         {
@@ -141,7 +140,6 @@ namespace API.Controllers
 
             return Ok(resignAssetDetailsDto);
         }
-
 
         [Authorize(Roles = "Admin, Asset")]
         [HttpDelete]
@@ -197,8 +195,6 @@ namespace API.Controllers
 
             return Ok(updatedAssetDetails);
         }
-
-
 
     }
 }

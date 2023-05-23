@@ -64,7 +64,6 @@ namespace API.Controllers
         }
 
         [HttpPost("AddQuotationToPurchaseRequisition")]
-        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddQuotation(int id, int quotationId)
         {
             string userName = User.Identity.Name;
@@ -75,7 +74,7 @@ namespace API.Controllers
                 return NotFound(); // Return 404 Not Found if the purchaseRequisition is not found
 
             if (purchaseRequisition.RequestUser != userName && !User.IsInRole("Admin"))
-                return Forbid(); // Return 403 Forbidden if the authenticated user is not the request user or doesn't have the "Admin" role
+                return Forbid(); // Return 403 Forbidden if the authenticated user is not the request user and doesn't have the "Admin" role
 
             var quotation = await _context.Quotations.FindAsync(quotationId);
 
@@ -89,28 +88,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-
-        // [HttpPost("AddQuotationToPurchaseRequisition")]
-        // public async Task<ActionResult> AddQuotation(int id, int quotationId)
-        // {
-        //     var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);
-
-        //     if (purchaseRequisition == null)
-        //         return NotFound(); // Return 404 Not Found if the purchaseRequisition is not found
-
-        //     var quotation = await _context.Quotations.FindAsync(quotationId);
-
-        //     if (quotation == null)
-        //         return NotFound(); // Return 404 Not Found if the quotation is not found
-
-        //     // Associate the quotation with the purchaseRequisition
-        //     purchaseRequisition.Quotation = quotation;
-        //     await _context.SaveChangesAsync();
-
-        //     return NoContent();
-        // }
-
-        // [Route("PurchaseRequisition/{id}/status")]
         [Authorize(Roles = "Approver")]
         [HttpPut]
         [Route("UpdateStatusPurchaseRequisition")]
@@ -197,7 +174,7 @@ namespace API.Controllers
                 return Forbid(); // Return 403 Forbidden if the authenticated user is not the request user
             }
 
-            purchaseRequisition.Status = Status.Cancel; // Set the status to "Cancel"
+            purchaseRequisition.Status = Status.Cancel;
 
             var result = await _context.SaveChangesAsync();
 
@@ -210,8 +187,6 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update Status");
             }
         }
-
-
 
         [Authorize(Roles = "Admin, RequestUser")]
         [HttpPut("EditPurchaseRequisition")]
@@ -243,7 +218,7 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return BadRequest(new ProblemDetails { Title = "Problem updating PR" });
+            return BadRequest(new ProblemDetails { Title = "Problem editing PR" });
         }
 
 

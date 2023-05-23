@@ -94,7 +94,7 @@ namespace API.Controllers
             };
         }
  
-        // [Authorize(Roles = "Admin")] [HttpDelete("deleteUser/{userId}")]
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteUser")]
         public async Task<IActionResult> DeleteUser(int userId)
         {

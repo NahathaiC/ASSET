@@ -41,7 +41,6 @@ namespace API.Controllers
             return Ok(userDtos);
         }
 
-
         [Authorize(Roles = "Admin")]
         [HttpGet("{emailOrId}")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUser(string emailOrId)
@@ -83,7 +82,6 @@ namespace API.Controllers
             return users;
         }
 
-
         [Authorize(Roles = "Admin")]
         [HttpPut("updateUserStatus")]
         public async Task<IActionResult> UpdateUserStatus([FromBody] UpdateUserStatusDto updateUserStatusDto)
@@ -115,8 +113,6 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update user status.");
             }
         }
-
-
 
         private async Task<User> GetUserByEmailOrId(string emailOrId)
         {

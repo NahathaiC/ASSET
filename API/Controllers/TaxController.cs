@@ -35,7 +35,6 @@ namespace API.Controllers
             return taxInvoices;
         }
 
-
         [HttpGet("{id}", Name = "GetTaxInvoice")]
         public async Task<ActionResult<TaxInvoice>> GetTaxInvoice(int id)
         {
@@ -51,7 +50,7 @@ namespace API.Controllers
             return taxInvoice;
         }
 
-        [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpPost("CreateTaxInvoice")] // Unique route for CreateTaxInvoice action
         public async Task<ActionResult> CreateTaxInvoice([FromBody] CreateTaxDto createTaxDto)
         {
@@ -79,7 +78,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new Tax Invoice" });
         }
 
-        [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpPost("AddTaxInvoicePicture")] // Unique route for AddTaxPic action
         public async Task<ActionResult> AddTaxPic([FromForm] AddTaxPicDto addTaxPicDto)
         {
@@ -106,7 +105,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpPut]
         public async Task<ActionResult> UpdateTaxInvoice(UpdateTaxDto taxInvoiceDto)
         {
@@ -123,7 +122,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem updating Tax Invoice" });
         }
 
-        [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpDelete]
         public async Task<ActionResult> DeleteTaxInvoice(int id)
         {
@@ -139,7 +138,6 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting Tax Invoice" });
         }
-
 
     }
 }

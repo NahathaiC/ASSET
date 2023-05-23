@@ -40,26 +40,6 @@ namespace API.Controllers
             return assetDtos;
         }
 
-        // [HttpGet("Asset/{id}", Name = "GetAsset")]
-        // public async Task<ActionResult<GetAssetDto>> GetAsset(string id)
-        // {
-        //     id = Uri.UnescapeDataString(id); // Decode the URL-encoded ID
-
-        //     var asset = await _context.Assets
-        //         .Include(a => a.Owner)
-        //         .Include(a => a.Stock)
-        //         .FirstOrDefaultAsync(a => a.Id == id);
-
-        //     if (asset == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     var assetDto = _mapper.Map<GetAssetDto>(asset);
-
-        //     return assetDto;
-        // }
-
         [HttpGet("Asset", Name = "GetAsset")]
         public async Task<ActionResult<GetAssetDto>> GetAssetById(string id)
         {
@@ -80,8 +60,7 @@ namespace API.Controllers
             return assetDto;
         }
 
-
-        [Authorize(Roles = "Asset")]
+        [Authorize(Roles = "Admin, Asset")]
         [HttpPost]
         public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
         {
@@ -116,7 +95,7 @@ namespace API.Controllers
         }
 
         [HttpPut] // Normal, GoodCondition, Broken, UnderRepair
-        [Authorize(Roles = "Asset")]
+        [Authorize(Roles = "Admin, Asset")]
         public async Task<ActionResult<Asset>> UpdateAssetStatus(string id, AssetStatus status)
         {
             // Check if the provided status value is valid
@@ -224,7 +203,6 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails { Title = "Problem Edit Asset" });
         }
-
 
     }
 }

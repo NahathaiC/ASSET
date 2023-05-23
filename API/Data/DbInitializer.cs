@@ -1,5 +1,4 @@
 using API.Entities;
-using API.Entities.PRAggregate;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Data

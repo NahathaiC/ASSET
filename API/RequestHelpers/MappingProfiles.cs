@@ -19,32 +19,42 @@ namespace API.RequestHelpers
     {
         public MappingProfiles()
         {
+            //PurchaseRequisition
             CreateMap<PRDto, PurchaseRequisition>();
             CreateMap<UpdatePRDto, PurchaseRequisition>();
             CreateMap<PurchaseRequisition, GetPRDto>();
 
+            //Quotation
             CreateMap<QuotDto, Quotation>();
             CreateMap<UpdateQuotationDto, Quotation>();
 
+            //PurchasOrder
             CreateMap<PODto, PurchaseOrder>();
+            CreateMap<UpdatePODto, PurchaseOrder>();
 
+            //TaxInvoice
             CreateMap<CreateTaxDto, TaxInvoice>()
                 .ForMember(dest => dest.TaxItems, opt => opt.MapFrom(src => src.TaxItems));
 
             CreateMap<TaxItemDto, TaxItem>();
-
             CreateMap<UpdateTaxDto, TaxInvoice>()
                 .ForMember(dest => dest.TaxItems, opt => opt.Ignore()); // Ignore mapping TaxItems
 
             CreateMap<UpdateTaxDto, TaxItem>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
 
+            //Owner
             CreateMap<Owner, OwnerDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.OwnerDesc, opt => opt.MapFrom(src => src.OwnerDesc));
             CreateMap<OwnerDto, Owner>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
+            //Stock
+            CreateMap<CreateStockDto, Stock>();
+            CreateMap<UpdateStockDto, Stock>();
+
+            //Asset
             CreateMap<CreateAssetDto, Asset>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new Stock { Id = src.Stock.Id }));
@@ -59,23 +69,24 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom((src, dest) => src.Owner != null ? new Owner { Id = src.Owner.Id } : dest.Owner))
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom((src, dest) => src.Stock != null ? new Stock { Id = src.Stock.Id } : dest.Stock));
 
+            //AssetDetails
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
+            CreateMap<CreateAssetDetailsRequest, AssetDetails>();
+
             CreateMap<AddAssetPicDto, AssetDetails>();
             CreateMap<AssetDetails, GetAssetDetailsDto>();
+            CreateMap<AssetDetails, GetAssetDetailsRequest>()
+                .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
+            
+            CreateMap<UpdateAssetDetailsDto, AssetDetails>();
 
-            CreateMap<CreateStockDto, Stock>();
-            CreateMap<UpdateStockDto, Stock>();
-
+            //Person In Charge
             CreateMap<PICDto, User>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
             CreateMap<User, GetPICDto>();
-            CreateMap<CreateAssetDetailsRequest, AssetDetails>();
-            CreateMap<UpdateAssetDetailsDto, AssetDetails>();
-            CreateMap<AssetDetails, GetAssetDetailsRequest>()
-                .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
-                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
 
         }
     }
