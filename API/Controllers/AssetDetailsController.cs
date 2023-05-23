@@ -47,8 +47,6 @@ namespace API.Controllers
             return Ok(assetDetailsDto);
         }
 
-
-
         // Create a wrapper class for the request body
         public class CreateAssetDetailsRequest
         {
@@ -75,7 +73,10 @@ namespace API.Controllers
             _context.AssetDetails.Add(assetDetails);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, assetDetails);
+            var createdAssetDetails = _mapper.Map<GetAssetDetailsRequest>(assetDetails);
+            createdAssetDetails.PersonInChargeDto = _mapper.Map<GetPICDto>(personInCharge);
+
+            return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, createdAssetDetails);
         }
 
         [Authorize(Roles = "Asset")]
@@ -102,20 +103,40 @@ namespace API.Controllers
             return NoContent();
         }
 
+        // [HttpGet("assets/active")]
+        // public async Task<ActionResult<IEnumerable<AssetDetails>>> GetActiveAssetDetails()
+        // {
+        //     var activeAssetDetails = await _context.GetActiveAssetDetails();
+
+        //     return Ok(activeAssetDetails);
+        // }
+
+        // [HttpGet("assets/resign")]
+        // public async Task<ActionResult<IEnumerable<AssetDetails>>> GetResignAssetDetails()
+        // {
+        //     var resignAssetDetails = await _context.GetResignAssetDetails();
+
+        //     return Ok(resignAssetDetails);
+        // }
+
         [HttpGet("assets/active")]
-        public async Task<ActionResult<IEnumerable<AssetDetails>>> GetActiveAssetDetails()
+        public async Task<ActionResult<IEnumerable<GetAssetDetailsRequest>>> GetActiveAssetDetails()
         {
             var activeAssetDetails = await _context.GetActiveAssetDetails();
 
-            return Ok(activeAssetDetails);
+            var activeAssetDetailsDto = _mapper.Map<List<GetAssetDetailsRequest>>(activeAssetDetails);
+
+            return Ok(activeAssetDetailsDto);
         }
 
         [HttpGet("assets/resign")]
-        public async Task<ActionResult<IEnumerable<AssetDetails>>> GetResignAssetDetails()
+        public async Task<ActionResult<IEnumerable<GetAssetDetailsRequest>>> GetResignAssetDetails()
         {
             var resignAssetDetails = await _context.GetResignAssetDetails();
 
-            return Ok(resignAssetDetails);
+            var resignAssetDetailsDto = _mapper.Map<List<GetAssetDetailsRequest>>(resignAssetDetails);
+
+            return Ok(resignAssetDetailsDto);
         }
 
 
@@ -136,37 +157,6 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting AssetDetails" });
         }
-
-        // [Authorize(Roles = "Asset")]
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> DeleteAssetDetailswithAsset(string id)
-        // {
-        //     var assetDetails = await _context.AssetDetails.FindAsync(id);
-
-        //     if (assetDetails == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     var asset = await _context.Assets.FindAsync(assetDetails.AssetId);
-
-        //     if (asset == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     _context.AssetDetails.Remove(assetDetails);
-        //     _context.Assets.Remove(asset);
-
-        //     var result = await _context.SaveChangesAsync() > 0;
-
-        //     if (result)
-        //     {
-        //         return Ok();
-        //     }
-
-        //     return BadRequest(new ProblemDetails { Title = "Problem deleting Asset and AssetDetails" });
-        // }
 
 
     }

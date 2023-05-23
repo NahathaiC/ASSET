@@ -3,20 +3,11 @@ using API.Entities;
 
 namespace API.DTOs.TaxDtos
 {
-    // public class UpdateProductIdDto
-    // {
-    //     [Required]
-    //     public string Id { get; set; }
-    //     public string Product_Desc { get; set; }
-    // }
     public class UpdateTaxDto
     {
         public int Id { get; set; }
         [Required]
-        public DateTime CreateDate { get; set; } = DateTime.Now;
-
-        [Required]
-        public IFormFile TaxPics { get; set; }
+        public DateTime CreateDate { get; set; }
 
         [Required]
         public string Supplier { get; set; }
@@ -38,10 +29,10 @@ namespace API.DTOs.TaxDtos
         [Required]
         public decimal TotalAmount { get; set; }
 
-        [Range(1, double.PositiveInfinity)]
+        [Range(0, double.PositiveInfinity)]
         public decimal Discount { get; set; }
 
-        [Range(1, double.PositiveInfinity)]
+        [Range(0, double.PositiveInfinity)]
         public decimal AftDiscount { get; set; }
 
         [Required]

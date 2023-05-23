@@ -65,16 +65,14 @@ namespace API.Controllers
         {
             var asset = _mapper.Map<Asset>(assetDto);
 
-            // Fetch the stock based on the provided StockId
             var stock = await _context.Stocks.FindAsync(assetDto.Stock.Id);
             if (stock == null)
             {
                 return BadRequest(new ProblemDetails { Title = "Invalid stock." });
             }
 
-            asset.Stock = stock; // Assign the fetched stock to the asset
+            asset.Stock = stock; 
 
-            // Fetch the owner based on the provided OwnerId
             var owner = await _context.Owners.FindAsync(assetDto.Owner.Id);
             if (owner == null)
             {
@@ -95,8 +93,8 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new asset." });
         }
 
-        [HttpPut("{id}/status")]
-        [Authorize(Roles = "Approver")]
+        [HttpPut]
+        [Authorize(Roles = "Asset")]
         public async Task<ActionResult<Asset>> UpdateAssetStatus(string id, AssetStatus status)
         {
             // Check if the provided status value is valid
@@ -111,7 +109,7 @@ namespace API.Controllers
 
             if (asset == null)
             {
-                return NotFound(); // Return 404 Not Found if the asset is not found
+                return NotFound();
             }
 
             // Update the AssetStatus based on the provided status value
@@ -124,7 +122,7 @@ namespace API.Controllers
             {
                 // Retrieve the updated asset from the database
                 var updatedAsset = await _context.Assets.FindAsync(id);
-                return Ok(updatedAsset); // Return the updated asset
+                return Ok(updatedAsset);
             }
             else
             {
@@ -133,7 +131,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin, Asset")]
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteAsset(string id)
         {
             var asset = await _context.Assets.FindAsync(id);

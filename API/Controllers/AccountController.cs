@@ -93,9 +93,9 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user)
             };
         }
-
-        // [Authorize(Roles = "Admin")]
-        [HttpDelete("deleteUser/{userId}")]
+ 
+        // [Authorize(Roles = "Admin")] [HttpDelete("deleteUser/{userId}")]
+        [HttpDelete("deleteUser")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());

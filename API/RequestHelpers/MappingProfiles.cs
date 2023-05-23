@@ -28,13 +28,17 @@ namespace API.RequestHelpers
 
             CreateMap<PODto, PurchaseOrder>();
 
-            // Inside your AutoMapper configuration
             CreateMap<CreateTaxDto, TaxInvoice>()
                 .ForMember(dest => dest.TaxItems, opt => opt.MapFrom(src => src.TaxItems));
 
             CreateMap<TaxItemDto, TaxItem>();
-            CreateMap<UpdateTaxDto, TaxInvoice>();
+
+            CreateMap<UpdateTaxDto, TaxInvoice>()
+                .ForMember(dest => dest.TaxItems, opt => opt.Ignore()); // Ignore mapping TaxItems
+
+            CreateMap<UpdateTaxDto, TaxItem>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
+
 
             CreateMap<CreateAssetDto, Asset>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
@@ -47,9 +51,6 @@ namespace API.RequestHelpers
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
             CreateMap<AddAssetPicDto, AssetDetails>();
             CreateMap<AssetDetails, GetAssetDetailsDto>();
-            CreateMap<AssetDetails, GetAssetDetailsRequest>()
-                .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
-                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
 
             CreateMap<CreateStockDto, Stock>();
 
@@ -58,6 +59,10 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email));
 
             CreateMap<User, GetPICDto>();
+            CreateMap<CreateAssetDetailsRequest, AssetDetails>();
+            CreateMap<AssetDetails, GetAssetDetailsRequest>()
+                .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
+                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
 
         }
     }
