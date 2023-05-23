@@ -120,7 +120,7 @@ namespace API.Controllers
 
             if (result) return NoContent();
 
-            return BadRequest(new ProblemDetails { Title = "Problem updating new Tax Invoice" });
+            return BadRequest(new ProblemDetails { Title = "Problem updating Tax Invoice" });
         }
 
         [Authorize(Roles = "Purchasing")]

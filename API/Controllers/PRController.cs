@@ -25,9 +25,8 @@ namespace API.Controllers
         public async Task<ActionResult<List<GetPRDto>>> GetPRs()
         {
             return await _context.PurchaseRequisitions
-                // .Include( q => q.Quotation)
+
                 .ProjectPRToPRDto()
-                // .Where( x => x.RequestUser == User.Identity.Name)
                 .ToListAsync();
         }
 
@@ -35,7 +34,7 @@ namespace API.Controllers
         public async Task<ActionResult<GetPRDto>> GetPR(int id)
         {
             return await _context.PurchaseRequisitions
-                // .Include( q => q.Quotation)
+
                 .ProjectPRToPRDto()
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
@@ -64,13 +63,19 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("{id}/quotation/{quotationId}")]
+        [HttpPost("AddQuotationToPurchaseRequisition")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AddQuotation(int id, int quotationId)
         {
+            string userName = User.Identity.Name;
+
             var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);
 
             if (purchaseRequisition == null)
                 return NotFound(); // Return 404 Not Found if the purchaseRequisition is not found
+
+            if (purchaseRequisition.RequestUser != userName && !User.IsInRole("Admin"))
+                return Forbid(); // Return 403 Forbidden if the authenticated user is not the request user or doesn't have the "Admin" role
 
             var quotation = await _context.Quotations.FindAsync(quotationId);
 
@@ -85,9 +90,30 @@ namespace API.Controllers
         }
 
 
+        // [HttpPost("AddQuotationToPurchaseRequisition")]
+        // public async Task<ActionResult> AddQuotation(int id, int quotationId)
+        // {
+        //     var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);
+
+        //     if (purchaseRequisition == null)
+        //         return NotFound(); // Return 404 Not Found if the purchaseRequisition is not found
+
+        //     var quotation = await _context.Quotations.FindAsync(quotationId);
+
+        //     if (quotation == null)
+        //         return NotFound(); // Return 404 Not Found if the quotation is not found
+
+        //     // Associate the quotation with the purchaseRequisition
+        //     purchaseRequisition.Quotation = quotation;
+        //     await _context.SaveChangesAsync();
+
+        //     return NoContent();
+        // }
+
+        // [Route("PurchaseRequisition/{id}/status")]
         [Authorize(Roles = "Approver")]
         [HttpPut]
-        [Route("PurchaseRequisition/{id}/status")]
+        [Route("UpdateStatusPurchaseRequisition")]
         public async Task<ActionResult<PurchaseRequisition>> UpdateStatus(int id, string status)
         {
             string userName = User.Identity.Name;
@@ -152,7 +178,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        [Route("PurchaseRequisition/{id}/status/CancelPRbyEmp")]
+        [Route("CanclePurchaseRequisitionByCreator")]
         [Authorize]
         public async Task<ActionResult<PurchaseRequisition>> UpdateStatusByEmp(int id)
         {
@@ -188,7 +214,7 @@ namespace API.Controllers
 
 
         [Authorize(Roles = "Admin, RequestUser")]
-        [HttpPut("{id}")]
+        [HttpPut("EditPurchaseRequisition")]
         public async Task<ActionResult> UpdatePR(UpdatePRDto prDto, int id)
         {
             var purchaseRequisition = await _context.PurchaseRequisitions.FindAsync(id);

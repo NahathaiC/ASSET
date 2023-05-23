@@ -40,10 +40,31 @@ namespace API.Controllers
             return assetDtos;
         }
 
+        // [HttpGet("Asset/{id}", Name = "GetAsset")]
+        // public async Task<ActionResult<GetAssetDto>> GetAsset(string id)
+        // {
+        //     id = Uri.UnescapeDataString(id); // Decode the URL-encoded ID
 
-        [HttpGet("{id}", Name = "GetAsset")]
-        public async Task<ActionResult<GetAssetDto>> GetAsset(string id)
+        //     var asset = await _context.Assets
+        //         .Include(a => a.Owner)
+        //         .Include(a => a.Stock)
+        //         .FirstOrDefaultAsync(a => a.Id == id);
+
+        //     if (asset == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     var assetDto = _mapper.Map<GetAssetDto>(asset);
+
+        //     return assetDto;
+        // }
+
+        [HttpGet("Asset", Name = "GetAsset")]
+        public async Task<ActionResult<GetAssetDto>> GetAssetById(string id)
         {
+            // id = Uri.UnescapeDataString(id); // Decode the URL-encoded ID
+
             var asset = await _context.Assets
                 .Include(a => a.Owner)
                 .Include(a => a.Stock)
@@ -59,6 +80,7 @@ namespace API.Controllers
             return assetDto;
         }
 
+
         [Authorize(Roles = "Asset")]
         [HttpPost]
         public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
@@ -71,7 +93,7 @@ namespace API.Controllers
                 return BadRequest(new ProblemDetails { Title = "Invalid stock." });
             }
 
-            asset.Stock = stock; 
+            asset.Stock = stock;
 
             var owner = await _context.Owners.FindAsync(assetDto.Owner.Id);
             if (owner == null)
@@ -93,7 +115,7 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem creating a new asset." });
         }
 
-        [HttpPut]
+        [HttpPut] // Normal, GoodCondition, Broken, UnderRepair
         [Authorize(Roles = "Asset")]
         public async Task<ActionResult<Asset>> UpdateAssetStatus(string id, AssetStatus status)
         {
@@ -132,7 +154,7 @@ namespace API.Controllers
 
         [Authorize(Roles = "Admin, Asset")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsset(string id)
+        public async Task<ActionResult> DeleteAsset(string id)
         {
             var asset = await _context.Assets.FindAsync(id);
 
@@ -151,10 +173,58 @@ namespace API.Controllers
             stock.Total -= 1;
 
             _context.Assets.Remove(asset);
-            await _context.SaveChangesAsync();
+            var result = await _context.SaveChangesAsync() > 0;
 
-            return NoContent();
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem deleting Asset" });
         }
+
+        [Authorize(Roles = "Admin, Asset")]
+        [HttpPut("EditAsset")]
+        public async Task<ActionResult> EditAsset(UpdateAssetDto assetDto)
+        {
+            var asset = await _context.Assets.FirstOrDefaultAsync(a => a.Id == assetDto.Id);
+
+            if (asset == null)
+            {
+                return NotFound();
+            }
+
+            if (asset.StockId != assetDto.Stock.Id)
+            {
+                var oldStock = await _context.Stocks.FindAsync(asset.StockId);
+                var newStock = await _context.Stocks.FindAsync(assetDto.Stock.Id);
+
+                if (newStock == null)
+                {
+                    return BadRequest(new ProblemDetails
+                    {
+                        Title = "Invalid stock ID",
+                        Detail = "The specified stock ID does not exist."
+                    });
+                }
+
+                if (oldStock != null)
+                {
+                    oldStock.Total--; // Decrement the Total of the old stock
+                }
+
+                newStock.Total++; // Increment the Total of the new stock
+
+                asset.StockId = newStock.Id;
+            }
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(new ProblemDetails { Title = "Problem Edit Asset" });
+        }
+
 
     }
 }

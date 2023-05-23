@@ -43,7 +43,7 @@ namespace API.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        [HttpGet("user")]
+        [HttpGet("{emailOrId}")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUser(string emailOrId)
         {
             var users = await GetUsersByEmailOrId(emailOrId);

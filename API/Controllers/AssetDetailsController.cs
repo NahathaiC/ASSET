@@ -47,6 +47,25 @@ namespace API.Controllers
             return Ok(assetDetailsDto);
         }
 
+        [HttpGet("AssetDetails/{id}", Name = "GetAssetDetail")]
+        public async Task<ActionResult<GetAssetDetailsRequest>> GetAssetDetailsById(string id)
+        {
+            id = Uri.UnescapeDataString(id);
+
+            var assetDetails = await _context.AssetDetails
+                .Include(ad => ad.PersonInCharge)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            
+            if (assetDetails == null)
+            {
+                return NotFound();
+            }
+
+            var assetDetailsDto = _mapper.Map<GetAssetDetailsRequest>(assetDetails);
+
+            return assetDetailsDto;
+        }
+
         // Create a wrapper class for the request body
         public class CreateAssetDetailsRequest
         {
@@ -103,22 +122,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // [HttpGet("assets/active")]
-        // public async Task<ActionResult<IEnumerable<AssetDetails>>> GetActiveAssetDetails()
-        // {
-        //     var activeAssetDetails = await _context.GetActiveAssetDetails();
-
-        //     return Ok(activeAssetDetails);
-        // }
-
-        // [HttpGet("assets/resign")]
-        // public async Task<ActionResult<IEnumerable<AssetDetails>>> GetResignAssetDetails()
-        // {
-        //     var resignAssetDetails = await _context.GetResignAssetDetails();
-
-        //     return Ok(resignAssetDetails);
-        // }
-
         [HttpGet("assets/active")]
         public async Task<ActionResult<IEnumerable<GetAssetDetailsRequest>>> GetActiveAssetDetails()
         {
@@ -140,7 +143,7 @@ namespace API.Controllers
         }
 
 
-        [Authorize(Roles = "Asset")]
+        [Authorize(Roles = "Admin, Asset")]
         [HttpDelete]
         public async Task<IActionResult> DeleteAssetDetails(string id)
         {
@@ -157,6 +160,44 @@ namespace API.Controllers
 
             return BadRequest(new ProblemDetails { Title = "Problem deleting AssetDetails" });
         }
+
+        public class EditAssetDetailsRequest
+        {
+            public UpdateAssetDetailsDto AssetDetailsDto { get; set; }
+            public PICDto PersonInChargeDto { get; set; }
+        }
+
+        [Authorize(Roles = "Admin, Asset")]
+        [HttpPut("EditAssetDetails")]
+        public async Task<ActionResult<GetAssetDetailsRequest>> EditAssetDetails([FromBody] EditAssetDetailsRequest request)
+        {
+            var assetDetails = await _context.AssetDetails.FindAsync(request.AssetDetailsDto.Id);
+
+            if (assetDetails == null)
+            {
+                return NotFound();
+            }
+
+            // Update asset details properties
+            _mapper.Map(request.AssetDetailsDto, assetDetails);
+
+            // Validate the existence of the user
+            var personInCharge = await _userManager.FindByIdAsync(request.PersonInChargeDto.Id.ToString());
+            if (personInCharge == null)
+            {
+                return BadRequest("Invalid PersonInCharge");
+            }
+
+            assetDetails.PersonInChargeId = personInCharge.Id;
+
+            await _context.SaveChangesAsync();
+
+            var updatedAssetDetails = _mapper.Map<GetAssetDetailsRequest>(assetDetails);
+            updatedAssetDetails.PersonInChargeDto = _mapper.Map<GetPICDto>(personInCharge);
+
+            return Ok(updatedAssetDetails);
+        }
+
 
 
     }

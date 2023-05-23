@@ -10,16 +10,16 @@ namespace API.DTOs.AssetDtos
         [Required]
         public string AssetId { get; set; }
 
-        // [Required]
+        [Required]
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 
-        // [Required]
+        [Required]
         public string Classifier { get; set; }
 
-        // [Required]
+        [Required]
         public string SerialNo { get; set; }
 
-        // [Required]
+        [Required]
         public string Supplier { get; set; }
         public decimal TotalAmount { get; set; }
         public decimal Vat { get; set; }

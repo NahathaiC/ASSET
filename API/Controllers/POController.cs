@@ -61,14 +61,19 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = "Purchasing")]
+        [Authorize(Roles = "Admin, Purchasing")]
         [HttpPost("{id}/quotation/{quotationId}")]
         public async Task<ActionResult> AddQuotation(int id, int quotationId)
         {
+            string userName = User.Identity.Name;
+
             var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
 
             if (purchaseOrder == null)
                 return NotFound(); // Return 404 Not Found if the purchaseOrder is not found
+
+            if (purchaseOrder.Creator != userName && !User.IsInRole("Admin"))
+                return Forbid(); // Return 403 Forbidden if the authenticated user is not the creator or doesn't have the "Admin" role
 
             var quotation = await _context.Quotations.FindAsync(quotationId);
 
@@ -81,6 +86,7 @@ namespace API.Controllers
 
             return NoContent();
         }
+
 
         [HttpPut]
         [Route("PurchaseOrder/{id}/status")]

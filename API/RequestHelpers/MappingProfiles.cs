@@ -39,6 +39,11 @@ namespace API.RequestHelpers
             CreateMap<UpdateTaxDto, TaxItem>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
 
+            CreateMap<Owner, OwnerDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.OwnerDesc, opt => opt.MapFrom(src => src.OwnerDesc));
+            CreateMap<OwnerDto, Owner>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             CreateMap<CreateAssetDto, Asset>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new Owner { Id = src.Owner.Id }))
@@ -48,11 +53,18 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => new OwnerDto { Id = src.Owner.Id, OwnerDesc = src.Owner.OwnerDesc }))
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => new StockDto { Id = src.Stock.Id, Type = src.Stock.Type }));
 
+            CreateMap<UpdateAssetDto, Asset>()
+                .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+                .ForMember(dest => dest.StockId, opt => opt.Ignore())
+                .ForMember(dest => dest.Owner, opt => opt.MapFrom((src, dest) => src.Owner != null ? new Owner { Id = src.Owner.Id } : dest.Owner))
+                .ForMember(dest => dest.Stock, opt => opt.MapFrom((src, dest) => src.Stock != null ? new Stock { Id = src.Stock.Id } : dest.Stock));
+
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
             CreateMap<AddAssetPicDto, AssetDetails>();
             CreateMap<AssetDetails, GetAssetDetailsDto>();
 
             CreateMap<CreateStockDto, Stock>();
+            CreateMap<UpdateStockDto, Stock>();
 
             CreateMap<PICDto, User>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -60,6 +72,7 @@ namespace API.RequestHelpers
 
             CreateMap<User, GetPICDto>();
             CreateMap<CreateAssetDetailsRequest, AssetDetails>();
+            CreateMap<UpdateAssetDetailsDto, AssetDetails>();
             CreateMap<AssetDetails, GetAssetDetailsRequest>()
                 .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
                 .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
