@@ -44,6 +44,10 @@ namespace API.RequestHelpers
 
             CreateMap<UpdateTaxDto, TaxItem>();
             CreateMap<AddTaxPicDto, TaxInvoice>();
+            CreateMap<TaxInvoice, TaxDto>();
+            CreateMap<TaxInvoice, GetTaxDto>();
+            CreateMap<TaxDto, TaxInvoice>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             //Owner
             CreateMap<Owner, OwnerDto>()
@@ -72,15 +76,20 @@ namespace API.RequestHelpers
                 .ForMember(dest => dest.Stock, opt => opt.MapFrom((src, dest) => src.Stock != null ? new Stock { Id = src.Stock.Id } : dest.Stock));
 
             //AssetDetails
+            CreateMap<AssetDetails, AssetDetailsDto>()
+                .ForMember(dest => dest.TaxInvoiceId, opt => opt.MapFrom(src => src.TaxInvoice.Id));
+
             CreateMap<CreateAssetDetailsDto, AssetDetails>();
             CreateMap<CreateAssetDetailsRequest, AssetDetails>();
 
             CreateMap<AddAssetPicDto, AssetDetails>();
             CreateMap<AssetDetails, GetAssetDetailsDto>();
+
             CreateMap<AssetDetails, GetAssetDetailsRequest>()
                 .ForMember(dest => dest.AssetDetailsDto, opt => opt.MapFrom(src => src))
-                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge));
-            
+                .ForMember(dest => dest.PersonInChargeDto, opt => opt.MapFrom(src => src.PersonInCharge))
+                .ForMember(dest => dest.TaxInvoiceDto, opt => opt.MapFrom(src => src.TaxInvoice));
+
             CreateMap<UpdateAssetDetailsDto, AssetDetails>();
 
             //Person In Charge

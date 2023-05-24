@@ -1,5 +1,6 @@
 using API.Data;
 using API.DTOs.AssetDtos;
+using API.DTOs.TaxDtos;
 using API.DTOs.UserDtos;
 using API.Entities;
 using API.Entities.AssetAggregate;
@@ -32,6 +33,7 @@ namespace API.Controllers
         {
             public GetAssetDetailsDto AssetDetailsDto { get; set; }
             public GetPICDto PersonInChargeDto { get; set; }
+            public GetTaxDto TaxInvoiceDto { get; set; }
         }
 
         [HttpGet]
@@ -39,12 +41,14 @@ namespace API.Controllers
         {
             var assetDetails = await _context.AssetDetails
                 .Include(ad => ad.PersonInCharge)
+                .Include(ad => ad.TaxInvoice)
                 .ToListAsync();
 
             var assetDetailsDto = _mapper.Map<List<GetAssetDetailsRequest>>(assetDetails);
 
             return Ok(assetDetailsDto);
         }
+
 
         [HttpGet("AssetDetails", Name = "GetAssetDetail")]
         public async Task<ActionResult<GetAssetDetailsRequest>> GetAssetDetailsById(string id)
@@ -53,8 +57,9 @@ namespace API.Controllers
 
             var assetDetails = await _context.AssetDetails
                 .Include(ad => ad.PersonInCharge)
+                .Include(ad => ad.TaxInvoice)
                 .FirstOrDefaultAsync(a => a.Id == id);
-            
+
             if (assetDetails == null)
             {
                 return NotFound();
@@ -70,6 +75,7 @@ namespace API.Controllers
         {
             public CreateAssetDetailsDto AssetDetailsDto { get; set; }
             public PICDto PersonInChargeDto { get; set; }
+            public TaxDto TaxInvoiceDto { get; set; }
         }
 
         [Authorize(Roles = "Admin, Asset")]
@@ -86,7 +92,15 @@ namespace API.Controllers
                 return BadRequest("Invalid PersonInCharge");
             }
 
+            // Validate the existence of the tax invoice
+            var taxInvoice = await _context.TaxInvoices.FindAsync(request.TaxInvoiceDto.Id);
+            if (taxInvoice == null)
+            {
+                return BadRequest("Invalid TaxInvoice");
+            }
+
             assetDetails.PersonInChargeId = personInCharge.Id;
+            assetDetails.TaxInvoiceId = taxInvoice.Id;
 
             _context.AssetDetails.Add(assetDetails);
             await _context.SaveChangesAsync();
@@ -96,6 +110,7 @@ namespace API.Controllers
 
             return CreatedAtAction(nameof(GetAssetDetails), new { id = assetDetails.Id }, createdAssetDetails);
         }
+
 
         [Authorize(Roles = "Admin, Asset")]
         [HttpPost("AddAssetPicture")]
@@ -163,6 +178,7 @@ namespace API.Controllers
         {
             public UpdateAssetDetailsDto AssetDetailsDto { get; set; }
             public PICDto PersonInChargeDto { get; set; }
+            public TaxDto TaxInvoiceDto { get; set; }
         }
 
         [Authorize(Roles = "Admin, Asset")]

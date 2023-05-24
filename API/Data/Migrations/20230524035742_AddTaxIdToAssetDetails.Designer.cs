@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230523082820_StockControllerAdded")]
-    partial class StockControllerAdded
+    [Migration("20230524035742_AddTaxIdToAssetDetails")]
+    partial class AddTaxIdToAssetDetails
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,6 +102,9 @@ namespace API.Data.Migrations
                     b.Property<string>("Supplier")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("TaxInvoiceId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("TEXT");
 
@@ -116,6 +119,8 @@ namespace API.Data.Migrations
                     b.HasIndex("AssetId");
 
                     b.HasIndex("PersonInChargeId");
+
+                    b.HasIndex("TaxInvoiceId");
 
                     b.ToTable("AssetDetails");
                 });
@@ -627,9 +632,17 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Entities.TaxInvoice", "TaxInvoice")
+                        .WithMany()
+                        .HasForeignKey("TaxInvoiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Asset");
 
                     b.Navigation("PersonInCharge");
+
+                    b.Navigation("TaxInvoice");
                 });
 
             modelBuilder.Entity("API.Entities.PRAggregate.PurchaseRequisition", b =>

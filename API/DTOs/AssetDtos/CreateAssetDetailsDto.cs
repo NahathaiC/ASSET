@@ -10,6 +10,8 @@ namespace API.DTOs.AssetDtos
         [Required]
         public string AssetId { get; set; }
 
+        // public int TaxInvoiceId { get; set; }
+
         [Required]
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 

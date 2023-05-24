@@ -5,6 +5,7 @@ namespace API.DTOs.AssetDtos
         public string Id { get; set; }
         public string AssetId { get; set; }
         public string AssetPic { get; set; }
+        // public int TaxInvoiceId { get; set; }
         public DateTime ReceivedDate { get; set; }
         public string Classifier { get; set; }
         public string SerialNo { get; set; }

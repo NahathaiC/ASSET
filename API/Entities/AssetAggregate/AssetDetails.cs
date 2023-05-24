@@ -12,10 +12,15 @@ namespace API.Entities.AssetAggregate
         [ForeignKey("AssetId")]
         public Asset Asset { get; set; }
         public string AssetId { get; set; }
+
+        [ForeignKey("TaxInvoiceId")]
+        public TaxInvoice TaxInvoice { get; set; }
+        public int TaxInvoiceId { get; set; }
+
         public DateTime ReceivedDate { get; set; } = DateTime.Now;
 
-        [ForeignKey("PersonInChargeId")]  // Specify the foreign key property name
-        public int PersonInChargeId { get; set; }  // Foreign key property
+        [ForeignKey("PersonInChargeId")]
+        public int PersonInChargeId { get; set; }
         public User PersonInCharge { get; set; }
 
         public string AssetPic { get; set; }
@@ -33,9 +38,5 @@ namespace API.Entities.AssetAggregate
         public decimal Depreciation => GrandAmount * (DepreciationRate / 100) * (UsedMonths / 12);
         public string PublicId { get; set; }
 
-        internal static IEnumerable<object> Include(Func<object, object> value)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

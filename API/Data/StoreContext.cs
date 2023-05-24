@@ -28,6 +28,7 @@ namespace API.Data
 
             builder.Entity<Asset>().HasKey(a => a.Id);
             builder.Entity<Stock>().HasKey(s => s.Id);
+            builder.Entity<TaxInvoice>().HasKey(t => t.Id);
 
             builder.Entity<Role>()
                 .HasData(
