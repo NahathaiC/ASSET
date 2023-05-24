@@ -42,7 +42,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Quotation>> CreateQuot(QuotDto quotDto)
+        public async Task<ActionResult<Quotation>> CreateQuot(CreateQuotDto quotDto)
         {
             var quotation = _mapper.Map<Quotation>(quotDto);
 

@@ -1,4 +1,4 @@
-using API.Entities;
+using API.DTOs.QuotDtos;
 
 namespace API.DTOs.PODtos
 {
@@ -10,6 +10,6 @@ namespace API.DTOs.PODtos
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        public Quotation Quotation { get; set; }
+        public QuotDto Quotation { get; set; }
     }
 }

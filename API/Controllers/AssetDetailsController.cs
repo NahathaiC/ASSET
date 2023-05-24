@@ -156,7 +156,7 @@ namespace API.Controllers
             var result = await _context.SaveChangesAsync() > 0;
             if (result) return Ok();
 
-            return BadRequest(new ProblemDetails { Title = "Problem deleting AssetDetails" });
+            return BadRequest(new ProblemDetails { Title = "Problem Deleting AssetDetails" });
         }
 
         public class EditAssetDetailsRequest

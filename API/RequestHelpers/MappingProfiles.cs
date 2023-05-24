@@ -25,8 +25,10 @@ namespace API.RequestHelpers
             CreateMap<PurchaseRequisition, GetPRDto>();
 
             //Quotation
-            CreateMap<QuotDto, Quotation>();
+            CreateMap<CreateQuotDto, Quotation>();
             CreateMap<UpdateQuotationDto, Quotation>();
+            CreateMap<QuotDto, Quotation>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             //PurchasOrder
             CreateMap<PODto, PurchaseOrder>();

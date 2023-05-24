@@ -201,7 +201,7 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return BadRequest(new ProblemDetails { Title = "Problem Edit Asset" });
+            return BadRequest(new ProblemDetails { Title = "Problem Editing Asset" });
         }
 
     }

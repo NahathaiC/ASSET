@@ -57,7 +57,7 @@ namespace API.Controllers
             }
             else
             {
-                return BadRequest(new ProblemDetails { Title = "Problem creating new PO" });
+                return BadRequest(new ProblemDetails { Title = "Problem Creating New PO" });
             }
         }
 
@@ -128,32 +128,9 @@ namespace API.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update Status");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to Update Status");
             }
         }
-
-        // [Authorize(Roles = "Admin, Purchasing")]
-        // [HttpPut("EditPurchaseOrders")]
-        // public async Task<ActionResult> UpdatePO(UpdatePODto poDto, int id)
-        // {
-        //     var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
-
-        //     if (purchaseOrder == null)
-        //     {
-        //         return NotFound();
-        //     }
-
-        //     _mapper.Map(poDto, purchaseOrder);
-
-        //     var result = await _context.SaveChangesAsync() > 0;
-
-        //     if (result)
-        //     {
-        //         return NoContent();
-        //     }
-
-        //     return BadRequest(new ProblemDetails { Title = "Problem editing PO"});
-        // }
 
         [Authorize(Roles = "Admin, Purchasing")]
         [HttpPut("EditPurchaseOrders")]
@@ -169,6 +146,32 @@ namespace API.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (purchaseOrder.Quotation != null)
+            {
+                if (poDto.Quotation != null && poDto.Quotation.Id != purchaseOrder.Quotation.Id)
+                {
+                    return BadRequest("The PurchaseOrder already has a Quotation assigned and cannot be modified.");
+                }
+            }
+            else if (poDto.Quotation != null)
+            {
+                var existingQuotation = await _context.Quotations.FindAsync(poDto.Quotation.Id);
+
+                if (existingQuotation == null)
+                {
+                    return BadRequest("Invalid Quotation. Please provide an existing Quotation.");
+                }
+
+                // Detach the existing Quotation from the context if it's not null
+                if (purchaseOrder.Quotation != null)
+                {
+                    _context.Entry(purchaseOrder.Quotation).State = EntityState.Detached;
+                }
+
+                // Assign the new Quotation to the purchaseOrder
+                purchaseOrder.Quotation = existingQuotation;
             }
 
             _mapper.Map(poDto, purchaseOrder);
@@ -203,7 +206,7 @@ namespace API.Controllers
 
             if (result) return Ok();
 
-            return BadRequest(new ProblemDetails { Title = "Problem deleting PO" });
+            return BadRequest(new ProblemDetails { Title = "Problem Deleting PO" });
         }
 
     }
