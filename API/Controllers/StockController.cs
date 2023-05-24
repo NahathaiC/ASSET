@@ -82,5 +82,22 @@ namespace API.Controllers
             return BadRequest(new ProblemDetails { Title = "Problem Edit Stock" });
         }
 
+        [Authorize(Roles = "Admin, Asset")]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteStock(int id)
+        {
+            var stock = await _context.Stocks.FindAsync(id);
+
+            if (stock == null) return NotFound();
+
+            _context.Stocks.Remove(stock);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result) return Ok();
+
+            return BadRequest(new ProblemDetails { Title = "Problem Deleting Stock" });
+        }
+
     }
 }

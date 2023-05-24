@@ -265,7 +265,7 @@ namespace API.Controllers
 
             if (result) return Ok();
 
-            return BadRequest(new ProblemDetails { Title = "Problem deleting PR" });
+            return BadRequest(new ProblemDetails { Title = "Problem Deleting PR" });
         }
 
     }

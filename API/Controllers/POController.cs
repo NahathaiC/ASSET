@@ -193,7 +193,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Admin, Purchasing")]
-        [HttpDelete]
+        [HttpDelete()]
         public async Task<ActionResult> DeletePO(int id)
         {
             var purchaseOrder = await _context.PurchaseOrders.FindAsync(id);
