@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using API.DTOs.QuotDtos;
 using API.Entities;
 
 namespace API.DTOs.PRDtos
@@ -6,7 +7,6 @@ namespace API.DTOs.PRDtos
     public class UpdatePRDto
     {
         public string FixHistory { get; set; }
-        // public DateTime CreateDate { get; set; }
         
         public string Title { get; set; }
         public string Department { get; set; }
@@ -20,6 +20,6 @@ namespace API.DTOs.PRDtos
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
         public string Remark { get; set; }
-        public Quotation Quotation { get; set; }
+        public QuotDto Quotation { get; set; }
     }
 }

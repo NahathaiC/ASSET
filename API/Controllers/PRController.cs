@@ -206,21 +206,50 @@ namespace API.Controllers
 
             if (!isRequestUser && !isAdmin)
             {
-                return Forbid(); // Return 403 Forbidden if the user is not authorized
+                return Forbid();
+            }
+
+            if (purchaseRequisition.Quotation != null)
+            {
+                if (prDto.Quotation != null && prDto.Quotation.Id != purchaseRequisition.Quotation.Id)
+                {
+                    return BadRequest("The PurchaseRequisition already has a Quotation assigned and cannot be modified.");
+                }
+            }
+            else if (prDto.Quotation != null)
+            {
+                var existingQuotation = await _context.Quotations.FindAsync(prDto.Quotation.Id);
+
+                if (existingQuotation == null)
+                {
+                    return BadRequest("Invalid Quotation. Please provide an existing Quotation.");
+                }
+
+                if (purchaseRequisition.Quotation != null)
+                {
+                    _context.Entry(purchaseRequisition.Quotation).State = EntityState.Detached;
+                }
+
+                purchaseRequisition.Quotation = existingQuotation;
             }
 
             _mapper.Map(prDto, purchaseRequisition);
 
-            var result = await _context.SaveChangesAsync() > 0;
-
-            if (result)
+            try
             {
-                return NoContent();
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ProblemDetails
+                {
+                    Title = "Problem editing PR",
+                    Detail = ex.Message
+                });
             }
 
-            return BadRequest(new ProblemDetails { Title = "Problem editing PR" });
+            return NoContent();
         }
-
 
         [Authorize(Roles = "Admin")]
         [HttpDelete]
