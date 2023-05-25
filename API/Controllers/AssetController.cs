@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    // [Authorize]
 
     public class AssetController : BaseApiController
     {
@@ -170,9 +170,10 @@ namespace API.Controllers
                 return NotFound();
             }
 
+            _mapper.Map(assetDto, asset); // Map properties from assetDto to asset
+
             if (asset.StockId != assetDto.Stock.Id)
             {
-                var oldStock = await _context.Stocks.FindAsync(asset.StockId);
                 var newStock = await _context.Stocks.FindAsync(assetDto.Stock.Id);
 
                 if (newStock == null)
@@ -184,14 +185,11 @@ namespace API.Controllers
                     });
                 }
 
-                if (oldStock != null)
-                {
-                    oldStock.Total--; // Decrement the Total of the old stock
-                }
-
-                newStock.Total++; // Increment the Total of the new stock
-
+                var oldStockId = asset.StockId;
                 asset.StockId = newStock.Id;
+
+                await UpdateStockTotal(oldStockId, decrement: true);
+                await UpdateStockTotal(newStock.Id, decrement: false);
             }
 
             var result = await _context.SaveChangesAsync() > 0;
@@ -201,7 +199,24 @@ namespace API.Controllers
                 return NoContent();
             }
 
-            return BadRequest(new ProblemDetails { Title = "Problem Editing Asset" });
+            return BadRequest(new ProblemDetails { Title = "Problem Edit Asset" });
+        }
+
+        private async Task UpdateStockTotal(int stockId, bool decrement)
+        {
+            var stock = await _context.Stocks.FindAsync(stockId);
+
+            if (stock != null)
+            {
+                if (decrement)
+                {
+                    stock.Total--;
+                }
+                else
+                {
+                    stock.Total++;
+                }
+            }
         }
 
     }

@@ -59,6 +59,7 @@ namespace API.RequestHelpers
             //Stock
             CreateMap<CreateStockDto, Stock>();
             CreateMap<UpdateStockDto, Stock>();
+            CreateMap<Stock, StockDto>();
 
             //Asset
             CreateMap<CreateAssetDto, Asset>()
@@ -72,8 +73,8 @@ namespace API.RequestHelpers
             CreateMap<UpdateAssetDto, Asset>()
                 .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
                 .ForMember(dest => dest.StockId, opt => opt.Ignore())
-                .ForMember(dest => dest.Owner, opt => opt.MapFrom((src, dest) => src.Owner != null ? new Owner { Id = src.Owner.Id } : dest.Owner))
-                .ForMember(dest => dest.Stock, opt => opt.MapFrom((src, dest) => src.Stock != null ? new Stock { Id = src.Stock.Id } : dest.Stock));
+                .ForMember(dest => dest.Owner, opt => opt.Ignore())
+                .ForMember(dest => dest.Stock, opt => opt.Ignore());
 
             //AssetDetails
             CreateMap<AssetDetails, AssetDetailsDto>()
