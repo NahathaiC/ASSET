@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class PRController : BaseApiController
     {
         private readonly StoreContext _context;
