@@ -73,6 +73,7 @@ namespace API.Data
         {
             var activeAssetDetails = await AssetDetails
                 .Include(ad => ad.PersonInCharge) // Include the related PersonInCharge entity
+                .Include(ad => ad.TaxInvoice)
                 .Where(ad => ad.PersonInCharge.Status.ToUpper() == "ACTIVE" || ad.PersonInCharge.Status == "Active")
                 .ToListAsync();
 
@@ -83,6 +84,7 @@ namespace API.Data
         {
             var resignAssetDetails = await AssetDetails
                 .Include(ad => ad.PersonInCharge) // Include the related PersonInCharge entity
+                .Include(ad => ad.TaxInvoice)
                 .Where(ad => ad.PersonInCharge.Status.ToUpper() == "RESIGN" || ad.PersonInCharge.Status == "Resign")
                 .ToListAsync();
 

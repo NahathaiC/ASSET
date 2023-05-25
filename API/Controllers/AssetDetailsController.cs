@@ -201,8 +201,14 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid PersonInCharge");
             }
+            var taxInvoice = await _context.TaxInvoices.FindAsync(request.TaxInvoiceDto.Id);
+            if (taxInvoice == null)
+            {
+                return BadRequest("Invalid TaxInvoice");
+            }
 
             assetDetails.PersonInChargeId = personInCharge.Id;
+            assetDetails.TaxInvoiceId = taxInvoice.Id;
 
             await _context.SaveChangesAsync();
 

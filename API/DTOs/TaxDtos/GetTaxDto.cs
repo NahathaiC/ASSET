@@ -8,7 +8,7 @@ namespace API.DTOs.TaxDtos
         public DateTime CreateDate { get; set; }
         public string Supplier { get; set; }
         public string SuppAdress { get; set; }
-        public List<TaxItem> TaxItems { get; set; }
+        // public List<TaxItem> TaxItems { get; set; }
         public string Product_Desc { get; set; }
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
