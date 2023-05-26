@@ -2,6 +2,7 @@ using API.Data;
 using API.DTOs.PRDtos;
 using API.Entities.PRAggregate;
 using API.Extensions;
+using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,10 @@ namespace API.Controllers
     {
         private readonly StoreContext _context;
         private readonly IMapper _mapper;
-        public PRController(StoreContext context, IMapper mapper)
+        private readonly ImageService _imageService;
+        public PRController(StoreContext context, IMapper mapper, ImageService imageService)
         {
+            _imageService = imageService;
             _mapper = mapper;
             _context = context;
 
@@ -24,30 +27,47 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<GetPRDto>>> GetPRs()
         {
-            return await _context.PurchaseRequisitions
-
-                .ProjectPRToPRDto()
+            var purchaseRequisition = await _context.PurchaseRequisitions
+                .Include(x => x.Quotation)
                 .ToListAsync();
+
+            var prDto = _mapper.Map<List<GetPRDto>>(purchaseRequisition);
+
+            return Ok(prDto);
         }
 
         [HttpGet("{id}", Name = "GetPR")]
         public async Task<ActionResult<GetPRDto>> GetPR(int id)
         {
-            return await _context.PurchaseRequisitions
-
-                .ProjectPRToPRDto()
+            var purchaseRequisition = await _context.PurchaseRequisitions
+                .Include(x => x.Quotation)
                 .Where(x => x.Id == id)
                 .FirstOrDefaultAsync();
+
+            var prDto = _mapper.Map<GetPRDto>(purchaseRequisition);
+
+            return Ok(prDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseRequisition>> CreatePR(PRDto prDto)
+        public async Task<ActionResult<PurchaseRequisition>> CreatePR([FromForm] PRDto prDto)
         {
             // Get the UserName of the user creating the PurchaseRequisition
             string userName = User.Identity.Name;
 
             var purchaseRequisition = _mapper.Map<PurchaseRequisition>(prDto);
             purchaseRequisition.RequestUser = userName; // Set the RequestUser property to the UserName
+
+            if (purchaseRequisition.PrPicture != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(prDto.PrPicture);
+
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+                purchaseRequisition.PrPicture = imageResult.SecureUrl.ToString();
+                purchaseRequisition.PublicId = imageResult.PublicId;
+            }
 
             _context.PurchaseRequisitions.Add(purchaseRequisition);
 

@@ -165,7 +165,13 @@ namespace API.Data.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PrPicture")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ProdDesc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")

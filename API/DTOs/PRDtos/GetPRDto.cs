@@ -22,5 +22,6 @@ namespace API.DTOs.PRDtos
         public string ApproverName1 { get; set; }
         public string ApproverName2 { get; set; }
         public Quotation Quotation { get; set; }
+        public string PrPicture { get; set; }
     }
 }

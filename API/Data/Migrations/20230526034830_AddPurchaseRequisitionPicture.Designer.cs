@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230525030337_AddTaxIdToAssetDetails")]
-    partial class AddTaxIdToAssetDetails
+    [Migration("20230526034830_AddPurchaseRequisitionPicture")]
+    partial class AddPurchaseRequisitionPicture
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,7 +168,13 @@ namespace API.Data.Migrations
                     b.Property<string>("Model")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("PrPicture")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ProdDesc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")

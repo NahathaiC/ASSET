@@ -5,11 +5,23 @@
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTaxIdToAssetDetails : Migration
+    public partial class AddPurchaseRequisitionPicture : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "PrPicture",
+                table: "PurchaseRequisitions",
+                type: "TEXT",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "PublicId",
+                table: "PurchaseRequisitions",
+                type: "TEXT",
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "TaxInvoiceId",
                 table: "AssetDetails",
@@ -61,6 +73,14 @@ namespace API.Data.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_AssetDetails_TaxInvoiceId",
                 table: "AssetDetails");
+
+            migrationBuilder.DropColumn(
+                name: "PrPicture",
+                table: "PurchaseRequisitions");
+
+            migrationBuilder.DropColumn(
+                name: "PublicId",
+                table: "PurchaseRequisitions");
 
             migrationBuilder.DropColumn(
                 name: "TaxInvoiceId",

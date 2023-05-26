@@ -6,7 +6,7 @@ namespace API.DTOs.PRDtos
     public class PRDto
     {
         public string FixHistory { get; set; }
-        public DateTime CreateDate { get; set; } = DateTime.Now;
+        // public DateTime CreateDate { get; set; } = DateTime.Now;
         [Required]
         public string Title { get; set; }
         public string Department { get; set; }
@@ -24,6 +24,7 @@ namespace API.DTOs.PRDtos
         [Range(1,double.PositiveInfinity)]
         public decimal UnitPrice { get; set; }
         public string Remark { get; set; }
-        public Quotation Quotation { get; set; }
+        // public Quotation Quotation { get; set; }
+        public IFormFile PrPicture { get; set; }
     }
 }

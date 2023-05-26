@@ -24,6 +24,8 @@ namespace API.Entities.PRAggregate
         public int ApprovalsReceived { get; set; } = 0;
         public Status Status { get; set; } = Status.Pending;
         public Quotation Quotation { get; set; }
+        public string PrPicture { get; set; }
+        public string PublicId { get; set; }
 
     }
 }
