@@ -1,6 +1,5 @@
 import { Avatar, CardActions, CardHeader, CardMedia } from "@mui/material";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
-import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -12,14 +11,6 @@ interface Props {
 }
 
 export default function PRCard({ purchaserequisition }: Props) {
-  const bull = (
-    <Box
-      component="span"
-      sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-    >
-      •
-    </Box>
-  );
 
   const getStatusColor = (status: string): string => {
     if (status.charAt(0) === "P") {

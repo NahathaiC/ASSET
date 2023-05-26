@@ -1,23 +1,20 @@
 import { Box, Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
+import agent from "../../app/api/agent";
 
 export default function PRDetails() {
   const { id } = useParams<{ id: string }>();
-  const [purchaseRequisition, setPRs] = useState<PurchaseRequisition | null>(
-    null
-  );
+  const [purchaseRequisition, setPRs] = useState<PurchaseRequisition | null>(null);
   const [loading, setLoading] = useState(true);
   const [showQuotation, setShowQuotation] = useState(false);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5050/api/PR/${id}`)
-      .then((response) => setPRs(response.data))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
+    id && agent.Catalog.details(parseInt(id))
+        .then(response => setPRs(response))
+        .catch(error => console.log(error))
+        .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <h3>Loading...</h3>;
@@ -26,10 +23,7 @@ export default function PRDetails() {
 
   const formattedDate = purchaseRequisition.createDate.slice(0, 10);
   const formatteduseDate = purchaseRequisition.useDate.slice(0, 10);
-  const formattedQuotDate = purchaseRequisition.quotation?.createDate?.slice(
-    0,
-    10
-  );
+  const formattedQuotDate = purchaseRequisition.quotation?.createDate?.slice(0, 10);
 
   const handleShowQuotation = () => {
     setShowQuotation(!showQuotation);
@@ -52,7 +46,7 @@ export default function PRDetails() {
         <Divider />
         <Box mt={2}>
           <Button variant="outlined" onClick={handleShowQuotation}>
-            {showQuotation ? "ปิดใบเสนอราคา" : "แสดงใบเสนอราคา"}
+            {showQuotation ? "ใบเสนอราคา" : "แสดงใบเสนอราคา"}
           </Button>
           {showQuotation && purchaseRequisition.quotation && (
             <TableContainer>

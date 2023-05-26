@@ -46,6 +46,8 @@ namespace API.Controllers
 
             var prDto = _mapper.Map<GetPRDto>(purchaseRequisition);
 
+            if (purchaseRequisition == null) return NotFound();
+
             return Ok(prDto);
         }
 
@@ -99,7 +101,7 @@ namespace API.Controllers
             var quotation = await _context.Quotations.FindAsync(quotationId);
 
             if (quotation == null)
-                return NotFound(); // Return 404 Not Found if the quotation is not found
+                return NotFound();
 
             // Associate the quotation with the purchaseRequisition
             purchaseRequisition.Quotation = quotation;
