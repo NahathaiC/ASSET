@@ -40,7 +40,7 @@ namespace API.RequestHelpers
 
             CreateMap<TaxItemDto, TaxItem>();
             CreateMap<UpdateTaxDto, TaxInvoice>()
-                .ForMember(dest => dest.TaxItems, opt => opt.Ignore()); // Ignore mapping TaxItems
+                .ForMember(dest => dest.TaxItems, opt => opt.Ignore());
 
             CreateMap<UpdateTaxDto, TaxItem>();
             CreateMap<AddTaxPicDto, TaxInvoice>();

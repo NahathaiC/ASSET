@@ -5,6 +5,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 
 interface Props {
   purchaserequisition: PurchaseRequisition;
@@ -46,7 +47,7 @@ export default function PRCard({ purchaserequisition }: Props) {
         }
         title={purchaserequisition.title}
         titleTypographyProps={{
-          sx: {fontWeight: 'bold'}
+          sx: { fontWeight: "bold" },
         }}
       />
       <CardContent>
@@ -60,15 +61,22 @@ export default function PRCard({ purchaserequisition }: Props) {
           <br /> {"สาขา : "} {purchaserequisition.department}
           <br /> {"แผนก : "} {purchaserequisition.section}
         </Typography>
-        <Typography sx={{ fontSize: 14, color: statusColor }} gutterBottom>
-          {"สถานะ : "}
+        <Typography
+          sx={{
+            fontSize: 14,
+            backgroundColor: statusColor,
+            borderRadius: "8px",
+            padding: "4px 8px",
+            color: "#fff",
+            display: "inline-block",
+          }}
+          gutterBottom
+        >
           {purchaserequisition.status}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="info">
-          More Details
-        </Button>
+        <Button component={Link} to={`/catalog/${purchaserequisition.id}`} size="small"> View </Button>
       </CardActions>
     </Card>
   );

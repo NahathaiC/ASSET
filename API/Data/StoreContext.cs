@@ -69,6 +69,7 @@ namespace API.Data
         {
             optionsBuilder.EnableSensitiveDataLogging();
         }
+        
         public async Task<List<AssetDetails>> GetActiveAssetDetails()
         {
             var activeAssetDetails = await AssetDetails

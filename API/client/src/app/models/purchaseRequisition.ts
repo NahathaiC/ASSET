@@ -1,8 +1,9 @@
+import { Quotation } from "./quotation";
+
 export interface PurchaseRequisition {
   id: number;
   title: string;
   requestUser: string;
-//   fixHistory: string;
   createDate: string;
   department: string;
   section: string;
@@ -11,6 +12,11 @@ export interface PurchaseRequisition {
   model: string;
   quantity: number;
   unitPrice: number;
-  remark?: string;
+  remark?: any;
   status: string;
+
+  approverName1: string
+  approverName2: string
+
+  quotation: Quotation
 }
