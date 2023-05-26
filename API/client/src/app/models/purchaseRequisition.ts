@@ -14,6 +14,7 @@ export interface PurchaseRequisition {
   unitPrice: number;
   remark?: any;
   status: string;
+  prPicture: string;
 
   approverName1: string
   approverName2: string

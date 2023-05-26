@@ -1,11 +1,11 @@
 import { AppBar, Box, List, ListItem, Switch, Toolbar, Typography, } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
-const midLinks = [
-  { title: "catalog", path: "/catalog" },
-  // {title: 'about', path: '/about'},
-  // {title: 'contact', path: '/contact'}
-];
+// const midLinks = [
+//   { title: "catalog", path: "/catalog" },
+//   // {title: 'about', path: '/about'},
+//   // {title: 'contact', path: '/contact'}
+// ];
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -48,11 +48,11 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         </Box>
 
         <List sx={{ display: "flex" }}>
-          {midLinks.map(({ title, path }) => (
+          {/* {midLinks.map(({ title, path }) => (
             <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
               {title.toUpperCase()}
             </ListItem>
-          ))}
+          ))} */}
         </List>
 
         <List sx={{ display: "flex" }}>

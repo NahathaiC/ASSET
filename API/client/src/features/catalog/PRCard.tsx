@@ -1,4 +1,4 @@
-import { Avatar, CardActions, CardHeader } from "@mui/material";
+import { Avatar, CardActions, CardHeader, CardMedia } from "@mui/material";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -49,6 +49,10 @@ export default function PRCard({ purchaserequisition }: Props) {
         titleTypographyProps={{
           sx: { fontWeight: "bold" },
         }}
+      />
+      <CardMedia
+        sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'grey.300' }}
+        image={purchaserequisition.prPicture}
       />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
