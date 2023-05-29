@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
 import agent from "../../app/api/agent";
+import NotFound from "../../app/errors/NotFound";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function PRDetails() {
   const { id } = useParams<{ id: string }>();
@@ -17,9 +19,9 @@ export default function PRDetails() {
         .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading) return <LoadingComponent message="Loading..."/>;
 
-  if (!purchaseRequisition) return <h3>Purchase Requisition not found</h3>;
+  if (!purchaseRequisition) return <NotFound />
 
   const formattedDate = purchaseRequisition.createDate.slice(0, 10);
   const formatteduseDate = purchaseRequisition.useDate.slice(0, 10);
