@@ -1,7 +1,9 @@
+using System.Text.Json;
 using API.Data;
 using API.DTOs.PRDtos;
 using API.Entities.PRAggregate;
 using API.Extensions;
+using API.RequestHelpers;
 using API.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -24,16 +26,38 @@ namespace API.Controllers
 
         }
 
+        // [HttpGet]
+        // public async Task<ActionResult<PagedList<PurchaseRequisition>>> GetPRs([FromQuery]PRParams prParams)
+        // {
+        //     var query = _context.PurchaseRequisitions
+        //     .Sort(prParams.OrderBy)
+        //     .Search(prParams.SearchTerm)
+        //     .Filter(prParams.Department, prParams.Section);
+
+        //     var results = await query.ToListAsync();
+
+        //     var PurchaseRequisitions = await PagedList<PurchaseRequisition>.ToPagedList(query, 
+        //         prParams.PageNumber, prParams.PageSize);
+
+        //     Response.Headers.Add("Pagination", JsonSerializer.Serialize(PurchaseRequisitions.MetaData));
+
+        //     return PurchaseRequisitions;
+        // }
         [HttpGet]
-        public async Task<ActionResult<List<GetPRDto>>> GetPRs()
+        public async Task<ActionResult<IEnumerable<GetPRDto>>> GetPRs([FromQuery] PRParams prParams)
         {
-            var purchaseRequisition = await _context.PurchaseRequisitions
-                .Include(x => x.Quotation)
-                .ToListAsync();
+            var query = _context.PurchaseRequisitions
+                .Sort(prParams.OrderBy)
+                .Search(prParams.SearchTerm)
+                .Filter(prParams.Department, prParams.Section);
 
-            var prDto = _mapper.Map<List<GetPRDto>>(purchaseRequisition);
+            var results = await query.ToListAsync();
 
-            return Ok(prDto);
+            var prDtos = _mapper.Map<List<GetPRDto>>(results);
+
+            var purchaseRequisitions = await PagedList<PurchaseRequisition>.ToPagedList(query, prParams.PageNumber, prParams.PageSize);
+            Response.AddPaginationHeader(purchaseRequisitions.MetaData);
+            return Ok(prDtos);
         }
 
         [HttpGet("{id}", Name = "GetPR")]
@@ -49,6 +73,15 @@ namespace API.Controllers
             if (purchaseRequisition == null) return NotFound();
 
             return Ok(prDto);
+        }
+
+        [HttpGet("filters")]
+        public async Task<IActionResult> GetFilters()
+        {
+            var department = await _context.PurchaseRequisitions.Select(p => p.Department).Distinct().ToListAsync();
+            var section = await _context.PurchaseRequisitions.Select(p => p.Section).Distinct().ToListAsync();
+
+            return Ok(new { department, section });
         }
 
         [HttpPost]

@@ -1,33 +1,53 @@
-using API.DTOs.PRDtos;
 using API.Entities.PRAggregate;
 
 namespace API.Extensions
 {
     public static class PRExtensions
     {
-        public static IQueryable<GetPRDto> ProjectPRToPRDto(this IQueryable<PurchaseRequisition> query)
+        public static IQueryable<PurchaseRequisition> Sort(this IQueryable<PurchaseRequisition> query, string orderBy)
         {
-            return query
-                .Select(purchaseRequisition => new GetPRDto
-                {
-                    Id = purchaseRequisition.Id,
-                    RequestUser = purchaseRequisition.RequestUser,
-                    FixHistory = purchaseRequisition.FixHistory,
-                    CreateDate = purchaseRequisition.CreateDate,
-                    Title = purchaseRequisition.Title,
-                    Department = purchaseRequisition.Department,
-                    Section = purchaseRequisition.Section,
-                    UseDate = purchaseRequisition.UseDate,
-                    ProdDesc = purchaseRequisition.ProdDesc,
-                    Model = purchaseRequisition.Model,
-                    Quantity = purchaseRequisition.Quantity,
-                    UnitPrice = purchaseRequisition.UnitPrice,
-                    Remark = purchaseRequisition.Remark,
-                    Quotation = purchaseRequisition.Quotation,
-                    Status = purchaseRequisition.Status.ToString(),
-                    ApproverName1 = purchaseRequisition.ApproverName1,
-                    ApproverName2 = purchaseRequisition.ApproverName2,
-                });
+            switch (orderBy)
+            {
+                case "CreatedDate":
+                    query = query.OrderBy(p => p.CreateDate);
+                    break;
+                case "UsingDate":
+                    query = query.OrderBy(p => p.UseDate);
+                    break;
+
+                default:
+                    query = query.OrderBy(p => p.Id);
+                    break;
+            }
+
+            return query;
         }
+
+        public static IQueryable<PurchaseRequisition> Search(this IQueryable<PurchaseRequisition> query, string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm)) return query;
+
+            var lowerCaseSearchTerm = searchTerm.Trim().ToLower();
+
+            return query.Where(p => p.Department.ToLower().Contains(lowerCaseSearchTerm));
+        }
+
+        public static IQueryable<PurchaseRequisition> Filter(this IQueryable<PurchaseRequisition>query, string department, string section )
+        {
+            var departmentList = new List<string>();
+            var sectionList = new List<string>();
+
+            if(!string.IsNullOrEmpty(department))
+                departmentList.AddRange(department.ToLower().Split(",").ToList());
+            
+            if(!string.IsNullOrEmpty(section))
+                sectionList.AddRange(section.ToLower().Split(",").ToList());
+            
+            query = query.Where( p => departmentList.Count == 0 || departmentList.Contains(p.Department.ToLower()));
+            query = query.Where( p => sectionList.Count == 0 || sectionList.Contains(p.Section.ToLower()));
+
+            return query;
+        }
+
     }
 }

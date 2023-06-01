@@ -1,11 +1,9 @@
 import { AppBar, Box, List, ListItem, Switch, Toolbar, Typography, } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
- const midLinks = [
-   //   { title: "catalog", path: "/catalog" },
-   { title: "Error", path: "/about" },
-   //   // {title: 'contact', path: '/contact'}
- ];
+const midLinks = [
+  { title: "PurchaseRequisitions", path: "/catalog" },
+  ];
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -42,7 +40,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
         <Box display='flex' alignItems='center'>
           <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
             {" "}
-            Purchase Requisition
+            HomePage
           </Typography>
           <Switch checked={darkMode} onChange={handleThemeChange} />
         </Box>

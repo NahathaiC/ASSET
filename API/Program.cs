@@ -54,9 +54,10 @@ builder.Services.AddCors(options =>
    {
        options.AddDefaultPolicy(builder =>
        {
-           builder.WithOrigins("http://localhost:5050")
+           builder.WithOrigins("http://localhost:5050", "http://localhost:3000", "http://localhost:3001")
                .AllowAnyMethod()
-               .AllowAnyHeader();
+               .AllowAnyHeader()
+               .WithExposedHeaders("Pagination");
        });
    });
 builder.Services.AddIdentityCore<User>(opt =>

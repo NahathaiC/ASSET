@@ -21,3 +21,12 @@ export interface PurchaseRequisition {
 
   quotation: Quotation
 }
+
+export interface prParams {
+  orderBy: string;
+  seachTem?: string;
+  department?: string[];
+  section?: string[];
+  pageNumber: number;
+  pageSize: number;
+}

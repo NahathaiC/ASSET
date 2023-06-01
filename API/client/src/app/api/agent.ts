@@ -1,15 +1,22 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../router/Routes";
+import { PaginatedResponse } from "../models/pagination";
 
 const sleep = () => new Promise(resolve => setTimeout(resolve, 500));
 
 axios.defaults.baseURL = 'http://localhost:5050/api/';
+axios.defaults.withCredentials = true;
 
-const responsesBody = (response: AxiosResponse) => response.data;
+const responseBody = (response: AxiosResponse) => response.data;
 
 axios.interceptors.response.use(async response => {
     await sleep();
+    const pagination = response.headers['pagination'];
+    if (pagination) {
+        response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+        return response;
+    }
     return response;
   },
   (error: AxiosError) => {
@@ -44,15 +51,16 @@ axios.interceptors.response.use(async response => {
 );
 
 const requests = {
-    get: (url: string) => axios.get(url).then(responsesBody),
-    post: (url: string, body: {}) => axios.post(url, body).then(responsesBody),
-    put: (url: string, body:{}) => axios.put(url, body).then(responsesBody),
-    delete: (url: string) => axios.delete(url).then(responsesBody),
+    get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
+    post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
+    put: (url: string, body:{}) => axios.put(url, body).then(responseBody),
+    delete: (url: string) => axios.delete(url).then(responseBody),
 }
 
 const Catalog = {
-    list: () => requests.get('PR'),
-    details: (id: number) => requests.get(`PR/${id}`)
+    list: (params: URLSearchParams) => requests.get('PR', params),
+    details: (id: number) => requests.get(`PR/${id}`),
+    fetchFilter: () => requests.get('PR/filters')
 }
 
 const TestErrors = {
@@ -64,9 +72,9 @@ const TestErrors = {
 }
 
 const Account = {
-    login: (values: any) => requests.post('Account/login', values),
-    register: (values: any) => requests.post('Account/register', values),
-    currentUser: () => requests.get('Account/currentUser'),
+  login: (values: any) => requests.post('Account/login', values),
+  register: (values: any) => requests.post('Account/register', values),
+  currentUser: () => requests.get('Account/currentUser'),
 }
 
 const agent = {
