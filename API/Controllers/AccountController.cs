@@ -40,40 +40,112 @@ namespace API.Controllers
             };
         }
 
-        [Authorize(Roles = "Admin")]
+        // [HttpPost("register")]
+        // public async Task<ActionResult> Register([FromBody] RegisterDto registerDto)
+        // {
+        //     var user = new User
+        //     {
+        //         UserName = registerDto.Name,
+        //         Id = registerDto.Id,
+        //         Email = registerDto.Email,
+        //         Position = registerDto.Position,
+        //         Department = registerDto.Department,
+        //         Section = registerDto.Section,
+        //         Phone = registerDto.Phone
+        //     };
+
+        //     var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+        //     if (!result.Succeeded)
+        //     {
+        //         foreach (var error in result.Errors)
+        //         {
+        //             ModelState.AddModelError(error.Code, error.Description);
+        //         }
+
+        //         return ValidationProblem();
+        //     }
+
+        //     // Assign the "EMP" role to the new user
+        //     await _userManager.AddToRoleAsync(user, "EMP");
+
+        //     return StatusCode(201);
+        // }
+
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterDto registerDto, [FromQuery] string[] roles)
+        public async Task<ActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            var user = new User
+            try
             {
-                UserName = registerDto.Name,
-                Id = registerDto.Id,
-                Email = registerDto.Email,
-                Position = registerDto.Position,
-                Department = registerDto.Department,
-                Section = registerDto.Section,
-                Phone = registerDto.Phone
-            };
+                var user = new User
+                {
+                    UserName = registerDto.Name,
+                    Id = registerDto.Id,
+                    Email = registerDto.Email,
+                    Position = registerDto.Position,
+                    Department = registerDto.Department,
+                    Section = registerDto.Section,
+                    Phone = registerDto.Phone
+                };
 
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
+                var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if (!result.Succeeded)
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+
+                    return ValidationProblem();
+                }
+
+                await _userManager.AddToRoleAsync(user, "EMP");
+
+                return StatusCode(201);
+            }
+            catch (Exception ex)
             {
-                foreach (var error in result.Errors)
+                // Log the exception details for further investigation
+                // Example: _logger.LogError(ex, "An error occurred while registering a user.");
+
+                // Return an error response
+                return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("updateRoles/{userId}")]
+        public async Task<ActionResult> UpdateRoles(string userId, [FromQuery] string[] roles)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(); // User not found
+            }
+
+            var existingRoles = await _userManager.GetRolesAsync(user);
+            var rolesToAdd = roles.Except(existingRoles).ToArray();
+            var rolesToDelete = existingRoles.Except(roles).ToArray();
+
+            var resultAdd = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            var resultDelete = await _userManager.RemoveFromRolesAsync(user, rolesToDelete);
+
+            if (resultAdd.Succeeded && resultDelete.Succeeded)
+            {
+                return Ok(); // Roles updated successfully
+            }
+            else
+            {
+                // Handle errors
+                foreach (var error in resultAdd.Errors.Concat(resultDelete.Errors))
                 {
                     ModelState.AddModelError(error.Code, error.Description);
                 }
-
                 return ValidationProblem();
             }
-
-            foreach (var role in roles)
-            {
-                await _userManager.AddToRoleAsync(user, role);
-            }
-
-            return StatusCode(201);
         }
+
 
         [Authorize]
         [HttpGet("currentUser")]
@@ -93,7 +165,7 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user)
             };
         }
- 
+
         [Authorize(Roles = "Admin")]
         [HttpDelete("deleteUser")]
         public async Task<IActionResult> DeleteUser(int userId)

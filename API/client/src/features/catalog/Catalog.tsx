@@ -2,7 +2,7 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 import PRList from "./PRList";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { useEffect } from "react";
-import { fetchFilters, fetchPRsAsync, prSelectors, setPrParams } from "./catalogSlice";
+import { fetchFilters, fetchPRsAsync, prSelectors, setPageNumber, setPrParams } from "./catalogSlice";
 import { Box, FormLabel, Grid, Pagination, Paper, Typography } from "@mui/material";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
@@ -62,10 +62,10 @@ export default function Catalog() {
         <PRList purchaserequisitions={purchaserequisitions} />
       </Grid>
       <Grid item xs={3} />
-      <Grid item xs={9}>
+      <Grid item xs={9} sx={{mb: 2}}>
         <AppPagination 
           metaData={metaData}
-          onPageChange={(page: number) => dispatch(setPrParams({pageNumber: page}))}
+          onPageChange={(page: number) => dispatch(setPageNumber({pageNumber: page}))}
         />
       </Grid>
     </Grid>

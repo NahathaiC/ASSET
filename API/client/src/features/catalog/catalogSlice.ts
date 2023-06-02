@@ -30,9 +30,10 @@ function getAxiosParams(prParams: prParams) {
   params.append("orderBy", prParams.orderBy);
 
   if (prParams.seachTem) params.append("searchTerm", prParams.seachTem);
-  if (prParams.department)
+  if (prParams.department.length > 0)
     params.append("department", prParams.department.toString());
-  if (prParams.section) params.append("section", prParams.section.toString());
+  if (prParams.section.length > 0)
+    params.append("section", prParams.section.toString());
   return params;
 }
 
@@ -80,6 +81,8 @@ function initParams() {
     pageNumber: 1,
     pageSize: 6,
     orderBy: "id",
+    department: [],
+    section: [],
   };
 }
 
@@ -98,6 +101,10 @@ export const catalogSlice = createSlice({
   reducers: {
     setPrParams: (state, action) => {
       state.prsLoaded = false;
+      state.prParams = { ...state.prParams, ...action.payload, pageNumber: 1 };
+    },
+    setPageNumber: (state, action) => {
+      state.prsLoaded = false;
       state.prParams = { ...state.prParams, ...action.payload };
     },
     setMetaData: (state, action) => {
@@ -109,7 +116,7 @@ export const catalogSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPRsAsync.pending, (state) => {
-      state.status = "pendingFetchPurchaseRequisitions";
+      state.status = "loading";
     });
     builder.addCase(fetchPRsAsync.fulfilled, (state, action) => {
       prAdapter.setAll(state, action.payload);
@@ -117,7 +124,7 @@ export const catalogSlice = createSlice({
       state.prsLoaded = true;
     });
     builder.addCase(fetchPRsAsync.rejected, (state) => {
-      state.status = "idle";
+      state.status = "error";
     });
 
     //PR
@@ -148,8 +155,11 @@ export const catalogSlice = createSlice({
   },
 });
 
-export const prSelectors = prAdapter.getSelectors((state: RootState) => state.catalog);
+export const prSelectors = prAdapter.getSelectors(
+  (state: RootState) => state.catalog
+);
+
+export const { setPrParams, resetPrParams, setMetaData, setPageNumber } =
+  catalogSlice.actions;
 
 export default catalogSlice.reducer;
-
-export const { setPrParams, resetPrParams, setMetaData } = catalogSlice.actions;

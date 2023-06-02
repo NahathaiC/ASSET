@@ -25,8 +25,8 @@ export interface PurchaseRequisition {
 export interface prParams {
   orderBy: string;
   seachTem?: string;
-  department?: string[];
-  section?: string[];
+  department: string[];
+  section: string[];
   pageNumber: number;
   pageSize: number;
 }

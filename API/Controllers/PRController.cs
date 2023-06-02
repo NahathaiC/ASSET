@@ -26,23 +26,6 @@ namespace API.Controllers
 
         }
 
-        // [HttpGet]
-        // public async Task<ActionResult<PagedList<PurchaseRequisition>>> GetPRs([FromQuery]PRParams prParams)
-        // {
-        //     var query = _context.PurchaseRequisitions
-        //     .Sort(prParams.OrderBy)
-        //     .Search(prParams.SearchTerm)
-        //     .Filter(prParams.Department, prParams.Section);
-
-        //     var results = await query.ToListAsync();
-
-        //     var PurchaseRequisitions = await PagedList<PurchaseRequisition>.ToPagedList(query, 
-        //         prParams.PageNumber, prParams.PageSize);
-
-        //     Response.Headers.Add("Pagination", JsonSerializer.Serialize(PurchaseRequisitions.MetaData));
-
-        //     return PurchaseRequisitions;
-        // }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GetPRDto>>> GetPRs([FromQuery] PRParams prParams)
         {
