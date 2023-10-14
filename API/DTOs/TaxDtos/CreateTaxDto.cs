@@ -4,6 +4,9 @@ namespace API.DTOs.TaxDtos
 {
     public class CreateTaxDto
     {
+
+        // public string TaxNumber { get; set; }
+        
         [Required]
         public DateTime CreateDate { get; set; } = DateTime.Now;
 

@@ -10,6 +10,8 @@ import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
 import HomePage from "../../features/home/HomePage";
 import RequireAuth from "./RequireAuth";
+import Inventory from "../../features/admin/inventory";
+import PRForm from "../../features/admin/PRForm";
 
 export const router = createBrowserRouter([
     {
@@ -19,6 +21,8 @@ export const router = createBrowserRouter([
             {element: <RequireAuth/>, children: [
                 {path: 'catalog', element: <Catalog />},
                 {path: 'catalog/:id', element: <PRDetails />},
+                {path: 'inventory', element: <Inventory />},
+                {path: 'prform', element: <PRForm cancelEdit={() => {}} />}, // Add the PRForm route here
             ]},
             {path: '', element: <HomePage />},
             {path: 'about', element: <AboutPage />},
@@ -29,5 +33,5 @@ export const router = createBrowserRouter([
             {path: 'not-found', element: <NotFound/>},
             {path: '*', element: <Navigate replace to='/not-found' />}
         ]
-        }
-])
+    }
+]);

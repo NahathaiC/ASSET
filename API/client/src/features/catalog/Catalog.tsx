@@ -1,12 +1,12 @@
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import PRList from "./PRList";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { useEffect } from "react";
-import { fetchFilters, fetchPRsAsync, prSelectors, setPageNumber, setPrParams } from "./catalogSlice";
-import { Box, FormLabel, Grid, Pagination, Paper, Typography } from "@mui/material";
+import { setPageNumber, setPrParams } from "./catalogSlice";
+import { FormLabel, Grid, Paper } from "@mui/material";
 import RadioButtonGroup from "../../app/components/RadioButtonGroup";
 import CheckboxButtons from "../../app/components/CheckboxButtons";
 import AppPagination from "../../app/components/AppPagination";
+import usePRs from "../../app/hooks/usePRs";
 
 const sortOptions = [
   { value: "CreatedDate", label: "วันที่ขอซื้อ" },
@@ -14,19 +14,11 @@ const sortOptions = [
 ];
 
 export default function Catalog() {
-  const purchaserequisitions = useAppSelector(prSelectors.selectAll);
-  const { prsLoaded, status, filtersLoaded, department, section, prParams, metaData } = useAppSelector(
+  const {purchaserequisitions, department, section, metaData} = usePRs();
+  const { status, prParams } = useAppSelector(
     (state) => state.catalog
   );
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (!prsLoaded) dispatch(fetchPRsAsync());
-  }, [prsLoaded, dispatch]);
-
-  useEffect(() => {
-    if (!filtersLoaded) dispatch(fetchFilters());
-  }, [dispatch, filtersLoaded]);
 
   if (status.includes("pending") || !metaData)
     return <LoadingComponent message="Loading Purchase requisitions..." />;

@@ -11,7 +11,7 @@ import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/configureStore";
 import SignedInMenu from "./SignedInMenu";
 
-const midLinks = [{ title: "PurchaseRequisitions", path: "/catalog" }];
+const midLinks = [{ title: "รายการขอซื้อ", path: "/catalog" }];
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -39,7 +39,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{ mb: 4 }}>
+    <AppBar position="static" sx={{ mb: 6 }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -62,6 +62,21 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
             </ListItem>
           ))}
         </List>
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
+              อนุมัติการขอซื้อ
+            </ListItem>
+          )}
+        </List>
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem component={NavLink} to={"/prform"} sx={navStyles}>
+              สร้างใบข้อซื้อ
+            </ListItem>
+          )}
+        </List>
+
         {user ? (
           <SignedInMenu />
         ) : (

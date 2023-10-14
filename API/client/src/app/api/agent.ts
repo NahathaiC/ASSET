@@ -11,11 +11,11 @@ axios.defaults.withCredentials = true;
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use((config) => {
   const token = store.getState().account.user?.token;
-  if (token) config.headers.Authorization = `Bearer ${token}` ;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
-})
+});
 
 axios.interceptors.response.use(
   async (response) => {
@@ -45,7 +45,7 @@ axios.interceptors.response.use(
         toast.error(data.title);
         break;
       case 401:
-        toast.error(data.title || 'Unauthorised');
+        toast.error(data.title || "Unauthorised");
         break;
       case 403:
         toast.error("You are not allowed to do that!");
@@ -89,10 +89,20 @@ const Account = {
   currentUser: () => requests.get("Account/currentUser"),
 };
 
+const Admin = {
+  createPR: (purchaserequisition: any) =>
+    requests.post("PR", purchaserequisition), // Change to 'post' instead of 'postForm'
+
+    updatePRStatus: (id: number, status: string) =>
+    requests.put(`PR/UpdateStatusPurchaseRequisition?id=${id}&status=${status}`, {}),
+};
+
 const agent = {
   Catalog,
   TestErrors,
   Account,
+  Admin,
 };
 
 export default agent;
+

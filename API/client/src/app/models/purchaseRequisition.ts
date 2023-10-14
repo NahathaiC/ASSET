@@ -1,5 +1,3 @@
-import { Quotation } from "./quotation";
-
 export interface PurchaseRequisition {
   id: number;
   title: string;
@@ -16,10 +14,8 @@ export interface PurchaseRequisition {
   status: string;
   prPicture: string;
 
-  approverName1: string
-  approverName2: string
-
-  quotation: Quotation
+  approverName1: string;
+  approverName2: string;
 }
 
 export interface prParams {

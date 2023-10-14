@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
@@ -10,7 +10,7 @@ export default function PRDetails() {
   const { id } = useParams<{ id: string }>();
   const [purchaseRequisition, setPRs] = useState<PurchaseRequisition | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showQuotation, setShowQuotation] = useState(false);
+  // const [showQuotation, setShowQuotation] = useState(false);
 
   useEffect(() => {
     id && agent.Catalog.details(parseInt(id))
@@ -25,11 +25,11 @@ export default function PRDetails() {
 
   const formattedDate = purchaseRequisition.createDate.slice(0, 10);
   const formatteduseDate = purchaseRequisition.useDate.slice(0, 10);
-  const formattedQuotDate = purchaseRequisition.quotation?.createDate?.slice(0, 10);
+  // const formattedQuotDate = purchaseRequisition.quotation?.createDate?.slice(0, 10);
 
-  const handleShowQuotation = () => {
-    setShowQuotation(!showQuotation);
-  };
+  // const handleShowQuotation = () => {
+  //   setShowQuotation(!showQuotation);
+  // };
 
   return (
     <Grid container spacing={6}>
@@ -46,7 +46,7 @@ export default function PRDetails() {
           }}
         />
         <Divider />
-        <Box mt={2}>
+        {/* <Box mt={2}>
           <Button variant="outlined" onClick={handleShowQuotation}>
             {showQuotation ? "ใบเสนอราคา" : "แสดงใบเสนอราคา"}
           </Button>
@@ -80,7 +80,7 @@ export default function PRDetails() {
               </Table>
             </TableContainer>
           )}
-        </Box>
+        </Box> */}
       </Grid>
       <Grid item xs={12} md={6}>
         <Typography variant="subtitle1">

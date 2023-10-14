@@ -8,10 +8,11 @@ namespace API.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        // public string TaxNumber { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public string TaxPics { get; set; }
         public string Supplier { get; set; }
-        public string SuppAdress { get; set; }
+        public string SuppAddress { get; set; }
         public List<TaxItem> TaxItems { get; set; } = new List<TaxItem>();
         public string Product_Desc { get; set; }
         public int Quantity { get; set; }

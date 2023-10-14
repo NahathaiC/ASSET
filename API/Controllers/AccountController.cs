@@ -104,7 +104,7 @@ namespace API.Controllers
 
                 return StatusCode(201);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Log the exception details for further investigation
                 // Example: _logger.LogError(ex, "An error occurred while registering a user.");

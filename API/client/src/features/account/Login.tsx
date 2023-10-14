@@ -88,8 +88,8 @@ export default function Login() {
           Sign In
         </LoadingButton>
         <Grid container>
-          <Grid item>
-            <Link to="/register">{"Don't have an account? Sign Up"}</Link>
+          <Grid item >
+            <Link  to="/register">{"Don't have an account? Sign Up"} </Link>
           </Grid>
         </Grid>
       </Box>

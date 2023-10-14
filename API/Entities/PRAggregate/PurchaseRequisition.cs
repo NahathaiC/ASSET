@@ -6,7 +6,7 @@ namespace API.Entities.PRAggregate
     {
         public int Id { get; set; }
         public string RequestUser { get; set; }
-        public string FixHistory { get; set; }
+        //public string FixHistory { get; set; }
         public DateTime CreateDate { get; set; } = DateTime.Now;
         public string Title { get; set; }
         public string Department { get; set; }
