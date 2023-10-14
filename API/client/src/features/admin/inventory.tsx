@@ -10,7 +10,6 @@ import {
   TableCell,
   TableBody,
 } from "@mui/material";
-import { Edit as EditIcon } from "@mui/icons-material";
 import { useState } from "react";
 import AppPagination from "../../app/components/AppPagination";
 import { useAppDispatch } from "../../app/store/configureStore";
@@ -79,6 +78,7 @@ export default function Inventory() {
               <TableCell align="center">สาขา</TableCell>
               <TableCell align="center">แผนก</TableCell>
               <TableCell align="center">จำนวน</TableCell>
+              <TableCell align="center">ราคาต่อหน่วย</TableCell>
               <TableCell align="center">สถานะการขอซื้อ</TableCell>
               <TableCell align="center">อนุมัติการขอซื้อ</TableCell>
               <TableCell align="center">ไม่อนุมัติการขอซื้อ</TableCell>
@@ -113,6 +113,9 @@ export default function Inventory() {
                   {purchaseRequisition.quantity}
                 </TableCell>
                 <TableCell align="center">
+                  {purchaseRequisition.unitPrice} THB
+                </TableCell>
+                <TableCell align="center">
                   {purchaseRequisition.status}
                 </TableCell>
                 <TableCell align="center">
@@ -121,7 +124,7 @@ export default function Inventory() {
                       onClick={() =>
                         updateStatus(purchaseRequisition.id, "Approved")
                       }
-                      style={{ color: "white", backgroundColor: "green" }}
+                      style={{ color: "white", backgroundColor: "#66bb6a" }}
                     >
                       Approved
                     </Button>
@@ -133,7 +136,7 @@ export default function Inventory() {
                       onClick={() =>
                         updateStatus(purchaseRequisition.id, "Disapproved")
                       }
-                      style={{ color: "white", backgroundColor: "red" }}
+                      style={{ color: "white", backgroundColor: "#d32f2f" }}
                     >
                       Disapproved
                     </Button>

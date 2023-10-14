@@ -63,9 +63,9 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           ))}
         </List>
         <List sx={{ display: "flex" }}>
-          {user && (
+          {user && user.roles?.includes("Admin") && (
             <ListItem component={NavLink} to={"/inventory"} sx={navStyles}>
-              อนุมัติการขอซื้อ
+              จัดการสถานะการขอซื้อ
             </ListItem>
           )}
         </List>
