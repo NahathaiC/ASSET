@@ -1,4 +1,15 @@
-import { Box, Divider, Grid, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
@@ -8,90 +19,83 @@ import LoadingComponent from "../../app/layout/LoadingComponent";
 
 export default function PRDetails() {
   const { id } = useParams<{ id: string }>();
-  const [purchaseRequisition, setPRs] = useState<PurchaseRequisition | null>(null);
+  const [purchaseRequisition, setPRs] = useState<PurchaseRequisition | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
-  // const [showQuotation, setShowQuotation] = useState(false);
-
   useEffect(() => {
-    id && agent.Catalog.details(parseInt(id))
-        .then(response => setPRs(response))
-        .catch(error => console.log(error))
+    id &&
+      agent.Catalog.details(parseInt(id))
+        .then((response) => setPRs(response))
+        .catch((error) => console.log(error))
         .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <LoadingComponent message="Loading..."/>;
+  const handlePrintPDF = () => {
+    // setPdfModalOpen(true);
+    window.print();
+  };
 
-  if (!purchaseRequisition) return <NotFound />
+  if (loading) return <LoadingComponent message="Loading..." />;
+
+  if (!purchaseRequisition) return <NotFound />;
 
   const formattedDate = purchaseRequisition.createDate.slice(0, 10);
   const formatteduseDate = purchaseRequisition.useDate.slice(0, 10);
-  // const formattedQuotDate = purchaseRequisition.quotation?.createDate?.slice(0, 10);
-
-  // const handleShowQuotation = () => {
-  //   setShowQuotation(!showQuotation);
-  // };
 
   return (
-    <Grid container spacing={6}>
-      <Grid item xs={12} md={6}>
-        <img
-          src={purchaseRequisition.prPicture}
-          alt={purchaseRequisition.title}
-          style={{
-            width: "100%",
-            height: "auto",
-            objectFit: "contain",
-            borderRadius: "8px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
-          }}
-        />
-        <Divider />
-        {/* <Box mt={2}>
-          <Button variant="outlined" onClick={handleShowQuotation}>
-            {showQuotation ? "ใบเสนอราคา" : "แสดงใบเสนอราคา"}
-          </Button>
-          {showQuotation && purchaseRequisition.quotation && (
-            <TableContainer>
-              <Table>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Supplier:</TableCell>
-                    <TableCell>
-                      {purchaseRequisition.quotation.supplier}
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Total Price:</TableCell>
-                    <TableCell>
-                      {purchaseRequisition.quotation.totalPrice} THB
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Create Date:</TableCell>
-                    <TableCell>{formattedQuotDate}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Remark:</TableCell>
-                    <TableCell>
-                      {purchaseRequisition.quotation.remark}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </Box> */}
-      </Grid>
-      <Grid item xs={12} md={6}>
+    // <Grid container spacing={6}>
+    //   <Grid item xs={12} md={6}>
+    //     <img
+    //       src={purchaseRequisition.prPicture}
+    //       alt={purchaseRequisition.title}
+    //       style={{
+    //         width: "100%",
+    //         height: "auto",
+    //         objectFit: "contain",
+    //         borderRadius: "8px",
+    //         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+    //       }}
+    //     />
+    //     <Divider />
+
+    //   </Grid>
+    //   <Grid item xs={12} md={6}>
+    //     <Typography variant="subtitle1">
+    //       Created By: {purchaseRequisition.requestUser} on {formattedDate}
+    //     </Typography>
+    //     <Typography variant="h4" color="primary">
+    //       {purchaseRequisition.prodDesc}
+    //     </Typography>
+    //     <Box mt={2} mb={2}>
+    //       <Divider />
+    //     </Box>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
         <Typography variant="subtitle1">
           Created By: {purchaseRequisition.requestUser} on {formattedDate}
         </Typography>
+      </Grid>
+      <Grid item xs={12}>
         <Typography variant="h4" color="primary">
           {purchaseRequisition.prodDesc}
         </Typography>
-        <Box mt={2} mb={2}>
-          <Divider />
-        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Divider />
+        <img
+           src={purchaseRequisition.prPicture}
+           alt={purchaseRequisition.title}
+           style={{
+            width: "300px", // Set your desired width here
+            height: "200px", // Set your desired height here
+            objectFit: "contain",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+           }}
+         />
+      </Grid>
+      <Grid item xs={12}>
         <TableContainer>
           <Table>
             <TableBody>
@@ -134,6 +138,11 @@ export default function PRDetails() {
             </TableBody>
           </Table>
         </TableContainer>
+      </Grid>
+      <Grid item xs={12}>
+        <Button variant="contained" color="primary" onClick={handlePrintPDF}>
+          Print Details
+        </Button>
       </Grid>
     </Grid>
   );

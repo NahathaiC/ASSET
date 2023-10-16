@@ -1,14 +1,14 @@
 import * as yup from 'yup';
 
 export const validationSchema = yup.object({
-  title: yup.string().required(),
-  createDate: yup.string().required(),
-  useDate: yup.string().required(),
-  department: yup.string().required(),
-  section: yup.string().required(),
-  prodDesc: yup.string(),
+  title: yup.string().required('จำเป็นต้องใส่'),
+  createDate: yup.string().required('จำเป็นต้องใส่'),
+  useDate: yup.string().required('จำเป็นต้องใส่'),
+  department: yup.string().required('จำเป็นต้องใส่'),
+  section: yup.string().required('จำเป็นต้องใส่'),
+  prodDesc: yup.string().required('จำเป็นต้องใส่'),
   model: yup.string(),
-  quantity: yup.number().required().moreThan(0),
-  unitPrice: yup.number().required().moreThan(1),
+  quantity: yup.number().required('จำนวนห้ามติดลบ').moreThan(0),
+  unitPrice: yup.number().required('จำนวนห้ามติดลบ').moreThan(0),
   prPicture: yup.mixed(),
 });
