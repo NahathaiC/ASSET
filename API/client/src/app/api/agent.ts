@@ -67,6 +67,10 @@ const requests = {
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
+  postForm: (url: string, data: FormData) =>
+  axios.post(url, data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }).then(responseBody)
 };
 
 const Catalog = {
@@ -87,11 +91,19 @@ const Account = {
   login: (values: any) => requests.post("Account/login", values),
   register: (values: any) => requests.post("Account/register", values),
   currentUser: () => requests.get("Account/currentUser"),
+  fetchCurrentUser: () => requests.get("Account/currentUser"),
 };
 
+function createFormData(item: any) {
+  let formData = new FormData();
+  for (const key in item) {
+    formData.append(key, item[key])
+  }
+  return formData;
+}
+
 const Admin = {
-  createPR: (purchaserequisition: any) =>
-    requests.post("PR", purchaserequisition), // Change to 'post' instead of 'postForm'
+  createPR: (purchaserequisition: any) => requests.postForm('PR', createFormData(purchaserequisition)),
 
     updatePRStatus: (id: number, status: string) =>
     requests.put(`PR/UpdateStatusPurchaseRequisition?id=${id}&status=${status}`, {}),
@@ -106,3 +118,13 @@ const agent = {
 
 export default agent;
 
+
+export const fetchCurrentUser = async () => {
+  try {
+    const user = await Account.fetchCurrentUser();
+    localStorage.setItem('user', JSON.stringify(user));
+    return user;
+  } catch (error) {
+    throw new Error("Error fetching current user: " + String(error));
+  }
+};
