@@ -11,7 +11,7 @@ import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/configureStore";
 import SignedInMenu from "./SignedInMenu";
 
-const midLinks = [{ title: "รายการขอซื้อ", path: "/catalog" }];
+const midLinks = [{ title: "รายการขอซื้อ", path: "/pr-catalog" }];
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -73,6 +73,14 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           {user && (
             <ListItem component={NavLink} to={"/prform"} sx={navStyles}>
               สร้างใบข้อซื้อ
+            </ListItem>
+          )}
+        </List>
+
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem component={NavLink} to={"/asset-catalog"} sx={navStyles}>
+              รายการทรัพย์สิน
             </ListItem>
           )}
         </List>

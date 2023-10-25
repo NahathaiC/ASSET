@@ -1,5 +1,8 @@
 using API.Data;
+using API.DTOs;
 using API.DTOs.AssetDtos;
+using API.DTOs.StockDtos;
+using API.DTOs.UserDtos;
 using API.Entities;
 using API.Entities.AssetAggregate;
 using API.Services;
@@ -60,39 +63,100 @@ namespace API.Controllers
             return assetDto;
         }
 
+        // [Authorize(Roles = "Admin, Asset")]
+        // [HttpPost]
+        // public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
+        // {
+        //     var asset = _mapper.Map<Asset>(assetDto);
+
+        //     var stock = await _context.Stocks.FindAsync(assetDto.Stock.Id);
+        //     if (stock == null)
+        //     {
+        //         return BadRequest(new ProblemDetails { Title = "Invalid stock." });
+        //     }
+
+        //     asset.Stock = stock;
+
+        //     var owner = await _context.Owners.FindAsync(assetDto.Owner.Id);
+        //     if (owner == null)
+        //     {
+        //         return BadRequest(new ProblemDetails { Title = "Invalid owner." });
+        //     }
+
+        //     asset.Owner = owner; // Assign the fetched owner to the asset
+
+        //     var personInCharge =  await _userManager.FindByIdAsync(asset.PersonInCharge.Id.ToString());
+        //     if (personInCharge == null)
+        //     {
+        //         return BadRequest("Invalid PersonInCharge");
+        //     }
+
+        //     asset.PersonInChargeId = personInCharge.Id;
+
+
+        //     _context.Assets.Add(asset);
+
+        //     var result = await _context.SaveChangesAsync() > 0;
+
+        //     if (result)
+        //     {
+        //         return CreatedAtRoute("GetAsset", new { Id = asset.Id }, asset);
+        //     }
+
+        //     return BadRequest(new ProblemDetails { Title = "Problem creating a new asset." });
+        // }
+        public class CreateAssetRequest
+        {
+            public CreateAssetDto AssetDto { get; set; }
+            public PICDto PersonInChargeDto { get; set; }
+            public StockDto StockDto { get; set; }
+            public OwnerDto OwnerDto { get; set; }
+        }
+
         [Authorize(Roles = "Admin, Asset")]
         [HttpPost]
-        public async Task<ActionResult<Asset>> CreateAsset(CreateAssetDto assetDto)
+        [ProducesResponseType(typeof(Asset), 201)]
+        public async Task<ActionResult<Asset>> CreateAsset([FromBody] CreateAssetRequest request)
         {
-            var asset = _mapper.Map<Asset>(assetDto);
+            var asset = _mapper.Map<Asset>(request.AssetDto);
 
-            var stock = await _context.Stocks.FindAsync(assetDto.Stock.Id);
+            // Validate the existence of the user (PersonInCharge)
+            var personInCharge = await _userManager.FindByIdAsync(request.PersonInChargeDto.Id.ToString());
+            if (personInCharge == null)
+            {
+                return BadRequest("Invalid PersonInCharge");
+            }
+
+            // Validate the existence of the stock
+            var stock = await _context.Stocks.FindAsync(request.StockDto.Id);
             if (stock == null)
             {
                 return BadRequest(new ProblemDetails { Title = "Invalid stock." });
             }
 
-            asset.Stock = stock;
-
-            var owner = await _context.Owners.FindAsync(assetDto.Owner.Id);
+            // Validate the existence of the owner
+            var owner = await _context.Owners.FindAsync(request.OwnerDto.Id);
             if (owner == null)
             {
                 return BadRequest(new ProblemDetails { Title = "Invalid owner." });
             }
 
-            asset.Owner = owner; // Assign the fetched owner to the asset
+            asset.Stock = stock;
+            asset.Owner = owner;
+            asset.PersonInChargeId = personInCharge.Id;
 
             _context.Assets.Add(asset);
+            await _context.SaveChangesAsync();
 
-            var result = await _context.SaveChangesAsync() > 0;
+            var createdAsset = _mapper.Map<GetAssetDto>(asset);
+            createdAsset.Owner = _mapper.Map<OwnerDto>(owner);
+            createdAsset.Stock = _mapper.Map<StockDto>(stock);
+            createdAsset.PersonInCharge = _mapper.Map<GetPICDto>(personInCharge);
 
-            if (result)
-            {
-                return CreatedAtRoute("GetAsset", new { Id = asset.Id }, asset);
-            }
-
-            return BadRequest(new ProblemDetails { Title = "Problem creating a new asset." });
+            return CreatedAtAction(nameof(GetAssetById), new { id = asset.Id }, createdAsset);
         }
+
+
 
         [HttpPut] // Normal, GoodCondition, Broken, UnderRepair
         [Authorize(Roles = "Admin, Asset")]

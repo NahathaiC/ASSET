@@ -25,5 +25,9 @@ namespace API.Entities.AssetAggregate
         [ForeignKey("StockId")]
         public Stock Stock { get; set; }
         public int StockId { get; set; }
+
+        [ForeignKey("PersonInChargeId")]
+        public int PersonInChargeId { get; set; }
+        public User PersonInCharge { get; set; }
     }
 }

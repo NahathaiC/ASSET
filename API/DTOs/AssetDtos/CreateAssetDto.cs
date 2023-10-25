@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using API.DTOs.StockDtos;
+using API.DTOs.UserDtos;
 
 namespace API.DTOs.AssetDtos
 {
@@ -17,8 +18,8 @@ namespace API.DTOs.AssetDtos
         [Required]
         public string Type { get; set; }
 
-        [Required]
-        public OwnerDto Owner { get; set; }
+        // [Required]
+        // public OwnerDto Owner { get; set; }
 
         [Required]
         public string Manufacturer { get; set; }
@@ -26,8 +27,10 @@ namespace API.DTOs.AssetDtos
         [Required]
         public string Model { get; set; }
 
-        [Required]
-        public StockDto Stock { get; set; }
+        // [Required]
+        // public StockDto Stock { get; set; }
+
+        // public PICDto PersonInCharge { get; set; }
     }
 
 }

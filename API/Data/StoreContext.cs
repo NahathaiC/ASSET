@@ -44,6 +44,11 @@ namespace API.Data
                 .HasOne<User>(ad => ad.PersonInCharge)
                 .WithMany()
                 .HasForeignKey(ad => ad.PersonInChargeId);
+            
+            builder.Entity<Asset>()
+                .HasOne<User>(a => a.PersonInCharge)
+                .WithMany()
+                .HasForeignKey(a => a.PersonInChargeId);
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

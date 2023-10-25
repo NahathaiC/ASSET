@@ -71,7 +71,7 @@ export default function PRCard({ purchaserequisition }: Props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button component={Link} to={`/catalog/${purchaserequisition.id}`} size="small"> View </Button>
+        <Button component={Link} to={`/pr-catalog/${purchaserequisition.id}`} size="small"> View </Button>
       </CardActions>
     </Card>
   );

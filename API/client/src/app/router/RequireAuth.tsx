@@ -16,7 +16,7 @@ export default function RequireAuth({roles}: Props) {
 
     if (roles && !roles.some( r => user.roles?.includes(r))) {
         toast.error('บัญชีนี้ไม่ได้รับสิทธิ์ในการเข้าถึง')
-        return <Navigate to='/catalog'/>
+        return <Navigate to='/pr-catalog'/>
     }
 
     return <Outlet />

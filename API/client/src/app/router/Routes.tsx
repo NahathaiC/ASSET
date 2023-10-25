@@ -12,6 +12,7 @@ import HomePage from "../../features/home/HomePage";
 import RequireAuth from "./RequireAuth";
 import Inventory from "../../features/admin/inventory";
 import PRForm from "../../features/admin/PRForm";
+import AssetCatalog from "../../features/ASSET-catalog/AssetCatalog";
 
 export const router = createBrowserRouter([
   {
@@ -22,11 +23,12 @@ export const router = createBrowserRouter([
       // authen routes
       {element: <RequireAuth />, children: [
           { path: "", element: <HomePage /> },
-          { path: "catalog", element: <Catalog /> },
-          { path: "catalog/:id", element: <PRDetails /> },
+          { path: "pr-catalog", element: <Catalog /> },
+          { path: "pr-catalog/:id", element: <PRDetails /> },
           { path: "prform", element: <PRForm cancelEdit={function (): void {
             throw new Error("Function not implemented.");
           } }/> },
+          { path: "asset-catalog", element: <AssetCatalog assets={[]} /> },
         ]},
 
       //admin routes

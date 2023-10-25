@@ -40,6 +40,9 @@ namespace API.Data.Migrations
                     b.Property<int>("OwnerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("PersonInChargeId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("StockId")
                         .HasColumnType("INTEGER");
 
@@ -49,6 +52,8 @@ namespace API.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("PersonInChargeId");
 
                     b.HasIndex("StockId");
 
@@ -609,6 +614,12 @@ namespace API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Entities.User", "PersonInCharge")
+                        .WithMany()
+                        .HasForeignKey("PersonInChargeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Entities.Stock", "Stock")
                         .WithMany()
                         .HasForeignKey("StockId")
@@ -616,6 +627,8 @@ namespace API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
+
+                    b.Navigation("PersonInCharge");
 
                     b.Navigation("Stock");
                 });

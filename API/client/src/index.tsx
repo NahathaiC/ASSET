@@ -10,7 +10,6 @@ import { RouterProvider } from "react-router-dom";
 import { Provider } from 'react-redux';
 import { router } from "./app/router/Routes";
 import { store } from './app/store/configureStore';
-import { fetchPRsAsync } from "./features/catalog/catalogSlice";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

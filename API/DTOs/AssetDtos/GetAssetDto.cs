@@ -1,4 +1,5 @@
 using API.DTOs.StockDtos;
+using API.DTOs.UserDtos;
 
 namespace API.DTOs.AssetDtos
 {
@@ -13,5 +14,6 @@ namespace API.DTOs.AssetDtos
         public string Model { get; set; }
         public string AssetStatus { get; set; }
         public StockDto Stock { get; set; }
+        public GetPICDto PersonInCharge { get; internal set; }
     }
 }
