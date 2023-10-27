@@ -46,7 +46,7 @@ export default function PRForm({ purchaserequisition, cancelEdit }: Props) {
       let response: PurchaseRequisition;
       if (!purchaserequisition) {
         response = await agent.Admin.createPR(data);
-        navigate(location.state?.from || "/catalog");
+        navigate(location.state?.from || "/pr-catalog");
         console.log(data);
       }
     } catch (error) {
@@ -148,7 +148,14 @@ export default function PRForm({ purchaserequisition, cancelEdit }: Props) {
             </Grid>
           </Grid>
           <Box display="flex" justifyContent="space-between" sx={{ mt: 3 }}>
-            <Button onClick={cancelEdit} variant="contained" color="inherit">
+            {/* <Button onClick={cancelEdit} variant="contained" color="inherit">
+              Cancel
+            </Button> */}
+            <Button
+              onClick={() => navigate("/pr-catalog")}
+              variant="contained"
+              color="inherit"
+            >
               Cancel
             </Button>
             <LoadingButton
@@ -160,8 +167,6 @@ export default function PRForm({ purchaserequisition, cancelEdit }: Props) {
             >
               Submit
             </LoadingButton>
-            {/* "Print PDF" button
-            <Button onClick={handlePrintPDF}>Print PDF</Button> */}
           </Box>
         </Box>
       </form>

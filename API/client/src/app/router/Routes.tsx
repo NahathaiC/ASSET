@@ -10,7 +10,7 @@ import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
 import HomePage from "../../features/home/HomePage";
 import RequireAuth from "./RequireAuth";
-import Inventory from "../../features/admin/inventory";
+import Inventory from "../../features/admin/PRStatus";
 import PRForm from "../../features/admin/PRForm";
 import AssetCatalog from "../../features/ASSET-catalog/AssetCatalog";
 
@@ -27,13 +27,13 @@ export const router = createBrowserRouter([
           { path: "pr-catalog/:id", element: <PRDetails /> },
           { path: "prform", element: <PRForm cancelEdit={function (): void {
             throw new Error("Function not implemented.");
-          } }/> },
+          } } /> },
           { path: "asset-catalog", element: <AssetCatalog assets={[]} /> },
         ]},
 
       //admin routes
-      {element: <RequireAuth roles={['Admin']} />, children: [
-        {path: 'inventory', element: <Inventory />},
+      {element: <RequireAuth roles={['Approver']} />, children: [
+        {path: 'prstatus', element: <Inventory />},
       ]},
 
       

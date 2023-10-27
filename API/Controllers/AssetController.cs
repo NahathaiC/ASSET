@@ -36,6 +36,7 @@ namespace API.Controllers
             var assets = await _context.Assets
                 .Include(a => a.Owner)
                 .Include(a => a.Stock)
+                .Include(a => a.PersonInCharge)
                 .ToListAsync();
 
             var assetDtos = _mapper.Map<List<GetAssetDto>>(assets);
@@ -51,6 +52,7 @@ namespace API.Controllers
             var asset = await _context.Assets
                 .Include(a => a.Owner)
                 .Include(a => a.Stock)
+                .Include(a => a.PersonInCharge)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (asset == null)
@@ -154,6 +156,30 @@ namespace API.Controllers
             createdAsset.PersonInCharge = _mapper.Map<GetPICDto>(personInCharge);
 
             return CreatedAtAction(nameof(GetAssetById), new { id = asset.Id }, createdAsset);
+        }
+
+        [Authorize(Roles = "Admin, Asset")]
+        [HttpPost("AddAssetPicture")]
+        public async Task<ActionResult> AddAssetPic([FromForm] AddAssetPicDto addAssetPicDto)
+        {
+            var asset = await _context.Assets.FindAsync(addAssetPicDto.Id);
+
+            if (asset == null)
+                return NotFound();
+
+            if (addAssetPicDto.AssetPic != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(addAssetPicDto.AssetPic);
+
+                if (imageResult.Error != null)
+                    return BadRequest(new ProblemDetails { Title = imageResult.Error.Message });
+
+                asset.AssetPic = imageResult.SecureUrl.ToString();
+                asset.PublicId = imageResult.PublicId;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
 

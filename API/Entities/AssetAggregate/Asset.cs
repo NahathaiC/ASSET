@@ -10,6 +10,7 @@ namespace API.Entities.AssetAggregate
         public int No { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public string SerialNo { get; set; }
 
         /// <summary>
         /// Id 1 = "ทรัพย์สินของ บริษัท", Id 2 = "ทรัพย์สินของ คู่สัญญา"
@@ -29,5 +30,8 @@ namespace API.Entities.AssetAggregate
         [ForeignKey("PersonInChargeId")]
         public int PersonInChargeId { get; set; }
         public User PersonInCharge { get; set; }
+
+        public string AssetPic { get; set; }
+        public string PublicId { get; set; }
     }
 }

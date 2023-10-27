@@ -22,6 +22,9 @@ namespace API.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AssetPic")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("AssetStatus")
                         .HasColumnType("INTEGER");
 
@@ -42,6 +45,12 @@ namespace API.Data.Migrations
 
                     b.Property<int>("PersonInChargeId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SerialNo")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("StockId")
                         .HasColumnType("INTEGER");

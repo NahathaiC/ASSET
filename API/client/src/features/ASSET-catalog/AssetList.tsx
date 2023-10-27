@@ -1,4 +1,4 @@
-import { List } from "@mui/material";
+import { Grid, List } from "@mui/material";
 import { Asset } from "../../app/models/asset";
 import AssetCard from "./AssetCard";
 
@@ -8,10 +8,12 @@ interface Props {
 
 export default function AssetList({ assets }: Props) {
   return (
-    <List>
+    <Grid container spacing={4}>
       {assets.map((asset) => (
-        <AssetCard key={asset.id} asset={asset} />
+        <Grid item xs={4}>
+          <AssetCard key={asset.id} asset={asset} />
+        </Grid>
       ))}
-    </List>
+    </Grid>
   );
 }

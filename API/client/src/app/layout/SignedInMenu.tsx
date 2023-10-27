@@ -1,7 +1,8 @@
-import { Button, Menu, MenuItem } from "@mui/material";
+import { Button, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import React from "react";
 import { useAppDispatch, useAppSelector } from "../store/configureStore";
 import { signOut } from "../../features/account/accountSlice";
+import { AccountCircle } from "@mui/icons-material";
 
 export default function SignedInMenu() {
   const dispatch = useAppDispatch();
@@ -16,31 +17,38 @@ export default function SignedInMenu() {
   };
 
   return (
-    <>
-      <Button 
-        color="inherit"
+    <div>
+      <IconButton
+        size="large"
+        aria-label="account of current user"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
         onClick={handleClick}
-        sx={{typography: 'h6'}}
+        color="inherit"
       >
-        {user?.email}
-      </Button>
+        
+        <Typography variant="body2" style={{ marginRight: "8px" }}>
+          {user?.email}
+        </Typography>
+        <AccountCircle />
+      </IconButton>
       <Menu
+        id="menu-appbar"
         anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
         anchorOrigin={{
           vertical: "top",
-          horizontal: "left",
+          horizontal: "right",
         }}
+        keepMounted
         transformOrigin={{
           vertical: "top",
-          horizontal: "left",
+          horizontal: "right",
         }}
+        open={open}
+        onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        {/* <MenuItem onClick={handleClose}>Create PR</MenuItem> */}
         <MenuItem onClick={() => dispatch(signOut())}>Logout</MenuItem>
       </Menu>
-    </>
+    </div>
   );
 }

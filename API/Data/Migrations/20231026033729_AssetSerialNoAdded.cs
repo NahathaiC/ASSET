@@ -5,7 +5,7 @@
 namespace API.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AssetPICAdded : Migration
+    public partial class AssetSerialNoAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,12 +19,30 @@ namespace API.Data.Migrations
                 table: "TaxInvoices",
                 newName: "SuppAddress");
 
+            migrationBuilder.AddColumn<string>(
+                name: "AssetPic",
+                table: "Assets",
+                type: "TEXT",
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "PersonInChargeId",
                 table: "Assets",
                 type: "INTEGER",
                 nullable: false,
                 defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "PublicId",
+                table: "Assets",
+                type: "TEXT",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "SerialNo",
+                table: "Assets",
+                type: "TEXT",
+                nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assets_PersonInChargeId",
@@ -52,7 +70,19 @@ namespace API.Data.Migrations
                 table: "Assets");
 
             migrationBuilder.DropColumn(
+                name: "AssetPic",
+                table: "Assets");
+
+            migrationBuilder.DropColumn(
                 name: "PersonInChargeId",
+                table: "Assets");
+
+            migrationBuilder.DropColumn(
+                name: "PublicId",
+                table: "Assets");
+
+            migrationBuilder.DropColumn(
+                name: "SerialNo",
                 table: "Assets");
 
             migrationBuilder.RenameColumn(

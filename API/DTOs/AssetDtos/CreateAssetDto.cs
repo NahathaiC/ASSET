@@ -17,6 +17,7 @@ namespace API.DTOs.AssetDtos
 
         [Required]
         public string Type { get; set; }
+        public string SerialNo { get; set; }
 
         // [Required]
         // public OwnerDto Owner { get; set; }

@@ -1,20 +1,58 @@
-import { Box, Button, Typography } from "@mui/material"
-import { useState } from "react"
+import { Box, Button, List, ListItem, Typography } from "@mui/material";
+import { useState } from "react";
 import PRForm from "../admin/PRForm";
+import { NavLink } from "react-router-dom";
+import { useAppSelector } from "../../app/store/configureStore";
 
 export default function HomePage() {
-    const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
-    if (editMode) return <PRForm cancelEdit={function (): void {
-        throw new Error("Function not implemented.");
-    } }/>
+  // Define a function to handle canceling the edit mode
+  const cancelEdit = () => {
+    setEditMode(false);
+  };
+  const { user } = useAppSelector((state) => state.account);
 
-    return (
-        <>
-            <Box display='flex' justifyContent='space-between'>
-                <Typography sx={{p:2}} variant="h4" > กรอกฟอร์มขอซื้อทรัพย์สินได้ที่นี่ </Typography>
-                <Button onClick={() => setEditMode(true)} sx={{ m:2 }} size="large" variant="contained"> สร้าง </Button>
-            </Box>
-        </>
-    )
+  if (editMode) return <PRForm cancelEdit={cancelEdit} />;
+
+  return (
+    <>
+      <Box display="flex" justifyContent="space-between">
+        <List sx={{ display: "flex", flexDirection: "column" }}>
+          {user && user.roles?.includes("Approver") && (
+            <ListItem>
+              <Button
+                component={NavLink}
+                to={"/prstatus"}
+                variant="contained"
+                size="large"
+                sx={{
+                  width: "100%", // Make the button equally wide
+                }}
+              >
+                จัดการสถานะการขอจัดซื้อ
+              </Button>
+            </ListItem>
+          )}
+
+          {user && user.roles?.includes("Approver") && (
+            <ListItem>
+              <Button
+                component={NavLink}
+                to={"/postatus"}
+                variant="contained"
+                size="large"
+                sx={{
+                  width: "100%", // Make the button equally wide
+                }}
+              >
+                จัดการสถานะการจัดซื้อ
+              </Button>
+            </ListItem>
+          )}
+        </List>
+        {/* Add other content or buttons here */}
+      </Box>
+    </>
+  );
 }
