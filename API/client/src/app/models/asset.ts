@@ -10,7 +10,7 @@ export interface Asset {
     assetStatus: string
     stock: Stock
     assetPic: string
-    PersonInCharge: string
+    personInCharge: PersonInCharge;
   }
   
   export interface Owner {
@@ -22,4 +22,21 @@ export interface Asset {
     id: number
     type: string
   }
+
+  export interface PersonInCharge { // New interface for personInCharge
+    id: number;
+    email: string;
+    userName: string;
+    position: string;
+    department: string;
+    section: string;
+    phone: string;
+    status: string;
+  }
   
+  export interface AssetParams {
+    orderBy: string;
+    searchTerm?: string;
+    pageNumber: number;
+    pageSize: number;
+  }

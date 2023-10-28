@@ -2,9 +2,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { catalogSlice } from "../../features/catalog/catalogSlice";
 import { accountSlice } from "../../features/account/accountSlice";
+import { assetSlice } from "../../features/ASSET-catalog/AssetSlice";
 
 export const store = configureStore({
     reducer: {
+        assetcatalog: assetSlice.reducer,
         catalog: catalogSlice.reducer,
         account: accountSlice.reducer,
     }

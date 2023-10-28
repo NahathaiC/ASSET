@@ -8,11 +8,12 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
-import HomePage from "../../features/home/HomePage";
+import HomePage from "../../features/home/PurchaseMN";
 import RequireAuth from "./RequireAuth";
 import Inventory from "../../features/admin/PRStatus";
 import PRForm from "../../features/admin/PRForm";
 import AssetCatalog from "../../features/ASSET-catalog/AssetCatalog";
+import AssetDetails from "../../features/ASSET-catalog/AssetDetails";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +29,8 @@ export const router = createBrowserRouter([
           { path: "prform", element: <PRForm cancelEdit={function (): void {
             throw new Error("Function not implemented.");
           } } /> },
-          { path: "asset-catalog", element: <AssetCatalog assets={[]} /> },
+          { path: "asset-catalog", element: <AssetCatalog /> },
+          { path: "asset-catalog/:id", element: <AssetDetails /> },
         ]},
 
       //admin routes

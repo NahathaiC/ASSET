@@ -79,6 +79,11 @@ const Catalog = {
   fetchFilter: () => requests.get("PR/filters"),
 };
 
+const AssetCatalog = {
+  list: (params: URLSearchParams) => requests.get("Asset", params),
+  details: (id: string) => requests.get(`Asset/Asset?id=${id}`),
+}
+
 const TestErrors = {
   get400Error: () => requests.get("buggy/bad-request"),
   get401Error: () => requests.get("buggy/unauthorised"),
@@ -114,6 +119,7 @@ const agent = {
   TestErrors,
   Account,
   Admin,
+  AssetCatalog,
 };
 
 export default agent;

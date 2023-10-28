@@ -39,6 +39,19 @@ export default function Inventory() {
     }
   };
 
+  const getStatusBackgroundColor = (status: string) => {
+    switch (status) {
+      case "Approved":
+        return "#66bb6a"; // Green
+      case "Pending":
+        return ""; // No background color
+      case "Disapproved":
+        return "#d32f2f"; // Red
+      default:
+        return ""; // Default background color
+    }
+  };
+
   function handleSelectedPR(purchaseRequisition: PurchaseRequisition) {
     if (purchaseRequisition.status === "Pending") {
       setSelectedPR(purchaseRequisition);
@@ -85,65 +98,72 @@ export default function Inventory() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {purchaserequisitions.map((purchaseRequisition) => (
-              <TableRow
-                key={purchaseRequisition.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {purchaseRequisition.id}
-                </TableCell>
-                <TableCell align="left">
-                  <Box display="flex" alignItems="center">
-                    <img
-                      src={purchaseRequisition.prPicture}
-                      alt={purchaseRequisition.title}
-                      style={{ height: 50, marginRight: 20 }}
-                    />
-                    <span>{purchaseRequisition.title}</span>
-                  </Box>
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.department}
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.section}
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.quantity}
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.unitPrice} THB
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.status}
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.status === "Pending" && (
-                    <Button
-                      onClick={() =>
-                        updateStatus(purchaseRequisition.id, "Approved")
-                      }
-                      style={{ color: "white", backgroundColor: "#66bb6a" }}
-                    >
-                      Approved
-                    </Button>
-                  )}
-                </TableCell>
-                <TableCell align="center">
-                  {purchaseRequisition.status === "Pending" && (
-                    <Button
-                      onClick={() =>
-                        updateStatus(purchaseRequisition.id, "Disapproved")
-                      }
-                      style={{ color: "white", backgroundColor: "#d32f2f" }}
-                    >
-                      Disapproved
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+            {purchaserequisitions.map((purchaseRequisition) => {
+              // Get the background color based on the status
+              const backgroundColor = getStatusBackgroundColor(
+                purchaseRequisition.status
+              );
+
+              return (
+                <TableRow
+                  key={purchaseRequisition.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    {purchaseRequisition.id}
+                  </TableCell>
+                  <TableCell align="left">
+                    <Box display="flex" alignItems="center">
+                      <img
+                        src={purchaseRequisition.prPicture}
+                        alt={purchaseRequisition.title}
+                        style={{ height: 50, marginRight: 20 }}
+                      />
+                      <span>{purchaseRequisition.title}</span>
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.department}
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.section}
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.quantity}
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.unitPrice} THB
+                  </TableCell>
+                  <TableCell align="center" style={{ color: "white", backgroundColor }}>
+                    {purchaseRequisition.status}
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.status === "Pending" && (
+                      <Button
+                        onClick={() =>
+                          updateStatus(purchaseRequisition.id, "Approved")
+                        }
+                        style={{ color: "white", backgroundColor: "#66bb6a" }}
+                      >
+                        Approved
+                      </Button>
+                    )}
+                  </TableCell>
+                  <TableCell align="center">
+                    {purchaseRequisition.status === "Pending" && (
+                      <Button
+                        onClick={() =>
+                          updateStatus(purchaseRequisition.id, "Disapproved")
+                        }
+                        style={{ color: "white", backgroundColor: "#d32f2f" }}
+                      >
+                        Disapproved
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

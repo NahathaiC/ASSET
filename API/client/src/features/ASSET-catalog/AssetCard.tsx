@@ -1,4 +1,13 @@
-import { ListItem, ListItemAvatar, Avatar, ListItemText, Card, CardHeader, CardMedia, Typography, CardContent, CardActions, Button } from "@mui/material";
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  CardMedia,
+  Typography,
+  CardContent,
+  CardActions,
+  Button,
+} from "@mui/material";
 import { Asset } from "../../app/models/asset";
 import { Link } from "react-router-dom";
 
@@ -7,15 +16,15 @@ interface Props {
 }
 
 export default function AssetCard({ asset }: Props) {
-  const getStatusColor = (status: string): string => {
-    if (status.charAt(0) === "U") {
-      return "#ffb74d";
-    } else if (status.charAt(0) === "B") {
-      return "#d32f2f";
-    } else if (status.charAt(0) === "G") {
-      return "#66bb6a";
-    }else if (status.charAt(0) === "N") {
+  const getStatusColor = (assetStatus: string): string => {
+    if (assetStatus.charAt(0) === "G") {
       return "#4BCEFF";
+    } else if (assetStatus.charAt(0) === "N") {
+      return "#66bb6a";
+    } else if (assetStatus.charAt(0) === "U") {
+      return "#ffb74d";
+    } else if (assetStatus.charAt(0) === "B") {
+      return "#d32f2f";
     } else {
       return "inherit";
     }
@@ -27,7 +36,7 @@ export default function AssetCard({ asset }: Props) {
       <CardHeader
         avatar={
           <Avatar style={{ backgroundColor: statusColor }}>
-            {asset.assetStatus.charAt(0).toUpperCase()}
+            {asset.name.charAt(0)}
           </Avatar>
         }
         title={asset.name}
@@ -36,19 +45,21 @@ export default function AssetCard({ asset }: Props) {
         }}
       />
       <CardMedia
-        sx={{ height: 140, backgroundSize: 'contain', bgcolor: 'grey.300' }}
+        sx={{ height: 140, backgroundSize: "contain", bgcolor: "grey.300" }}
         image={asset.assetPic}
       />
       <CardContent>
+      <br />
         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
           {"ใช้งานโดย : "}
-          {asset.PersonInCharge}
+          {asset.personInCharge.userName}
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {"ผู้ผลิต : "} {asset.manufacturer}
           <br /> {"โมเดล : "} {asset.model}
           <br /> {"ประเภททรัพย์สิน : "} {asset.type}
         </Typography>
+        <br />
         <Typography
           sx={{
             fontSize: 14,
@@ -60,11 +71,18 @@ export default function AssetCard({ asset }: Props) {
           }}
           gutterBottom
         >
-          {asset.assetStatus}
+          {"สถานะ : "}{asset.assetStatus}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button component={Link} to={`/asset-catalog${asset.id}`} size="small"> View </Button>
+        <Button
+          component={Link}
+          to={`/asset-catalog/${encodeURIComponent(asset.id)}`}
+          size="small"
+        >
+          {" "}
+          View{" "}
+        </Button>
       </CardActions>
     </Card>
   );

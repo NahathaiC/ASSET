@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.Extensions;
+using API.RequestHelpers;
 
 namespace API.Controllers
 {
@@ -31,17 +33,23 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GetAssetDto>>> GetAssets()
+        public async Task<ActionResult<List<GetAssetDto>>> GetAssets([FromQuery] AssetParams assetParams)
         {
-            var assets = await _context.Assets
+            var query = _context.Assets
                 .Include(a => a.Owner)
                 .Include(a => a.Stock)
                 .Include(a => a.PersonInCharge)
-                .ToListAsync();
+                .Sort(assetParams.OrderBy)
+                .Search(assetParams.SearchTerm)
+                .AsQueryable();
 
-            var assetDtos = _mapper.Map<List<GetAssetDto>>(assets);
+            var results = await query.ToListAsync();
 
-            return assetDtos;
+            var assetDto = _mapper.Map<List<GetAssetDto>>(results);
+
+            var assets = await PagedList<Asset>.ToPagedList(query, assetParams.PageNumber, assetParams.PageSize);
+            Response.AddPaginationHeader(assets.MetaData);
+            return Ok(assetDto);
         }
 
         [HttpGet("Asset", Name = "GetAsset")]

@@ -10,9 +10,9 @@ import {
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/configureStore";
 import SignedInMenu from "./SignedInMenu";
-import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
-const midLinks = [{ title: "รายการขอซื้อ", path: "/pr-catalog" }];
+// const midLinks = [{ title: "รายการขอซื้อ", path: "/pr-catalog" }];
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -48,8 +48,9 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           alignItems: "center",
         }}
       >
+        <Typography variant="h6">ระบบจัดการการจัดซื้อทรัพย์สิน</Typography>
         <Switch checked={darkMode} onChange={handleThemeChange} />
-        <List sx={{ display: "flex" }}>
+        {/* <List sx={{ display: "flex" }}>
           {midLinks.map(({ title, path }) => (
             <ListItem
               component={NavLink}
@@ -60,7 +61,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
               {title.toUpperCase()}
             </ListItem>
           ))}
-        </List>
+        </List> */}
         {/* <List sx={{ display: "flex" }}>
           {user && user.roles?.includes("Admin") && (
             <ListItem
@@ -72,6 +73,17 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
             </ListItem>
           )}
         </List> */}
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem
+              component={NavLink}
+              to={"/pr-catalog"}
+              sx={{ ...navStyles, fontSize: "0.9rem" }}
+            >
+              รายการขอซื้อ
+            </ListItem>
+          )}
+        </List>
         <List sx={{ display: "flex" }}>
           {user && (
             <ListItem
@@ -113,9 +125,14 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           </List>
         )}
         <Box display="flex" alignItems="center">
-          <Typography variant="h4" component={NavLink} to="/" sx={navStyles}>
+          <Typography
+            variant="h6"
+            component={NavLink}
+            to="/"
+            sx={{ ...navStyles, fontSize: "0.9rem", alignItems: "center" }}
+          >
             {user && user.roles?.includes("Approver") && (
-              <HistoryEduIcon sx={{ fontSize: 30 }} />
+              <PendingActionsIcon sx={{ fontSize: 25 }} />
             )}
           </Typography>
         </Box>
