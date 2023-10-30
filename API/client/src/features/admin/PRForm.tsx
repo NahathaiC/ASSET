@@ -64,7 +64,7 @@ export default function PRForm({ purchaserequisition, cancelEdit }: Props) {
 
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12}>
-              <AppTextInput control={control} name="title" label="ชื่อหัวข้อ" />
+              <AppTextInput control={control} name="title" label="รายการขอซื้อ" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="subtitle1" gutterBottom>

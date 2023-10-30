@@ -4,7 +4,7 @@ import PRForm from "../admin/PRForm";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../app/store/configureStore";
 
-export default function HomePage() {
+export default function PurchaseMN() {
   const [editMode, setEditMode] = useState(false);
 
   // Define a function to handle canceling the edit mode

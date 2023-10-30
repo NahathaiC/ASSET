@@ -14,6 +14,8 @@ import Inventory from "../../features/admin/PRStatus";
 import PRForm from "../../features/admin/PRForm";
 import AssetCatalog from "../../features/ASSET-catalog/AssetCatalog";
 import AssetDetails from "../../features/ASSET-catalog/AssetDetails";
+import PRreport from "../../features/admin/PR-report";
+import PurchaseMN from "../../features/home/PurchaseMN";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +25,7 @@ export const router = createBrowserRouter([
 
       // authen routes
       {element: <RequireAuth />, children: [
-          { path: "", element: <HomePage /> },
+          { path: "pr-mn", element: <PurchaseMN /> },
           { path: "pr-catalog", element: <Catalog /> },
           { path: "pr-catalog/:id", element: <PRDetails /> },
           { path: "prform", element: <PRForm cancelEdit={function (): void {
@@ -31,11 +33,13 @@ export const router = createBrowserRouter([
           } } /> },
           { path: "asset-catalog", element: <AssetCatalog /> },
           { path: "asset-catalog/:id", element: <AssetDetails /> },
+          
         ]},
 
       //admin routes
       {element: <RequireAuth roles={['Approver']} />, children: [
         {path: 'prstatus', element: <Inventory />},
+        {path: 'pr-report', element: <PRreport />},
       ]},
 
       

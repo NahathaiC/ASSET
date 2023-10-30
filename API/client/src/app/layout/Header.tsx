@@ -108,6 +108,18 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           )}
         </List>
 
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem
+              component={NavLink}
+              to={"/pr-report"}
+              sx={{ ...navStyles, fontSize: "0.9rem" }}
+            >
+              รายงานการขอซื้อ
+            </ListItem>
+          )}
+        </List>
+
         {user ? (
           <SignedInMenu />
         ) : (
@@ -128,7 +140,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           <Typography
             variant="h6"
             component={NavLink}
-            to="/"
+            to="/prstatus"
             sx={{ ...navStyles, fontSize: "0.9rem", alignItems: "center" }}
           >
             {user && user.roles?.includes("Approver") && (

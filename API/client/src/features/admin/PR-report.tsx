@@ -1,8 +1,7 @@
+import React, { useState } from "react";
 import {
   Box,
   Typography,
-  Button,
-  TableContainer,
   Paper,
   Table,
   TableHead,
@@ -10,23 +9,39 @@ import {
   TableCell,
   TableBody,
   Snackbar,
+  TableContainer,
+  Button,
 } from "@mui/material";
-import { useState } from "react";
-import AppPagination from "../../app/components/AppPagination";
 import { useAppDispatch } from "../../app/store/configureStore";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
 import usePRs from "../../app/hooks/usePRs";
 import { setPageNumber } from "../catalog/catalogSlice";
 import PRForm from "./PRForm";
 import agent from "../../app/api/agent";
+import AppPagination from "../../app/components/AppPagination";
+import { Link } from "react-router-dom";
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 
-export default function Inventory() {
+
+export default function PRreport() {
   const { purchaserequisitions, metaData } = usePRs();
   const dispatch = useAppDispatch();
   const [editMode, setEditMode] = useState(false);
   const [selectedPR, setSelectedPR] = useState<PurchaseRequisition | undefined>(
     undefined
   );
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(event.target.value);
+  };
 
   const updateStatus = async (id: number, status: string) => {
     try {
@@ -45,14 +60,13 @@ export default function Inventory() {
       case "Approved":
         return "#66bb6a"; // Green
       case "Pending":
-        return ""; // No background color
+        return "#ffb74d"; // No background color
       case "Disapproved":
         return "#d32f2f"; // Red
       default:
         return ""; // Default background color
     }
   };
-  
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -62,16 +76,19 @@ export default function Inventory() {
     setSnackbarOpen(true);
   };
 
-  
-
-  const sortedPurchaserequisitions = [...purchaserequisitions].sort((a, b) => {
-    if (a.status === "Pending" && b.status !== "Pending") {
-      return -1;
-    } else if (a.status !== "Pending" && b.status === "Pending") {
-      return 1;
+  const filterByDate = (startDate: string, endDate: string) => {
+    if (startDate && endDate) {
+      const endDateNextDay = new Date(endDate);
+      endDateNextDay.setDate(endDateNextDay.getDate() + 1); // Add one day to the end date
+      return purchaserequisitions.filter((purchaseRequisition) => {
+        const purchaseDate = new Date(purchaseRequisition.createDate);
+        return (
+          purchaseDate >= new Date(startDate) && purchaseDate < endDateNextDay
+        );
+      });
     }
-    return 0;
-  });
+    return purchaserequisitions;
+  };
 
   function handleSelectedPR(purchaseRequisition: PurchaseRequisition) {
     if (purchaseRequisition.status === "Pending") {
@@ -100,30 +117,40 @@ export default function Inventory() {
     <>
       <Box display="flex" justifyContent="space-between">
         <Typography sx={{ p: 2 }} variant="h4">
-          จัดการสถานะการขอซื้อ
+          รายงานการขอซื้อ
         </Typography>
       </Box>
+
+      <label>จากวันที่  </label>
+      <input type="date" value={startDate} onChange={handleStartDateChange} />
+
+      <label>  จนถึงวันที่  </label>
+      <input type="date" value={endDate} onChange={handleEndDateChange} />
+
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
               <TableCell>รหัส</TableCell>
-              <TableCell align="left">purchaseRequisition</TableCell>
+              <TableCell align="center">รายการขอซื้อ</TableCell>
+              <TableCell align="center">ขอซื้อโดย</TableCell>
+              <TableCell align="center">วันที่ขอซื้อ</TableCell>
               <TableCell align="center">สาขา</TableCell>
               <TableCell align="center">แผนก</TableCell>
               <TableCell align="center">จำนวน</TableCell>
               <TableCell align="center">ราคาต่อหน่วย</TableCell>
               <TableCell align="center">สถานะการขอซื้อ</TableCell>
-              <TableCell align="center">อนุมัติการขอซื้อ</TableCell>
-              <TableCell align="center">ไม่อนุมัติการขอซื้อ</TableCell>
+              <TableCell align="center">รายละเอียด</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortedPurchaserequisitions.map((purchaseRequisition) => {
+            {filterByDate(startDate, endDate).map((purchaseRequisition) => {
               // Get the background color based on the status
               const backgroundColor = getStatusBackgroundColor(
                 purchaseRequisition.status
               );
+
+              const formattedDate = purchaseRequisition.createDate.slice(0, 10);
 
               return (
                 <TableRow
@@ -144,6 +171,10 @@ export default function Inventory() {
                     </Box>
                   </TableCell>
                   <TableCell align="center">
+                    {purchaseRequisition.requestUser}
+                  </TableCell>
+                  <TableCell align="center">{formattedDate}</TableCell>
+                  <TableCell align="center">
                     {purchaseRequisition.department}
                   </TableCell>
                   <TableCell align="center">
@@ -155,34 +186,20 @@ export default function Inventory() {
                   <TableCell align="center">
                     {purchaseRequisition.unitPrice} THB
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    align="center"
+                    style={{ color: "white", backgroundColor }}
+                  >
                     {purchaseRequisition.status}
                   </TableCell>
                   <TableCell align="center">
-                    {purchaseRequisition.status === "Pending" && (
-                      <Button
-                        onClick={() => {
-                          updateStatus(purchaseRequisition.id, "Approved");
-                          showSnackbar("Status approved");
-                        }}
-                        style={{ color: "white", backgroundColor: "#66bb6a" }}
-                      >
-                        Approved
-                      </Button>
-                    )}
-                  </TableCell>
-                  <TableCell align="center">
-                    {purchaseRequisition.status === "Pending" && (
-                      <Button
-                        onClick={() => {
-                          updateStatus(purchaseRequisition.id, "Disapproved");
-                          showSnackbar("Status disapproved");
-                        }}
-                        style={{ color: "white", backgroundColor: "#d32f2f" }}
-                      >
-                        Disapproved
-                      </Button>
-                    )}
+                    <Button
+                      component={Link}
+                      to={`/pr-catalog/${purchaseRequisition.id}`} // Update the path as needed
+                      size="small"
+                    >
+                      <FindInPageIcon/>
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
@@ -203,7 +220,7 @@ export default function Inventory() {
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={snackbarOpen}
-        autoHideDuration={3000} // Adjust the duration as needed
+        autoHideDuration={3000}
         onClose={() => setSnackbarOpen(false)}
         message={snackbarMessage}
       />
