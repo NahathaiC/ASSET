@@ -11,6 +11,7 @@ namespace API.DTOs.UserDtos
         public string Phone { get; set; }
         public string Status { get; set; }
         public string Token { get; set; }
+
     }
 
 }

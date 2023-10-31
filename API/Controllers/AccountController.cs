@@ -30,6 +30,7 @@ namespace API.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
+                UserName = user.UserName,
                 Position = user.Position,
                 Department = user.Department,
                 Section = user.Section,
@@ -156,6 +157,7 @@ namespace API.Controllers
             return new UserDto
             {
                 Id = user.Id,
+                UserName = user.UserName,
                 Email = user.Email,
                 Position = user.Position,
                 Department = user.Department,

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   Divider,
@@ -16,6 +17,7 @@ import agent from "../../app/api/agent";
 import NotFound from "../../app/errors/NotFound";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useReactToPrint } from "react-to-print";
+import "./PRDetails.css";
 
 export default function PRDetails() {
   const generatePDF = useReactToPrint({
@@ -38,10 +40,6 @@ export default function PRDetails() {
         .finally(() => setLoading(false));
   }, [id]);
 
-  // const handlePrintPDF = () => {
-  //   window.print();
-  // };
-
   if (loading) return <LoadingComponent message="Loading..." />;
 
   if (!purchaseRequisition) return <NotFound />;
@@ -51,8 +49,13 @@ export default function PRDetails() {
 
   return (
     <>
-      <div ref={componentPDF} style={{ width: "100%" }}>
-        <Grid container spacing={2}>
+      <div ref={componentPDF} className="pdf-container">
+        <Grid container spacing={2} className="pdf-content">
+          <Grid item xs={12}>
+            <Typography variant="h4" className="pdf-header">
+              Purchase Requisitions Form details
+            </Typography>
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">
               Created By: {purchaseRequisition.requestUser} on {formattedDate}
@@ -70,8 +73,8 @@ export default function PRDetails() {
               src={purchaseRequisition.prPicture}
               alt={purchaseRequisition.title}
               style={{
-                width: "300px", // Set your desired width here
-                height: "200px", // Set your desired height here
+                width: "300px",
+                height: "200px",
                 objectFit: "contain",
                 borderRadius: "8px",
                 boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",

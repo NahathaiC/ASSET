@@ -8,7 +8,6 @@ import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
-import HomePage from "../../features/home/PurchaseMN";
 import RequireAuth from "./RequireAuth";
 import Inventory from "../../features/admin/PRStatus";
 import PRForm from "../../features/admin/PRForm";
@@ -16,6 +15,8 @@ import AssetCatalog from "../../features/ASSET-catalog/AssetCatalog";
 import AssetDetails from "../../features/ASSET-catalog/AssetDetails";
 import PRreport from "../../features/admin/PR-report";
 import PurchaseMN from "../../features/home/PurchaseMN";
+import UserUpdate from "../../features/admin/UserUpdate";
+// import UserMN from "../../features/admin/UserMN";
 
 export const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {element: <RequireAuth roles={['Approver']} />, children: [
         {path: 'prstatus', element: <Inventory />},
         {path: 'pr-report', element: <PRreport />},
+      ]},
+
+      {element: <RequireAuth roles={['Admin']} />, children: [
+        {path: 'user-mn', element: <UserUpdate />},
       ]},
 
       

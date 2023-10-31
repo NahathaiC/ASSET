@@ -1,0 +1,5 @@
+.pdf-container {
+  width: 100%;
+  padding: 40px;
+  margin-top: 20px; /* Add padding to create space between the text and the edge of the paper */
+}

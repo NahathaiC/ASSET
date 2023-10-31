@@ -120,6 +120,18 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           )}
         </List>
 
+        <List sx={{ display: "flex" }}>
+          {user && (
+            <ListItem
+              component={NavLink}
+              to={"/user-mn"}
+              sx={{ ...navStyles, fontSize: "0.9rem" }}
+            >
+              จัดการบัญชีผู้ใช้
+            </ListItem>
+          )}
+        </List>
+
         {user ? (
           <SignedInMenu />
         ) : (

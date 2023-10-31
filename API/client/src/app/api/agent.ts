@@ -62,16 +62,17 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-  get: (url: string, params?: URLSearchParams) =>
-    axios.get(url, { params }).then(responseBody),
+  get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
-  postForm: (url: string, data: FormData) =>
-  axios.post(url, data, {
-    headers: { 'Content-Type': 'multipart/form-data' }
+  postForm: (url: string, data: FormData) => axios.post(url, data, {
+      headers: {'Content-type': 'multipart/form-data'}
+  }).then(responseBody),
+  putForm: (url: string, data: FormData) => axios.put(url, data, {
+      headers: {'Content-type': 'multipart/form-data'}
   }).then(responseBody)
-};
+}
 
 const Catalog = {
   list: (params: URLSearchParams) => requests.get("PR", params),
@@ -93,11 +94,18 @@ const TestErrors = {
 };
 
 const Account = {
+  
   login: (values: any) => requests.post("Account/login", values),
   register: (values: any) => requests.post("Account/register", values),
   currentUser: () => requests.get("Account/currentUser"),
   fetchCurrentUser: () => requests.get("Account/currentUser"),
 };
+
+const User = {
+  list: (params: URLSearchParams) => requests.get("User/users", params),
+  //updateProduct: (product: any) => requests.putForm('products', createFormData(product)),
+  updateUser:(user: any) => requests.putForm("User/updateUser", createFormData(user)),
+}
 
 function createFormData(item: any) {
   let formData = new FormData();
@@ -120,6 +128,7 @@ const agent = {
   Account,
   Admin,
   AssetCatalog,
+  User,
 };
 
 export default agent;

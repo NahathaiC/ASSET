@@ -15,7 +15,7 @@ export default function useAssets() {
   useEffect(() => {
     if (!assetsLoaded) dispatch(fetchAssetsAsync());
   }, [assetsLoaded, dispatch]);
-
+ 
   return {
     assets,
     assetsLoaded,
