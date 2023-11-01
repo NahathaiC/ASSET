@@ -18,8 +18,6 @@ export interface UserDto {
   department: string;
   section: string;
   phone: string;
-  // status: string;
-  // token: string;
 }
 
 export interface UserParams {

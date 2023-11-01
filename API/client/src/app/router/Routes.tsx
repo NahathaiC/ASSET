@@ -16,7 +16,6 @@ import AssetDetails from "../../features/ASSET-catalog/AssetDetails";
 import PRreport from "../../features/admin/PR-report";
 import PurchaseMN from "../../features/home/PurchaseMN";
 import UserUpdate from "../../features/admin/UserUpdate";
-// import UserMN from "../../features/admin/UserMN";
 
 export const router = createBrowserRouter([
   {

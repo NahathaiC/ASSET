@@ -6,8 +6,8 @@ import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { setPageNumber } from "../catalog/catalogSlice";
 
 export default function UserCatalog() {
-  const { getusers, metaData } = useUser();
-  const { status, userParams } = useAppSelector((state) => state.usercatalog);
+  const { metaData } = useUser();
+  const { status } = useAppSelector((state) => state.usercatalog);
   const dispatch = useAppDispatch();
 
   if (status.includes("pending") || !metaData)

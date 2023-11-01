@@ -63,7 +63,7 @@ export default function PRDetails() {
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h4" color="primary">
-              {purchaseRequisition.prodDesc}
+              {purchaseRequisition.title}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -71,7 +71,7 @@ export default function PRDetails() {
             <br />
             <img
               src={purchaseRequisition.prPicture}
-              alt={purchaseRequisition.title}
+              alt={purchaseRequisition.prodDesc}
               style={{
                 width: "300px",
                 height: "200px",
@@ -85,6 +85,10 @@ export default function PRDetails() {
             <TableContainer>
               <Table>
                 <TableBody>
+                <TableRow>
+                    <TableCell>Product Description:</TableCell>
+                    <TableCell>{purchaseRequisition.prodDesc}</TableCell>
+                  </TableRow>
                   <TableRow>
                     <TableCell>Department:</TableCell>
                     <TableCell>{purchaseRequisition.department}</TableCell>
