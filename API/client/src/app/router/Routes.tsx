@@ -16,6 +16,7 @@ import AssetDetails from "../../features/ASSET-catalog/AssetDetails";
 import PRreport from "../../features/admin/PR-report";
 import PurchaseMN from "../../features/home/PurchaseMN";
 import UserUpdate from "../../features/admin/UserUpdate";
+import HomePage from "../layout/HomePage";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
         {path: 'user-mn', element: <UserUpdate />},
       ]},
 
-      
+      { path: "", element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
       { path: "login", element: <Login /> },

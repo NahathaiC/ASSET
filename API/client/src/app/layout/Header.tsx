@@ -10,9 +10,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/configureStore";
 import SignedInMenu from "./SignedInMenu";
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
-
-// const midLinks = [{ title: "รายการขอซื้อ", path: "/pr-catalog" }];
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 const rightLinks = [
   { title: "login", path: "/login" },
@@ -40,7 +38,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
   const { user } = useAppSelector((state) => state.account);
 
   return (
-    <AppBar position="static" sx={{ mb: 6 }}>
+    <AppBar position="static" sx={{ mb: 2}}>
       <Toolbar
         sx={{
           display: "flex",
@@ -48,9 +46,12 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">ระบบจัดการการจัดซื้อทรัพย์สิน</Typography>
+        <Typography variant="h6" component={NavLink} to="/" sx={navStyles}>
+          {" "}
+          ระบบจัดการการจัดซื้อทรัพย์สิน
+        </Typography>
         <Switch checked={darkMode} onChange={handleThemeChange} />
-       
+
         <List sx={{ display: "flex" }}>
           {user && (
             <ListItem
