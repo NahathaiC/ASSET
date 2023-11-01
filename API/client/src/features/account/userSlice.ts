@@ -34,7 +34,6 @@ export const fetchUsersAsync = createAsyncThunk<
   try {
     const response = await agent.User.list(params);
     console.log("API Response Data:", response);
-
     thunkAPI.dispatch(setMetaData(response.metaData));
     return response;
   } catch (error) {
@@ -97,6 +96,7 @@ export const userSlice = createSlice({
     builder.addCase(fetchUsersAsync.rejected, (state) => {
       state.status = "idle";
     });
+
   },
 });
 

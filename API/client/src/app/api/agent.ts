@@ -62,17 +62,24 @@ axios.interceptors.response.use(
 );
 
 const requests = {
-  get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
+  get: (url: string, params?: URLSearchParams) =>
+    axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
   delete: (url: string) => axios.delete(url).then(responseBody),
-  postForm: (url: string, data: FormData) => axios.post(url, data, {
-      headers: {'Content-type': 'multipart/form-data'}
-  }).then(responseBody),
-  putForm: (url: string, data: FormData) => axios.put(url, data, {
-      headers: {'Content-type': 'multipart/form-data'}
-  }).then(responseBody)
-}
+  postForm: (url: string, data: FormData) =>
+    axios
+      .post(url, data, {
+        headers: { "Content-type": "multipart/form-data" },
+      })
+      .then(responseBody),
+  putForm: (url: string, data: FormData) =>
+    axios
+      .put(url, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(responseBody),
+};
 
 const Catalog = {
   list: (params: URLSearchParams) => requests.get("PR", params),
@@ -83,7 +90,7 @@ const Catalog = {
 const AssetCatalog = {
   list: (params: URLSearchParams) => requests.get("Asset", params),
   details: (id: string) => requests.get(`Asset/Asset?id=${id}`),
-}
+};
 
 const TestErrors = {
   get400Error: () => requests.get("buggy/bad-request"),
@@ -94,7 +101,6 @@ const TestErrors = {
 };
 
 const Account = {
-  
   login: (values: any) => requests.post("Account/login", values),
   register: (values: any) => requests.post("Account/register", values),
   currentUser: () => requests.get("Account/currentUser"),
@@ -103,23 +109,26 @@ const Account = {
 
 const User = {
   list: (params: URLSearchParams) => requests.get("User/users", params),
-  //updateProduct: (product: any) => requests.putForm('products', createFormData(product)),
-  updateUser:(user: any) => requests.putForm("User/updateUser", createFormData(user)),
-}
+  updateUser: (user: any) => requests.put("User/updateUser", user),
+};
 
 function createFormData(item: any) {
   let formData = new FormData();
   for (const key in item) {
-    formData.append(key, item[key])
+    formData.append(key, item[key]);
   }
   return formData;
 }
 
 const Admin = {
-  createPR: (purchaserequisition: any) => requests.postForm('PR', createFormData(purchaserequisition)),
+  createPR: (purchaserequisition: any) =>
+    requests.postForm("PR", createFormData(purchaserequisition)),
 
-    updatePRStatus: (id: number, status: string) =>
-    requests.put(`PR/UpdateStatusPurchaseRequisition?id=${id}&status=${status}`, {}),
+  updatePRStatus: (id: number, status: string) =>
+    requests.put(
+      `PR/UpdateStatusPurchaseRequisition?id=${id}&status=${status}`,
+      {}
+    ),
 };
 
 const agent = {
@@ -133,11 +142,10 @@ const agent = {
 
 export default agent;
 
-
 export const fetchCurrentUser = async () => {
   try {
     const user = await Account.fetchCurrentUser();
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
     return user;
   } catch (error) {
     throw new Error("Error fetching current user: " + String(error));

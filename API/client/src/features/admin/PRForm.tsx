@@ -1,17 +1,15 @@
-import React, { useState, useRef } from "react";
-import { Box, Button, Grid, Modal, Paper, Typography } from "@mui/material";
+import { useState, useRef } from "react";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import { useForm, FieldValues } from "react-hook-form";
 import AppTextInput from "../../app/components/AppTextInput";
 import AppDropzone from "../../app/components/AppDropzone";
 import { LoadingButton } from "@mui/lab";
-import agent, { fetchCurrentUser } from "../../app/api/agent";
+import agent from "../../app/api/agent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { setUser } from "../account/accountSlice";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchema } from "./prValidation";
 import { useNavigate, useLocation } from "react-router-dom";
 import { PurchaseRequisition } from "../../app/models/purchaseRequisition";
-import MyPDFComponent from "../../app/components/MyPDFComponent";
 
 interface Props {
   purchaserequisition?: PurchaseRequisition;

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useUser,} from "../../app/hooks/useUsers";
+import { useUser } from "../../app/hooks/useUsers";
 import { UserDto } from "../../app/models/user";
 import { useAppDispatch } from "../../app/store/configureStore";
-import UserForm from "./UserMN";
-import { Edit, Delete } from "@mui/icons-material";
+import UserForm from "./UserForm";
+import { Edit } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -17,11 +17,12 @@ import {
   Button,
 } from "@mui/material";
 import AppPagination from "../../app/components/AppPagination";
-import { setPageNumber } from "../catalog/catalogSlice";
+import {
+  setPageNumber,
+} from "../account/userSlice";
 
 //ตัวแทน Inventory ของคลิป หรือ PRstatus
 
-//UserMN.tsx
 export default function UserUpdate() {
   const { getusers, metaData } = useUser();
   const dispatch = useAppDispatch();
@@ -57,6 +58,7 @@ export default function UserUpdate() {
               <TableCell align="center">สาขา</TableCell>
               <TableCell align="center">แผนก</TableCell>
               <TableCell align="center">เบอร์โทร</TableCell>
+              <TableCell align="center">แก้ไข</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -74,12 +76,11 @@ export default function UserUpdate() {
                 <TableCell align="center">{user.department}</TableCell>
                 <TableCell align="center">{user.section}</TableCell>
                 <TableCell align="center">{user.phone}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   <Button
                     onClick={() => handleSelectUser(user)}
                     startIcon={<Edit />}
                   />
-                  <Button startIcon={<Delete />} color="error" />
                 </TableCell>
               </TableRow>
             ))}

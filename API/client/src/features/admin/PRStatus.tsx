@@ -120,11 +120,6 @@ export default function Inventory() {
           </TableHead>
           <TableBody>
             {sortedPurchaserequisitions.map((purchaseRequisition) => {
-              // Get the background color based on the status
-              const backgroundColor = getStatusBackgroundColor(
-                purchaseRequisition.status
-              );
-
               return (
                 <TableRow
                   key={purchaseRequisition.id}

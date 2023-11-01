@@ -50,29 +50,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
       >
         <Typography variant="h6">ระบบจัดการการจัดซื้อทรัพย์สิน</Typography>
         <Switch checked={darkMode} onChange={handleThemeChange} />
-        {/* <List sx={{ display: "flex" }}>
-          {midLinks.map(({ title, path }) => (
-            <ListItem
-              component={NavLink}
-              to={path}
-              key={path}
-              sx={{ ...navStyles, fontSize: "0.9rem" }}
-            >
-              {title.toUpperCase()}
-            </ListItem>
-          ))}
-        </List> */}
-        {/* <List sx={{ display: "flex" }}>
-          {user && user.roles?.includes("Admin") && (
-            <ListItem
-              component={NavLink}
-              to={"/prstatus"}
-              sx={{ ...navStyles, fontSize: "0.9rem" }}
-            >
-              จัดการสถานะการขอซื้อ
-            </ListItem>
-          )}
-        </List> */}
+       
         <List sx={{ display: "flex" }}>
           {user && (
             <ListItem
