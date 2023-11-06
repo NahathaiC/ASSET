@@ -14,7 +14,7 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 const rightLinks = [
   { title: "login", path: "/login" },
-  { title: "register", path: "/register" },
+  // { title: "register", path: "/register" },
 ];
 
 const navStyles = {
@@ -59,7 +59,7 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
               to={"/pr-catalog"}
               sx={{ ...navStyles, fontSize: "0.9rem" }}
             >
-              รายการขอซื้อ
+              รายการขอจัดซื้อ
             </ListItem>
           )}
         </List>
@@ -107,6 +107,18 @@ export default function Header({ darkMode, handleThemeChange }: Props) {
               sx={{ ...navStyles, fontSize: "0.9rem" }}
             >
               จัดการบัญชีผู้ใช้
+            </ListItem>
+          )}
+        </List>
+
+        <List sx={{ display: "flex" }}>
+          {user && user.roles?.includes("Admin") && (
+            <ListItem
+              component={NavLink}
+              to={"/register"}
+              sx={{ ...navStyles, fontSize: "0.9rem" }}
+            >
+              สร้างบัญชีผู้ใช้
             </ListItem>
           )}
         </List>

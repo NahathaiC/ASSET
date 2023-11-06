@@ -49,7 +49,7 @@ export default function Register() {
         <LockOutlinedIcon />
       </Avatar>
       <Typography component="h1" variant="h5">
-        Register
+        สร้างบัญชีผู้ใช้
       </Typography>
       <Box
         component="form"

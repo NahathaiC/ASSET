@@ -43,15 +43,20 @@ export const router = createBrowserRouter([
         {path: 'pr-report', element: <PRreport />},
       ]},
 
+      // {element: <RequireAuth roles={['Purchasing']} />, children: [
+      //   {path: 'pr-report', element: <PRreport />},
+      // ]},
+
       {element: <RequireAuth roles={['Admin']} />, children: [
         {path: 'user-mn', element: <UserUpdate />},
+        { path: "register", element: <Register /> },
       ]},
 
       { path: "", element: <HomePage /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
       { path: "login", element: <Login /> },
-      { path: "register", element: <Register /> },
+      
       { path: "server-error", element: <ServerError /> },
       { path: "not-found", element: <NotFound /> },
       { path: "*", element: <Navigate replace to="/not-found" /> },
